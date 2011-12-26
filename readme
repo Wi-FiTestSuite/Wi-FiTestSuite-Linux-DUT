@@ -1,0 +1,167 @@
+#
+#  WFA Test Engine Source Code (DUT and Control PC) Revision 01.31
+
+# Release History:
+# Initial Release: Version 1.0, July 10 2006, Qiumin Hu, Wi-Fi Alliance
+#
+# Revision: 01.05, September 28 2006   bug fixes, maintenance release
+# Revision: 01.06, October 26 2006     bug fixes (environment variables), maintenance release
+# Revision: 01.10, January 11 2007     bug fixes, maintenance release
+# Revision: 01.40, March 30 2007       bug fixed, enhancement and official WMM Beta
+# Revision: 02.00, April 20 2007       WPA2 maintenance and official WMM 
+#
+# REFER TO THE diff0100to0200 FOR THE SET OF DIFF FILES THAT 
+# DOCUMENT THE SPECIFIC CHANGES BETWEEN THIS VERSION AND
+# THE PREVIOUS Released VERSION
+           
+
+
+
+/*
+ * Copyright (c) Wi-Fi Alliance 2006 - Confidential not for redistribution
+ *
+ *=======================================================================
+ * LICENSE
+ *=======================================================================
+ *
+ *
+ *
+ * License is granted only to Wi-Fi Alliance members and designated  Wi-Fi
+ * contractors and, unless otherwise expressly authorized in writing by the
+ * Wi-Fi Alliance, is limited for use solely in testing Wi-Fi equipment in
+ * conjunction with a Wi-Fi certification program. This license is not
+ * transferable or sublicensable, and it does not extend to and may not be
+ * used with non-Wi-Fi applications.
+ *
+ * Commercial derivative works or applications that use this software are NOT
+ * AUTHORIZED without specific prior written permission from Wi-Fi Alliance
+ *
+ * Non-Commercial derivative works for your own internal use are authorized
+ * and are limited by the same restrictions.
+ *
+ * Neither the name of the author nor "Wi-Fi Alliance"
+ * may be used to endorse or promote products that are derived
+ * from or that use this software without specific prior written
+ * permission from Wi-Fi Alliance
+ *
+ * THIS SOFTWARE IS PROVIDED BY WIFI ALLIANCE "AS IS" AND ANY EXPRESSED OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY, NON-INFRINGEMENT AND FITNESS FOR A  PARTICULAR PURPOSE,
+ * ARE DISCLAIMED. IN NO EVENT SHALL WIFI ALLIANCE BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, THE COST OF PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
+0. Introduction
+   This source code package contains a sample Linux implementation of the DUT code for 
+   the Wi-Fi Test Engine.  This DUT code includes the Wi-Fi Traffic Generator.  
+   The DUT code is written to be portable to other platforms.
+  
+   Also included here is Linux source code for the Control PC component of the Wi-Fi Test Engine.
+   The sample code uses TCP over USB to provide connectivity between the DUT and the Control PC. 
+   This code will need to be modified to support alternate connectivity methods. 
+   
+   The third component included is called the Test Console.  This component is a peer traffic 
+   Generator to the DUT's traffic generator that can run on the Control PC 
+
+Please refer to the WFA Porting Guidelines document for detailed instructions on the porting process. 
+
+The following instructions pertain to the direct use of this sample code in a Linux environment.
+
+**************** IMPORTANT****************************************************
+Before building the software, if you plan to support WPA2 as default, you can simply go to the step 1 "Building the software". If the dut is preparing for WMM
+support, the lines in the file "Makefile.inc" for WMM is needed to be 
+uncommented and the default setting for WPA2 should be commented out as well.
+
+1. Building the software
+   a. build all
+      all you need is to simply type "make all".
+
+   b. build individual modules
+      cd into the appropriate directory to edit and type "make"
+
+   c. build a specific agent 
+      there are three agents in this package. They are "dut", "ca" and "tc", 
+      standing for "Device Under Test", "Control Agent" and "Test Console" 
+      respectively.
+
+      To build one of them only, you need to edit the file "Makefile.inc" to
+      comment rest of modules out
+
+   d. clean modules and object files
+      simply type "make clean" or cd into the module directories, 
+      type "make clean"
+
+2. Installing the software
+   a. copy dut/wfa_dut to /usr/sbin (or other location) on the 
+      linux DUT
+
+   b. MUST copy scripts/getipconfig.sh to /usr/local/sbin on the Linux DUT. 
+
+3. Running the software
+   3.1 DUT -- dut/wfa_dut
+   a. The current implementation is based on the open source wpa_supplicant
+      (hostap.epitest.fi/wpa_supplicant). The DUT must have it installed.
+
+   b. The supplicant can be either auto started during the system boot or 
+      manually started by typing "wpa_supplicant -Dmadwifi -iath0 -c "any 
+      configuration file". Before doing this, you need to have a console 
+      terminal to access/login the DUT.
+      Please refer the wpa_supplicant document/README and Linux setup document 
+      for setting auto-start.
+
+   c. The IP address for the control link interface (can be USB, ethernet, or 
+      others with TCP/IP/aLink) needs to be set, e.g. 10.10.1.100 . This should be set for a differnt
+      subnet from the traffic agent interface (Wi-Fi interface).
+
+   d. Once you have already logged in the DUT, type:
+      wfa_dut <control link interface, etc usb0> <local tcp port, e.g. 8000>  
+
+   3.2 Control Agent (LINUX PC) -- ca/wfa_ca
+   a. Before starting the control agent, first you need to make sure or set 
+      the IP address for the control link interface (e.g. 10.10.1.110) that 
+      matches the subnet set in the DUT. Second, you need to set two 
+      environment variables. Type:
+      a.1: export WFA_ENV_AGENT_IPADDR=<IP address of the DUT's control 
+           interface, e.g. 10.10.1.100>
+      a.2: export WFA_ENV_AGENT_PORT=<Port number of the DUT control TCP sits
+           on, e.g. 8000>  
+
+   b. Start the control agent:
+      wfa_ca <local ethernet interface to communicate to others such as Test 
+              Manager or CLI commander, e.g eth0> <local port to listen on, 
+              e.g. 9000> 
+
+
+   c. Now you are ready.
+
+   3.4 PC-WTG (Linux) -- tc/wfa_tc tc/wfa_pctg 
+       The current Linux implementation is similar to DUT that is consist of
+       two programs, pc traffic generator and test console. 
+       Please take this as a reference peer only for validating your porting, 
+       and note that for actual certification testing a different peer traffic generator
+       will be used.  
+
+   a. Starts PC TG:
+      wfa_pctg <local interface, e.g. eth0> <traffic generator control port, e.g. 9800> 
+
+      a.1: export WFA_ENV_PCTG_IPADDR=<IP address of the DUT's control 
+           interface, e.g. 192.168.1.201>
+      a.2: export WFA_ENV_PCTG_PORT=<Port number of the DUT control TCP sits
+           on, e.g. 9800>  
+      wfa_tc <local ethernet interface e.g. eth0> <local port number, e.g. 9850>
+
+4. Debug utility
+   There is a CAPI command implemented to enable debug output. The debug levels
+   include
+   a. ERROR -- Default and not Changeable  (level 1)
+   b. INFO  -- Can be turned on/off        (level 2)
+   c. WARNING -- Can be turned on/off      (level 4)
+
+For questions, send emails to sigmasupport@wi-fi.org 
+

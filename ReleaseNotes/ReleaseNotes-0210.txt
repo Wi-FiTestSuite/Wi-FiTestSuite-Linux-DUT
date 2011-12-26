@@ -1,0 +1,157 @@
+I). IBSS support has been added to this release. Please read the detail 
+   information in the included file "IBSS.txt".
+   
+The changes include the following:
+
+1. lib/wfa_ca_resp.c
+   a. line 129
+   wfaStaSetModeResp
+
+   b. line 1052
+   int wfaStaSetModeResp()
+
+2. lib/wfa_cmdproc.c
+   a. line 1674
+   int xcCmdProcStaSetMode()
+
+3. lib/wfa_cs.c
+   a. line 1362
+   wfaSetMode();
+
+
+
+II). The main release has extended support in Test Engine for WMM Power Save.
+
+The changes include the following:
+
+1. dut/wfa_dut.c -- All in the #ifdef WFA_WMM_EXT
+   a. line 105
+   BOOL       gtgWmmPS = 0;
+   unsigned long psTxMsg[512];
+   unsigned long psRxMsg[512];
+   wfaWmmPS_t wmmps_info;
+   int        psSockfd = -1;
+
+   extern struct apts_msg *apts_msgs;
+   extern void BUILD_APTS_MSG(int msg, unsigned long *txbuf);
+   extern int wfaWmmPowerSaveProcess(int sockfd);
+ 
+   b. line 293
+   fds.psfd = &psSockfd;
+
+   c. line 349 
+   if(gtgWmmPS != 0 && psSockfd != -1)
+   {
+      BUILD_APTS_MSG(APTS_HELLO, psTxMsg);
+      wfaTrafficSendTo(psSockfd, (char *)psTxMsg, sizeof(psTxMsg), (struct sockaddr *) &wmmps_info.psToAddr);
+
+      wmmps_info.sta_state = 0;
+      wmmps_info.wait_state = WFA_WAIT_STAUT_00;
+      continue;
+   }
+
+   d. line 474
+   if(psSockfd > 0 && FD_ISSET(psSockfd, &sockSet))
+   {
+       wfaWmmPowerSaveProcess(psSockfd);
+       continue;
+   }
+
+   e. line 530
+   close(psSockfd);
+
+2. inc/wfa_tg.h
+   a. line 101
+   #define PROF_UAPSD            5
+
+   b. line 134
+   /* wmm defs */
+#define TOS_VO7     0xE0         // 111 0  0000 (7)  AC_VO tos/dscp values
+#define TOS_VO      0xD0         // 110 0  0000 (6)  AC_VO tos/dscp values
+//Atheros Madwifi use 0x88 for UPSD/Voice
+//#define TOS_VO      0x88       // 110 0  0000 (6)  AC_VO tos/dscp values
+
+#define TOS_VI      0xA0         // 101 0  0000 (5)  AC_VI
+#define TOS_VI4     0x80         // 100 0  0000 (4)  AC_VI
+
+#define TOS_BE      0x00         // 000 0  0000 (0)  AC_BE
+#define TOS_EE      0x60         // 011 0  0000 (3)  AC_BE
+
+#define TOS_BK      0x20         // 001 0  0000 (1)  AC_BK
+#define TOS_LE      0x40         // 010 0  0000 (2)  AC_BK
+ 
+3. inc/wfa_wmmps.h
+   The file is newly created.
+
+4. lib/wfa_cmdproc.c
+   a. line 117
+   { PROF_UAPSD, "uapsd", NULL }
+
+5. lib/wfa_cs.c
+   a. function wfaStaSetUAPSD(). The function needs to update to match the 
+      actual device control setup for UAPSD.
+
+6. lib/wfa_tg.c
+   a. line 585
+   Within the "case PROF_UAPSD:", starts UAPSD test
+
+   b. line 709
+   Stop UAPSD test.
+
+7. lib/wfa_sock.c
+   a. line 268
+   if(*fds->psfd > 0)
+   {
+         FD_SET(*fds->psfd, fdset);
+         *maxfdn1 = max(*maxfdn1-1, *fds->psfd) + 1;
+   }
+
+8. lib/wfa_thr.c
+   a. line 108
+extern int gtgWmmPS;
+extern int psSockfd;
+extern int **ac_seq;
+extern wfaWmmPS_t wmmps_info;
+
+extern void wfaSetDUTPwrMgmt(int mode);
+extern void BUILD_APTS_MSG(int msg, unsigned long *txbuf);
+extern void wmmps_wait_state_proc();
+
+   b. line 143
+   "tosval"s are updated.
+
+   c. line 385
+   within if(myProfile->profile == PROF_UAPSD)
+
+9. lib/wfa_wmmps.c
+   The file is newly created.
+
+
+
+III.  WMM Power Save Setup and Implementation
+
+To implement WMM Power Save:
+
+   a). First please follow the "README.txt" file to setup the environment.
+   b). start wfa_dut, wfa_ca, and telnet to connect wfa_ca (ip&port) or use 
+       cli_ca to send commands.
+   b). run "sta_set_uapsd" command. Detail parameters described in DUT Control
+       API document.
+   c). run "traffic_agent_config,profile,uapsd,interface,<interface name>,
+            source,<ip address of test console>,sourceport,12345,
+	    destinationport,12345"
+   d). run "traffic_agent_receive_start,streamid,<a id given after 
+            traffic_agent_config"
+   e). after test is finished, run "traffic_agent_receive_stop,streamid,<a id>"
+
+   Currently, each test must repeat steps c), d), and e).
+
+   Besides these steps, a set of commands are still needed to setup the DUT,
+   e.g. configuring IP address, setup Wi-Fi WPA2 parameters and association, etc.
+   Please refer to the WPA2 baseline testing with this WTE tool and reference
+   documents for these additional setup details.
+
+   Further improvements will be considered for both WMM-PS console and this
+   latest control agent software.
+
+   If you have questions, please contact Qiumin Hu directly at WFA (qhu@wi-fi.org)

@@ -1,0 +1,25 @@
+
+================================= Release 02.32 =================================
+
+
+This release is an incremental release for support for the Voice - Personal
+program.  This release includes the following main differences from the previous
+released version 02.10 Test Engine software package.
+
+A. Improvements to existing WFA Test Engine code
+
+	1. Fixed bugs
+           Read the revision histories in the files:
+
+	2. Modify the throttled method in lib/wfa_tg.c. Again, please read the
+           comments carefully and do your homework to adopt to your device (tuning?)
+
+B. Voice Support
+        Remove the code for end2end method to match the updated test plan. But
+        the clock synchronization is still remained and optional to keep it.
+
+C. UCC Script
+   A set of new script  is implemented. Please read the other documents for
+   details. These script commands support both Voice HSO and partial for 
+   smart phone WMM profile. Subsequent releases will have more additions.
+

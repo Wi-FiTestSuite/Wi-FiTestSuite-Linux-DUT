@@ -1,0 +1,55 @@
+
+================================= Release 02.40 ================================
+
+This WMM-Power Save (WMM-PS) release contains new software that fixes accumulated bugs and implementation errors. These issues resulted in inconsistent test results.
+
+This release adds the WMM-PS test bed software upgrade to the DUT code. The following changes were made from the previous version (2.1) of WMM-PS:
+   1) Handshaking mechanism before starting and ending tests
+   2) Exchange messages based on WMM-PS test plan definitions
+   3) Redefine timing requirements that may have caused random pass/fail tests
+
+These changes led to a major re-implementation of the state machine. Therefore, the 2.1 code base for WMM-Power Save must be completely replaced by version 2.4.
+
+Before working on this source for WMM-Power Save, you must go to the member-only web site to download, study, and understand the latest release of WMM-Power Save test-bed software and documents. They include:
+   Software:
+     1) Source code for WFGEN
+     2) tcl script for parsing and result analysis
+     3) Wireshark sniffer, a special version for WMM-PS
+   Documents:
+     1) Wi-Fi Alliance WMM-Power Save Interoperability Test Plan
+     2) 802.11e (for APSD protocol specificition)
+     3) WFA WMM-Power Save Techops Mannual
+     4) WMM-PS Test Handshake and Reset Mechanism
+     5) DUT Source Porting Guideline
+
+The porting for the DUT code primarily involves the function wfaWmmPowerSaveProcess() in lib/wfa_wmmps.c. Some minimum effort could be taken to port the rest of code for the WMM-PS module (in lib/wfa_wmmps.c, lib/wfa_thr.c, and dut/wfa_dut.c) This could vary depending on what OS your device uses.
+
+Additional changes were made for optimization and to address member generated bug reports:
+   1)  Comment out the process priority settings and leave these for the user to
+       decide. 
+            File impacted: lib/wfa_tg.c
+                * look at used function "wfaSetProcPriority()"
+
+   2)  Correct a major bug brought in 2.3 release that results in WPA2 DL not 
+       receiving.
+            Reported Bug #3, #4, #6
+            File impacted: dut/wfa_dut.c 
+                  from line 430 "/* Baseline ... */
+                *  at 431 adding || gtgRecv != 0
+                * at line 495 adding "if(gtgTransac != 0) 
+
+   3)  Reformat the debugging print statements suggested
+           Reported Bug #5  
+           File Impacted: wfa_ca_resp.c
+
+   4)  Change the memcpy size used
+           Reporteded Bug #7
+           File Impacted: lib/wfa_cmdproc.c
+           At line 980 in the function xcCmdProcStaGetBSSID 
+           change "slen" to WFA_IF_NAME_LEN
+           
+   5)  Change the return values (SUCCESS and FAILURE to TRUE and FALSE, respectively) across a few places for consistency in lib/wfa_dut.c and lib/wfa_sock.c.
+
+These must be merged into the previous version if you have done the porting. 
+
+For details, please read "README.txt" and CAPI Specification document. 

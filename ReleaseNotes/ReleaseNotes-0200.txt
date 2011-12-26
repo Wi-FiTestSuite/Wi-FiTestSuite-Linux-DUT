@@ -1,0 +1,55 @@
+
+============================ Release 2.00 ==================================
+This release is a major release since 1.0.0. The release includes the following
+main differences from the previous one 1.1.0.
+
+A. Improvements
+1. Rename the file lib/wfa_ca.c to lib/wfa_cs.c that is to avoid the confusing
+   names between lib/wfa_ca.c and ca/wfa_ca.c. The lib/wfa_cs.c stands for
+   configuration and setting, and ca/wfa_ca.c stands for control agent.
+   
+2. Unified the message buffers:
+   In lib/wfa_cs.c, each of functions uses the common global gCmdStr[] and 
+   dutCmdResponse_t gGenericResp. 
+   In dut/wfa_dut.c before using these two variables, they will be reset.
+
+   In lib/wfa_ca_resp.c, each of functions uses gRespStr[];
+   In ca/wfa_ca.c, it will be reset before using it again each time.
+
+3. Optimize the timimg control and delay
+   In the file lib/wfa_tg.c, a new function called "wfaTxSleepTime()" is 
+   created. The timing and delay for packet transmit will be determined
+   (assuming) by two derived variables "sleepTime" and "throttledRate". To 
+   derive these variables, the following elements are used:
+       a. traffic profile (file transfer, wmm/ip_tv, or mcast)
+       b. frame rate
+       c. the hardware platform's CPU/OS clock resolution
+
+   Therefore, each indepedent implementation must redesign, implement and tune
+   the algorithm used in this function in order to justify and control the
+   transmit rate in order to achieve it is better performance.
+
+4. Per some responses for ICMP ping, an UDP level Echo is implemented that
+   allows vendors have options to use system level ping (ICMP) or use a UDP
+   echo to handle "ping". This may become a default "ping" mechanism for 
+   Voice Over Wi-Fi program.
+
+5. Enhance to code to allow handle multiple Stream IDs traffic commands
+   for execution and statistics reporting.
+    
+B. WMM Extension Beta
+1. A new file lib/wfa_thr.c is created. This file contains the functions to 
+   set TOS/DSCP tag and send packets in each of different threads. 
+
+2. In dut/wfa_dut.c, the main function creates a number of threads that are used
+   for WMM traffic. The receiving of WMM remains the same and with different 
+   profile statistics recording.
+
+3. In lib/wfa_tg.c  the WMM traffic thread synchronization uses
+   pthread_cond_signal() to trigger the thread for performing traffic command.
+
+C. Bug fixing
+1. fix the misplacing sender socket ip address&port to receiver's.
+2. close all file handles.
+3. free all memories allocated.
+

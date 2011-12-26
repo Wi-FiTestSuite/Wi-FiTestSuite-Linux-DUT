@@ -1,0 +1,55 @@
+
+================================= Release 02.4.1 ================================
+
+Release 2.4.1 is the official release for Voice - Personal.
+
+Major Bug Fixes:
+
+1. [Bug #12] UDP socket was not properly closed. Transposed two lines to close
+   the socket id before resetting it to -1.
+   Affected File(s): lib/wfa_tg.c
+
+2. [Bug #13] A difference exists between the CAPI argument specification for
+   "sta_set_ip_config" and its implementation. Modified the CAPI specification to
+   match the implementation.
+   Affected File(s): "WFA TechOps Test Engine DUT Control API"
+
+3. [Bug #14] Improvements were made to traffic control. The traffic period and
+   max rate were changed.
+   Affected File(s): lib/wfa_tg.c
+
+4. [Bug #15] WMM test statistics report failures observed due to a buffer
+   overflow. Increased the size of "BYTE buff[]". 
+   Affected File(s): lib/wfa_thr.c
+
+5. [Bug #16] Misspellings of a file descriptor. Replaced "tmpfile" with "tmpfd".
+   Affected File(s): lib/wfa_cs.c
+
+6. [Bug #17] Use of "strcat()" could potentially cause memory problems. Changed
+   the lib calls from "strcat()" to "strncat()"
+   Affected File(s): lib/wfa_ca_resp.c
+
+7. [Bug #18] In some embedded devices "num_hello" reaches its upper limit,
+   causing other tests to reset. The counter is now reset at the completion of
+   each test.
+   Affected File(s): lib/wfa_thr.c,lib/wfa_wmmps.c
+
+8. [Bug #19] There is the potential for a race condition caused by a device 
+   driver's capability for handling enablment of PS ON. Changed the order of
+   WMM-Power Save Management (On) before starting the test in "lib/wfa_thr.c".
+   Added "wfaSetDUTPwrMgmt()" before confirming test start in "lib/wfa_thr.c".
+   Affected File(s): lib/wfa_thr.c
+
+9. [None] Defined macro WFA_STAUT_IF for wlan interface.
+   Affected File(s): inc/wfa_ca.h, lib/wfa_cs.c
+
+10.[None] Transposed functions wfaSetEncryption1() and wfaSetEncryption() for
+   supporting WEP. Individual portings should select the appropriate function
+   used according to their need for WEP support.
+   Affected File(s): wfa_cs.c
+
+11.[None] Removed/changed numerous printf statements.
+
+Affected files contain additional detail on specific functions modified.
+
+For details, please read "README.txt" and CAPI Specification document.

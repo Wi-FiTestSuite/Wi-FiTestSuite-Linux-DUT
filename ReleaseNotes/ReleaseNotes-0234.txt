@@ -1,0 +1,16 @@
+
+================================= Release 02.34 ================================
+
+This release is an minor  release for support for the Voice - Personal program.
+The followings are the updates from the previous release.
+
+1. Add a new CAPI command support "sta_up_load" 
+   The command will instruct DUT to upload the rest result (file) from DUT 
+   internal storage to a Test Console/Test Manager specified file. Currently
+   the command provide a way to upload Voice Personal test result file.
+
+2. UCC Script
+   The script includes all recent releases, plus supports the new command 
+   "sta_up_load".
+
+For details, please read "README.txt" and CAPI Specification document. 

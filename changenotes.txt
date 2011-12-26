@@ -1,0 +1,7 @@
+
+This release inclues:
+
+1. The lastest updates for PMF, TDLS and Voice Enterprise
+2. Bug fixes
+   a. Check the adjusted latency for sleep timer in wfa_dut.c
+   b. initialize the sockets to "-1"

@@ -1,0 +1,11 @@
+
+=========================== Release 03.01.02  ==============================
+
+Release 03.01.02 is the official release with Sigma 3.1.2
+
+This release includes the merge all features supporting 11n, latest WPA2, 
+experimenting WMM-AC and Voice Enterprise.
+
+The source code also includes the open source of Sigma PC-ENDPOINT. Users may cchange the source to experimenting other features and assiting debugging.
+
+Please send report to sigmasupport@wi-fi.org
