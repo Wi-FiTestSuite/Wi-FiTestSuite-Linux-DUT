@@ -81,8 +81,8 @@
  *              it has all the latest Voice, PMF and TDLS changes & 
  *              latest bug fixes
  */
-#define WFA_SYSTEM_VER      "DUTPCE-4.2"     /* PC-ENDPOINT 4.2        */
-                                             /* Sigma DUT 4.2          */
+#define WFA_SYSTEM_VER      "DUTPCE-4.3.0"     /* PC-ENDPOINT 4.3.0       */
+                                             /* Sigma DUT 4.3.0          */
                                  
 
 #endif
