@@ -2358,22 +2358,23 @@ int wfaStaTestBedCmd(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 /*
  * This is used to send a frame or action frame
  */
-int wfaStaSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+int wfaStaDevSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
    dutCommand_t *cmd = (dutCommand_t *)caCmdBuf;
    /* uncomment it if needed */
    // char *ifname = cmd->intf;
-   dutCmdResponse_t *staCmdResp = &gGenericResp;
-   caStaSendFrame_t *sf = &cmd->cmdsu.sf;
+   dutCmdResponse_t *devSendResp = &gGenericResp;
+   caStaDevSendFrame_t *sf = &cmd->cmdsu.sf;
 
+   DPRINT_INFO(WFA_OUT, "Inside wfaStaDevSendFrame function ...\n");
    /* processing the frame */
 
-   switch(sf->frame)
+   switch(sf->program)
    {
-       case FM_TYPE_PMF:
+       case PROG_TYPE_PMF:
        {
           pmfFrame_t *pmf = &sf->frameType.pmf;
-          switch(pmf->type)
+          switch(pmf->eFrameName)
           {
               case PMF_TYPE_DISASSOC:
               {
@@ -2406,10 +2407,10 @@ int wfaStaSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
           }
        }
        break;
-       case FM_TYPE_TDLS:
+       case PROG_TYPE_TDLS:
        {
           tdlsFrame_t *tdls = &sf->frameType.tdls;
-          switch(tdls->type)
+          switch(tdls->eFrameName)
           {
               case TDLS_TYPE_DISCOVERY:
               /* use the peer mac address to send the frame */
@@ -2425,7 +2426,7 @@ int wfaStaSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
           }
        }
        break;
-       case FM_TYPE_VENT:
+       case PROG_TYPE_VENT:
        {
           ventFrame_t *vent = &sf->frameType.vent;
           switch(vent->type)
@@ -2436,9 +2437,15 @@ int wfaStaSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
               break;
           }
        } 
+       case PROG_TYPE_GEN:
+       {
+		/* General frames */
+       } 
+	   
+	   
    }
-    
-   wfaEncodeTLV(WFA_STA_SENDFRAME_RESP_TLV, 4, (BYTE *)staCmdResp, respBuf);
+   devSendResp->status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_DEV_SEND_FRAME_RESP_TLV, 4, (BYTE *)devSendResp, respBuf);
    *respLen = WFA_TLV_HDR_LEN + 4;
 
    return WFA_SUCCESS;
@@ -2605,6 +2612,762 @@ int wfaStopPing(dutCmdResponse_t *stpResp, int streamid)
     return WFA_SUCCESS;
 }
 
+/*
+ * wfaStaGetP2pDevAddress(): 
+ */
+int wfaStaGetP2pDevAddress(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* dutCommand_t *getInfo = (dutCommand_t *)caCmdBuf; */
+
+	printf("\n Entry wfaStaGetP2pDevAddress... ");
+
+	// Fetch the device ID and store into 	infoResp->cmdru.devid 
+	//strcpy(infoResp->cmdru.devid, str);
+	strcpy(&infoResp.cmdru.devid[0], "ABCDEFGH");
+
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_GET_DEV_ADDRESS_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+
+/*
+ * wfaStaSetP2p(): 
+ */
+int wfaStaSetP2p(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaSetP2p_t *getStaSetP2p = (caStaSetP2p_t *)caCmdBuf; uncomment and use it*/
+
+	printf("\n Entry wfaStaSetP2p... ");
+
+	// Implement the function and this does not return any thing back.
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_SETP2P_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+/*
+ * wfaStaP2pConnect(): 
+ */
+int wfaStaP2pConnect(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaP2pConnect_t *getStaP2pConnect = (caStaP2pConnect_t *)caCmdBuf; uncomment and use it */
+
+	printf("\n Entry wfaStaP2pConnect... ");
+
+	// Implement the function and does not return anything.
+
+	
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_CONNECT_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+/*
+ * wfaStaStartAutoGo(): 
+ */
+int wfaStaStartAutoGo(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   //caStaStartAutoGo_t *getStaStartAutoGo = (caStaStartAutoGo_t *)caCmdBuf;
+
+	printf("\n Entry wfaStaStartAutoGo... ");
+
+	// Fetch the group ID and store into 	infoResp->cmdru.grpid 
+	strcpy(&infoResp.cmdru.grpid[0], "ABCDEFGH");
+	
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_START_AUTO_GO_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+
+
+/*
+ * wfaStaP2pStartGrpFormation(): 
+ */
+int wfaStaP2pStartGrpFormation(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   //caStaP2pStartGrpForm_t *getStaP2pStartGrpForm = (caStaP2pStartGrpForm_t *)caCmdBuf;
+
+	printf("\n Entry wfaStaP2pStartGrpFormation... ");
+
+	// Fetch the device mode and put in 	infoResp->cmdru.p2presult 
+	//strcpy(infoResp->cmdru.p2presult, "GO");
+
+	// Fetch the device grp id and put in 	infoResp->cmdru.grpid 
+	//strcpy(infoResp->cmdru.grpid, "AA:BB:CC:DD:EE:FF_DIRECT-SSID");
+	
+	strcpy(infoResp.cmdru.grpFormInfo.result, "CLIENT");
+	strcpy(infoResp.cmdru.grpFormInfo.grpId, "AA:BB:CC:DD:EE:FF_DIRECT-SSID");
+
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_START_GRP_FORMATION_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+/*
+ * wfaStaP2pDissolve(): 
+ */
+int wfaStaP2pDissolve(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   //caStaP2pDissolve_t *getStap2pDissolve= (caStaP2pDissolve_t *)caCmdBuf;
+
+	printf("\n Entry wfaStaP2pDissolve... ");
+
+	// Implement the function and this does not return any thing back.
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_DISSOLVE_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+/*
+ * wfaStaSendP2pInvReq(): 
+ */
+int wfaStaSendP2pInvReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaSendP2pInvReq_t *getStaP2pInvReq= (caStaSendP2pInvReq_t *)caCmdBuf; */
+
+	printf("\n Entry wfaStaSendP2pInvReq... ");
+
+	// Implement the function and this does not return any thing back.
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_SEND_INV_REQ_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+/*
+ * wfaStaAcceptP2pInvReq(): 
+ */
+int wfaStaAcceptP2pInvReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* uncomment and use it
+    * caStaAcceptP2pInvReq_t *getStaP2pInvReq= (caStaAcceptP2pInvReq_t *)caCmdBuf;
+    */
+
+	printf("\n Entry wfaStaAcceptP2pInvReq... ");
+
+	// Implement the function and this does not return any thing back.
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_ACCEPT_INV_REQ_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+/*
+ * wfaStaSendP2pProvDisReq(): 
+ */
+int wfaStaSendP2pProvDisReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* uncomment and use it
+    * caStaSendP2pProvDisReq_t *getStaP2pProvDisReq= (caStaSendP2pProvDisReq_t *)caCmdBuf;
+    */
+
+	printf("\n Entry wfaStaSendP2pProvDisReq... ");
+
+	// Implement the function and this does not return any thing back.
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_SEND_PROV_DIS_REQ_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+/*
+ * wfaStaSetWpsPbc(): 
+ */
+int wfaStaSetWpsPbc(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* uncomment and use it 
+    * caStaSetWpsPbc_t *getStaSetWpsPbc= (caStaSetWpsPbc_t *)caCmdBuf;
+    */
+
+	printf("\n Entry wfaStaSetWpsPbc... ");
+
+	// Implement the function and this does not return any thing back.
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_WPS_SETWPS_PBC_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+/*
+ * wfaStaWpsReadPin(): 
+ */
+int wfaStaWpsReadPin(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* uncomment and use it 
+    * caStaWpsReadPin_t *getStaWpsReadPin= (caStaWpsReadPin_t *)caCmdBuf;
+    */
+
+	printf("\n Entry wfaStaWpsReadPin... ");
+
+	// Fetch the device PIN and put in 	infoResp->cmdru.wpsPin 
+	//strcpy(infoResp->cmdru.wpsPin, "12345678");
+	strcpy(&infoResp.cmdru.wpsPin[0], "1234456");
+
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_WPS_READ_PIN_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+
+/*
+ * wfaStaWpsReadLabel(): 
+ */
+int wfaStaWpsReadLabel(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* uncomment and use it 
+    * caStaWpsReadLabel_t *getStaWpsReadLabel= (caStaWpsReadLabel_t *)caCmdBuf;
+    */
+
+	printf("\n Entry wfaStaWpsReadLabel... ");
+
+	// Fetch the device Label and put in	infoResp->cmdru.wpsPin 
+	//strcpy(infoResp->cmdru.wpsPin, "12345678");
+	strcpy(&infoResp.cmdru.wpsPin[0], "1234456");
+
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_WPS_READ_PIN_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);	
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+/*
+ * wfaStaWpsEnterPin(): 
+ */
+int wfaStaWpsEnterPin(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+    dutCmdResponse_t infoResp;
+   /* uncomment and use it 
+    * caStaWpsEnterPin_t *getStaWpsEnterPin= (caStaWpsEnterPin_t *)caCmdBuf;
+    */  
+
+	printf("\n Entry wfaStaWpsEnterPin... ");
+
+   // Implement the function and this does not return any thing back.
+
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_WPS_ENTER_PIN_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+/*
+ * wfaStaGetPsk(): 
+ */
+int wfaStaGetPsk(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaGetPsk_t *getStaGetPsk= (caStaGetPsk_t *)caCmdBuf; uncomment and use it */
+
+	printf("\n Entry wfaStaGetPsk... ");
+
+
+	// Fetch the device PP and SSID  and put in 	infoResp->cmdru.pskInfo 
+	//strcpy(infoResp->cmdru.wpsPin, "12345678");
+	strcpy(&infoResp.cmdru.pskInfo.passPhrase[0], "1234456");
+	strcpy(&infoResp.cmdru.pskInfo.ssid[0], "WIFI_DIRECT");	
+
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_GET_PSK_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+/*
+ * wfaStaP2pReset(): 
+ */
+int wfaStaP2pReset(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* dutCommand_t *getStaP2pReset= (dutCommand_t *)caCmdBuf; */
+
+	printf("\n Entry wfaStaP2pReset... ");
+	// Implement the function and this does not return any thing back.
+
+
+   
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_RESET_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+
+/*
+ * wfaStaGetP2pIpConfig(): 
+ */
+int wfaStaGetP2pIpConfig(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaGetP2pIpConfig_t *staGetP2pIpConfig= (caStaGetP2pIpConfig_t *)caCmdBuf; */
+   
+   caStaGetIpConfigResp_t *ifinfo = &(infoResp.cmdru.getIfconfig);
+
+	printf("\n Entry wfaStaGetP2pIpConfig... ");
+
+
+	// Fetch the device IP config  and put in 	infoResp->cmdru 
+	//strcpy(infoResp->cmdru.wpsPin, "12345678");
+	ifinfo->isDhcp =0;
+	strcpy(&(ifinfo->ipaddr[0]), "192.165.100.111");
+	strcpy(&(ifinfo->mask[0]), "255.255.255.0");
+	strcpy(&(ifinfo->dns[0][0]), "192.165.100.1");
+	strcpy(&(ifinfo->mac[0]), "ba:ba:ba:ba:ba:ba");
+	
+	
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_GET_IP_CONFIG_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+
+
+/*
+ * wfaStaSendServiceDiscoveryReq(): 
+ */
+int wfaStaSendServiceDiscoveryReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaSendServiceDiscoveryReq_t *staSendServiceDiscoveryReq= (caStaSendServiceDiscoveryReq_t *)caCmdBuf; uncomment and use it */
+   
+	printf("\n Entry wfaStaSendServiceDiscoveryReq... ");
+	// Implement the function and this does not return any thing back.
+
+
+	
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_SEND_SERVICE_DISCOVERY_REQ_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+
+
+/*
+ * wfaStaSendP2pPresenceReq(): 
+ */
+int wfaStaSendP2pPresenceReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   caStaSendP2pPresenceReq_t *staSendP2pPresenceReq= (caStaSendP2pPresenceReq_t *)caCmdBuf;
+   
+	printf("\n Entry wfaStaSendP2pPresenceReq... ");
+	// Implement the function and this does not return any thing back.
+	printf("\n The long long Duration: %lld... ",staSendP2pPresenceReq->duration);
+	printf("\n The long long interval : %lld.. ",staSendP2pPresenceReq->interval);
+
+
+	
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_SEND_PRESENCE_REQ_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+/*
+ * wfaStaSetSleepReq(): 
+ */
+int wfaStaSetSleepReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaSetSleep_t *staSetSleepReq= (caStaSetSleep_t *)caCmdBuf; */
+   
+	printf("\n Entry wfaStaSetSleepReq... ");
+	// Implement the function and this does not return any thing back.
+
+	
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_SET_SLEEP_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN +4;
+
+   return WFA_SUCCESS;
+}
+
+/*
+ * wfaStaSetOpportunisticPsReq(): 
+ */
+int wfaStaSetOpportunisticPsReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaSetOpprPs_t *staSetOpperPsReq= (caStaSetOpprPs_t *)caCmdBuf; uncomment and use it */
+   
+	printf("\n Entry wfaStaSetOpportunisticPsReq... ");
+	// Implement the function and this does not return any thing back.
+
+	
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_SET_OPPORTUNISTIC_PS_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + 4;
+
+   return WFA_SUCCESS;
+}
+#ifndef WFA_STA_TB
+/*
+ * wfaStaPresetParams(): 
+ */
+
+int wfaStaPresetParams(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+	dutCmdResponse_t infoResp;
+
+   caStaPresetParameters_t *presetParams = (caStaPresetParameters_t *)caCmdBuf;
+
+
+   DPRINT_INFO(WFA_OUT, "Inside wfaStaPresetParameters function ...\n");
+
+	// Implement the function and its sub commands 
+	infoResp.status = STATUS_COMPLETE;
+
+   wfaEncodeTLV(WFA_STA_PRESET_PARAMETERS_RESP_TLV, 4, (BYTE *)&infoResp, respBuf);
+   *respLen = WFA_TLV_HDR_LEN + 4;
+
+   return WFA_SUCCESS;
+}
+int wfaStaSet11n(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf) 
+{
+	
+	caSta11n_t * v11nParams = (caSta11n_t *)caCmdBuf;
+	dutCmdResponse_t infoResp;
+	dutCmdResponse_t *v11nParamsResp = &infoResp;
+	
+
+
+	int st =0; // SUCCESS
+	
+	DPRINT_INFO(WFA_OUT, "Inside wfaStaSet11n function....\n"); 
+
+
+	if(v11nParams->addba_reject != 0xFF && v11nParams->addba_reject < 2)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_addba_reject failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+	
+    if(v11nParams->ampdu != 0xFF && v11nParams->ampdu < 2)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_ampdu failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+	
+    if(v11nParams->amsdu != 0xFF && v11nParams->amsdu < 2)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_amsdu failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+
+    if(v11nParams->greenfield != 0xFF && v11nParams->greenfield < 2)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "_set_greenfield failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+
+    if(v11nParams->mcs32!= 0xFF && v11nParams->mcs32 < 2 && v11nParams->mcs_fixedrate[0] != '\0')
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_mcs failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	} 
+	else if (v11nParams->mcs32!= 0xFF && v11nParams->mcs32 < 2 && v11nParams->mcs_fixedrate[0] == '\0')
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_mcs32 failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+
+	} 
+	else if (v11nParams->mcs32 == 0xFF && v11nParams->mcs_fixedrate[0] != '\0')
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_mcs32 failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+
+    if(v11nParams->rifs_test != 0xFF && v11nParams->rifs_test < 2)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_rifs_test failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+
+    if(v11nParams->sgi20 != 0xFF && v11nParams->sgi20 < 2)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_sgi20 failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+
+	if(v11nParams->smps != 0xFFFF)
+	{
+	    if(v11nParams->smps == 0)
+	    {
+			// implement the funciton
+			//st = wfaExecuteCLI(gCmdStr); 
+			;
+
+	    }
+	    else if(v11nParams->smps == 1)
+	    {
+			// implement the funciton
+			//st = wfaExecuteCLI(gCmdStr); 
+			;
+	    }		
+	    else if(v11nParams->smps == 2)
+		{
+			// implement the funciton
+			//st = wfaExecuteCLI(gCmdStr); 
+			;		
+	    }
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_smps failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+
+	if(v11nParams->stbc_rx != 0xFFFF)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_stbc_rx failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+	
+	if(v11nParams->width[0] != '\0')
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_11n_channel_width failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+
+	}
+	
+    if(v11nParams->_40_intolerant != 0xFF && v11nParams->_40_intolerant < 2)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+            v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_40_intolerant failed");
+	        wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+	        *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+
+	}
+
+	if(v11nParams->txsp_stream != 0 && v11nParams->txsp_stream <4)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+			v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_txsp_stream failed");
+			wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+			*respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+
+	}
+
+	if(v11nParams->rxsp_stream != 0 && v11nParams->rxsp_stream < 4)
+	{
+		// implement the funciton
+		//st = wfaExecuteCLI(gCmdStr); 
+		if(st != 0)
+		{
+			v11nParamsResp->status = STATUS_ERROR;
+			strcpy(v11nParamsResp->cmdru.info, "set_rxsp_stream failed");
+			wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)v11nParamsResp, respBuf);
+			*respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+			return FALSE;
+		}
+	}
+
+	v11nParamsResp->status = STATUS_COMPLETE;
+	wfaEncodeTLV(WFA_STA_SET_11N_RESP_TLV, 4, (BYTE *)v11nParamsResp, respBuf);
+	*respLen = WFA_TLV_HDR_LEN + 4;
+	return WFA_SUCCESS;
+}
+#endif
+/*
+ * wfaStaAddArpTableEntry(): 
+ */
+int wfaStaAddArpTableEntry(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaAddARPTableEntry_t *staAddARPTableEntry= (caStaAddARPTableEntry_t *)caCmdBuf; uncomment and use it */
+   
+	printf("\n Entry wfastaAddARPTableEntry... ");
+	// Implement the function and this does not return any thing back.
+
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
+
+/*
+ * wfaStaBlockICMPResponse(): 
+ */
+int wfaStaBlockICMPResponse(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+   dutCmdResponse_t infoResp;
+   /* caStaBlockICMPResponse_t *staAddARPTableEntry= (caStaBlockICMPResponse_t *)caCmdBuf; uncomment and use it */
+   
+	printf("\n Entry wfaStaBlockICMPResponse... ");
+	// Implement the function and this does not return any thing back.
+
+   infoResp.status = STATUS_COMPLETE;
+   wfaEncodeTLV(WFA_STA_P2P_BLOCK_ICMP_RESPONSE_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+   return WFA_SUCCESS;
+}
 int wfaStaSetRadio(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
     dutCommand_t *setRadio = (dutCommand_t *)caCmdBuf;
@@ -2648,4 +3411,142 @@ int wfaStaSetRFeature(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
    return WFA_SUCCESS;
 }
 
+
+int wfaStaCliCommand(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+
+	char cmdName[32];
+	char * pcmdStr,*str;
+	int st,tmp_val;
+	char CmdStr[WFA_CMD_STR_SZ];
+	FILE *wfaCliFd;
+	char wfaCliBuff[64];
+	char retstr[256];
+	int CmdReturnFlag;
+    char tmp[256];
+    FILE * sh_pipe;
+    
+	caStaCliCmdResp_t infoResp;
+
+	printf("\n Entry wfaStaCliCommand... ");
+
+	printf("The command Received: %s",caCmdBuf);
+
+	memcpy(cmdName, strtok_r((char *)caCmdBuf, ",", (char **)&pcmdStr), 32);
+
+	sprintf(CmdStr, "%s",cmdName);
+
+
+
+
+	for(;;)
+	{
+		str = strtok_r(NULL, ",", &pcmdStr);
+		if(str == NULL || str[0] == '\0')
+			break;
+		else
+		{
+			sprintf(CmdStr, "%s /%s",CmdStr,str);
+			str = strtok_r(NULL, ",", &pcmdStr);
+			sprintf(CmdStr, "%s %s",CmdStr,str);
+		}
+	}
+
+	CmdReturnFlag =0;
+	// check the return process
+	wfaCliFd=fopen("/etc/WfaEndpoint/wfa_cli.txt","r");
+	if(wfaCliFd!= NULL)
+	{
+		while(fgets(wfaCliBuff, 64, wfaCliFd) != NULL)
+		{
+			//printf("\nLine read from CLI file : %s",wfaCliBuff);
+			if(ferror(wfaCliFd))
+				break;
+			str=strtok(wfaCliBuff,"-");
+			if(strcmp(str,cmdName) == 0)
+			{
+				str=strtok(NULL,",");
+				//printf("\n The str: %s Check\n",str);
+				if(strcmp(str,"TRUE") == 0)
+					CmdReturnFlag =1;
+				break;
+			}
+		}
+		fclose(wfaCliFd);
+
+	}
+
+
+	//printf("\n Command Return Flag : %d",CmdReturnFlag);
+	st = 1;
+	memset(&retstr[0],'\0',255);
+    memset(&tmp[0],'\0',255);
+
+	sprintf(gCmdStr, "%s",  CmdStr);
+    printf("\nCLI Command -- %s\n", gCmdStr);
+    
+    sh_pipe = popen(gCmdStr,"r");
+    
+    if(!sh_pipe)
+    {
+        printf ("Error in opening pipe");
+    }
+
+
+    //tmp_val=getdelim(&retstr,255,"\n",sh_pipe);
+    fgets(&retstr,255,sh_pipe);
+    
+    if(pclose(sh_pipe) != 0)
+    {
+        printf("Error in closing shell cmd pipe");
+    }
+	sleep(2);
+    
+    printf("CLI retun value- %s\n",retstr);
+	
+	memcpy(tmp, strtok_r((char *)retstr, "-", (char **)&pcmdStr), 2);
+	printf("\ncli status - %s",tmp);
+	if(strlen(tmp) > 0)
+	    st = atoi(tmp);
+
+    infoResp.resFlag=CmdReturnFlag;
+    
+	switch(st)
+	{
+	case 0:
+	   infoResp.status = STATUS_COMPLETE;
+	   if (CmdReturnFlag)
+	   {
+            str=strtok_r(NULL, "\n", (char **)&pcmdStr);
+	        strncpy(tmp,str, 255);
+	        printf("\nresult - %s",tmp);
+			if(tmp != NULL)
+			{
+                memset(&infoResp.result[0],'\0',WFA_CLI_CMD_RESP_LEN-1);			    
+				strncpy(&infoResp.result[0], tmp,(strlen(tmp) < WFA_CLI_CMD_RESP_LEN ) ? strlen(tmp) : (WFA_CLI_CMD_RESP_LEN-1) );
+				printf("Return CLI result to CA: %s****\n", &infoResp.result[0]);			
+			}
+			else
+				strcpy(&infoResp.result[0], "ENV_VAR_NOT_DEFINED");
+
+	   }
+
+	
+	   break;
+	case 1:
+		infoResp.status = STATUS_ERROR;
+		break;
+	case 2:
+		infoResp.status = STATUS_INVALID;
+		break;
+	}
+
+   wfaEncodeTLV(WFA_STA_CLI_CMD_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
+   *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+
+    printf("\nExit from CLI function\n");    
+   return TRUE;
+
+	
+}
 

@@ -131,6 +131,10 @@ int main(int argc, char *argv[])
     char *pcmdStr = NULL;
     char respStr[WFA_BUFF_512];
 
+	//start of CLI handling variables
+	char wfaCliBuff[128];
+	FILE *wfaCliFd;
+	char * cliCmd,*tempCmdBuff;
     if(argc < 3)
     {
         DPRINT_ERR(WFA_ERR, "Usage: %s <control interface> <local control agent port>\n", argv[0]);
@@ -305,8 +309,40 @@ int main(int argc, char *argv[])
 
             isFound = 0;
     
-            memcpy(cmdName, strtok_r((char *)xcCmdBuf, ",", (char **)&pcmdStr), 32);
-            i = 0;
+			tempCmdBuff=(char* )malloc(sizeof(xcCmdBuf));
+			memcpy(tempCmdBuff,xcCmdBuf,sizeof(xcCmdBuf));
+		
+			memcpy(cmdName, strtok_r((char *)tempCmdBuff, ",", (char **)&pcmdStr), 32);
+			printf("\nInside the CLI huck block \n");
+
+			wfaCliFd=fopen("/etc/WfaEndpoint/wfa_cli.txt","r");
+			printf("\nAfter File open \n");
+			if(wfaCliFd!= NULL)
+			{
+				//printf("\nInside File open \n");
+				while(fgets(wfaCliBuff, 128, wfaCliFd) != NULL)
+				{
+					//printf("Line read from CLI file : %s",wfaCliBuff);
+					if(ferror(wfaCliFd))
+						break;
+					cliCmd=strtok(wfaCliBuff,"-");
+					if(strcmp(cliCmd,cmdName) == 0)
+					{
+						strcpy(cmdName,"wfa_cli_cmd");
+						pcmdStr = &xcCmdBuf[0];
+						break;
+					}
+				}
+				fclose(wfaCliFd);
+
+			}
+			printf("\nOutside the new block \n");
+			free(tempCmdBuff);
+			if(strcmp(cmdName,"wfa_cli_cmd") != 0)
+	            memcpy(cmdName, strtok_r((char *)xcCmdBuf, ",", (char **)&pcmdStr), 32);
+
+			
+			i = 0;
             while(nameStr[i].type != -1)
             {
                 if(strcmp(nameStr[i].name, cmdName) == 0)

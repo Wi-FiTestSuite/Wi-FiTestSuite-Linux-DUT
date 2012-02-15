@@ -873,12 +873,14 @@ int xcCmdProcStaSetIpConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     dutCommand_t staSetIpConfig;
     caStaSetIpConfig_t *setip = (caStaSetIpConfig_t *)&staSetIpConfig.cmdsu.ipconfig; 
+    caStaSetIpConfig_t defparams = {"", 0, "", "", "", "", ""};
     char *str;
 
     if(aBuf == NULL)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy(setip, &defparams, sizeof(caStaSetIpConfig_t));
 
     for(;;)
     {
@@ -1148,11 +1150,13 @@ int  xcCmdProcStaSetEncryption(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEncryption_t *setencryp = (caStaSetEncryption_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caStaSetEncryption_t defparams = {"", "", 0, {"", "", "", ""}, 0};
 
     if(aBuf == NULL)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setencryp, (void *)&defparams, sizeof(caStaSetEncryption_t));
 
     for(;;)
     {
@@ -1321,12 +1325,14 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetPSK_t *setencryp = (caStaSetPSK_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caStaSetPSK_t defparams = {"", "", "", "", 0, WFA_DISABLED};
 
 #ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setencryp, (void *)&defparams, sizeof(caStaSetPSK_t));
 
     for(;;)
     {
@@ -1391,6 +1397,7 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapTLS_t *setsec = (caStaSetEapTLS_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caStaSetEapTLS_t defparams = {"", "", "", "", "", ""};
    
 #ifndef WFA_PC_CONSOLE
 
@@ -1398,6 +1405,7 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapTLS_t));
 
     for(;;)
     {
@@ -1465,6 +1473,7 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
 int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapTTLS_t *setsec = (caStaSetEapTTLS_t *) (aBuf+sizeof(wfaTLV));
+    caStaSetEapTTLS_t defparams = {"", "", "", "", "", "", "", ""};
     char *str;
    
 #ifndef WFA_PC_CONSOLE
@@ -1472,6 +1481,7 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapTTLS_t));
 
     for(;;)
     {
@@ -1546,12 +1556,14 @@ int xcCmdProcStaSetEapSIM(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapSIM_t *setsec = (caStaSetEapSIM_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caStaSetEapSIM_t defparams = {"", "", "", "", "", "", 0, {"", "", ""}};
    
 #ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapSIM_t));
 
     for(;;)
     {
@@ -1637,12 +1649,14 @@ int xcCmdProcStaSetPEAP(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapPEAP_t *setsec = (caStaSetEapPEAP_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caStaSetEapPEAP_t defparams = {"", "", "", "", "", "", "", "", 0};
    
 #ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapPEAP_t));
 
     for(;;)
     {
@@ -1724,11 +1738,13 @@ int xcCmdProcStaSetIBSS(char *pcmdStr, BYTE *aBuf, int *aLen)
     caStaSetIBSS_t *setibss = (caStaSetIBSS_t *) (aBuf+sizeof(wfaTLV));
     char *str;
     int i = 0;
+    caStaSetIBSS_t defparams = {"", "", 0, 0, {"", "", "", ""}, 0xFF};
    
     if(aBuf == NULL)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setibss, (void *)&defparams, sizeof(caStaSetIBSS_t));
 
     for(;;)
     {
@@ -1893,11 +1909,14 @@ int xcCmdProcStaAssociate(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     dutCommand_t *setassoc = (dutCommand_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caStaAssociate_t *assoc = &setassoc->cmdsu.assoc; 
+    caStaAssociate_t defparams = {"", "", WFA_DISABLED}; 
 
     if(aBuf == NULL)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy(assoc, &defparams, sizeof(caStaAssociate_t));
 
     for(;;)
     {
@@ -1924,6 +1943,12 @@ int xcCmdProcStaAssociate(char *pcmdStr, BYTE *aBuf, int *aLen)
             strncpy(setassoc->cmdsu.assoc.bssid, str, 17);
             DPRINT_INFO(WFA_OUT, "bssid %s\n", setassoc->cmdsu.assoc.bssid);
         }
+        else if(strcasecmp(str, "wps") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            if(strcasecmp(str, "enabled") == 0)
+               setassoc->cmdsu.assoc.wps = WFA_ENABLED;
+        }
    }
 
     wfaEncodeTLV(WFA_STA_ASSOCIATE_TLV, sizeof(dutCommand_t), (BYTE *)setassoc, aBuf);
@@ -1937,11 +1962,14 @@ int xcCmdProcStaReAssociate(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     dutCommand_t *setassoc = (dutCommand_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caStaAssociate_t *assoc = &setassoc->cmdsu.assoc; 
+    caStaAssociate_t defparams = {"", "", WFA_DISABLED}; 
 
     if(aBuf == NULL)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy(assoc, &defparams, sizeof(caStaAssociate_t));
 
     for(;;)
     {
@@ -2019,6 +2047,7 @@ int xcCmdProcStaSetUAPSD(char *pcmdStr, BYTE *aBuf, int *aLen)
     caStaSetUAPSD_t *setuapsd = (caStaSetUAPSD_t *) (aBuf+sizeof(wfaTLV));
     char *str;
     wfaTLV *hdr = (wfaTLV *)aBuf;
+    caStaSetUAPSD_t defparams = {"", "", 0, 0, 0, 0, 0};
 
     DPRINT_INFO(WFA_OUT, "start xcCmdProcAgentConfig ...\n");
     DPRINT_INFO(WFA_OUT, "params:  %s\n", pcmdStr);
@@ -2026,6 +2055,7 @@ int xcCmdProcStaSetUAPSD(char *pcmdStr, BYTE *aBuf, int *aLen)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setuapsd, (void *)&defparams, sizeof(caStaSetUAPSD_t));
     setuapsd->acBE = 0;
     setuapsd->acBK = 0;
     setuapsd->acVI = 0;
@@ -2155,11 +2185,13 @@ int xcCmdProcStaSetMode(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetMode_t *setmode = (caStaSetMode_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caStaSetMode_t defparams = {"", "", 0, 0, 0, {"", "", "", ""}, 0xFF};
 
     if(aBuf == NULL)
        return WFA_FAILURE;
 
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setmode, (void *)&defparams, sizeof(caStaSetMode_t));
 
     for(;;)
     {
@@ -2242,6 +2274,1005 @@ int xcCmdProcStaSetMode(char *pcmdStr, BYTE *aBuf, int *aLen)
     return WFA_SUCCESS;
 }
 
+int xcCmdProcStaGetP2pDevAddress(char * pcmdStr,BYTE * aBuf,int * aLen)
+{
+    dutCommand_t *getP2pDevAdd= (dutCommand_t *) (aBuf+sizeof(wfaTLV));
+    char *str;
+   
+    if(aBuf == NULL)
+       return FALSE;
+   
+    memset(aBuf, 0, *aLen);
+
+    for(;;)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        if(str == NULL || str[0] == '\0')
+           break;
+
+        if(strcasecmp(str, "interface") == 0)
+        {
+           str = strtok_r(NULL, ",", &pcmdStr);  
+           strncpy(getP2pDevAdd->intf, str, WFA_IF_NAME_LEN-1 );
+           getP2pDevAdd->intf[WFA_IF_NAME_LEN-1] = '\0';
+        }
+    }
+
+    wfaEncodeTLV(WFA_STA_P2P_GET_DEV_ADDRESS_TLV, sizeof(dutCommand_t), (BYTE *)getP2pDevAdd, aBuf);
+
+    *aLen = 4+sizeof(dutCommand_t);
+
+    return TRUE;
+}
+
+int xcCmdProcStaSetP2p(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaSetP2p_t *staSetP2p= (caStaSetP2p_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSetP2p->intf, str, WFA_IF_NAME_LEN-1);
+         staSetP2p->intf[WFA_IF_NAME_LEN-1]='\0';
+
+      }
+      else if(strcasecmp(str, "listen_chn") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->listen_chn= atoi(str);
+         staSetP2p->listen_chn_flag =1;
+      }
+      else if(strcasecmp(str, "p2p_mode") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSetP2p->p2p_mode, str, 15);
+         staSetP2p->p2p_mode_flag = 1;
+      }
+      else if(strcasecmp(str, "persistent") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->presistent= atoi(str);
+         staSetP2p->presistent_flag = 1;
+      }
+      else if(strcasecmp(str, "intra_bss") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->intra_bss= atoi(str);
+         staSetP2p->intra_bss_flag = 1;
+      }
+      else if(strcasecmp(str, "noa_duration") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->noa_duration= atoi(str);
+         staSetP2p->noa_duration_flag = 1;
+      }
+      else if(strcasecmp(str, "noa_interval") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->noa_interval= atoi(str);
+         staSetP2p->noa_interval_flag = 1;
+      }
+      else if(strcasecmp(str, "noa_count") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->noa_count= atoi(str);
+         staSetP2p->noa_count_flag = 1;
+      }
+      else if(strcasecmp(str, "concurrency") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->concurrency= atoi(str);
+         staSetP2p->concurrency_flag= 1;
+      }
+      else if(strcasecmp(str, "p2pinvitation") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->p2p_invitation= atoi(str);
+         staSetP2p->p2p_invitation_flag= 1;
+      }
+      else if(strcasecmp(str, "bcn_int") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->bcn_int= atoi(str);
+         staSetP2p->bcn_int_flag= 1;
+      }
+      else if(strcasecmp(str, "ext_listen_time_interval") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->ext_listen_time_int= atoi(str);
+         staSetP2p->ext_listen_time_int_flag= 1;
+      }
+      else if(strcasecmp(str, "ext_listen_time_period") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->ext_listen_time_period= atoi(str);
+         staSetP2p->ext_listen_time_period_flag= 1;
+      }
+      else if(strcasecmp(str, "discoverability") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->discoverability= atoi(str);
+         staSetP2p->discoverability_flag= 1;
+      }
+      else if(strcasecmp(str, "service_discovery") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->service_discovery= atoi(str);
+         staSetP2p->service_discovry_flag= 1;
+      }
+      else if(strcasecmp(str, "crossconnection") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->crossconnection= atoi(str);
+         staSetP2p->crossconnection_flag= 1;
+      }
+      else if(strcasecmp(str, "p2pmanaged") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->p2pmanaged= atoi(str);
+         staSetP2p->p2pmanaged_flag= 1;
+      }
+      else if(strcasecmp(str, "go_apsd") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetP2p->go_apsd= atoi(str);
+         staSetP2p->go_apsd_flag= 1;
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_SETP2P_TLV, sizeof(caStaSetP2p_t), (BYTE *)staSetP2p, aBuf);
+
+   *aLen = 4+sizeof(caStaSetP2p_t);
+
+   return TRUE;
+}
+
+
+int xcCmdProcStaP2pConnect(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaP2pConnect_t *staP2pConnect= (caStaP2pConnect_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pConnect->intf, str,WFA_IF_NAME_LEN-1);
+         staP2pConnect->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pConnect->grpid, str, WFA_P2P_GRP_ID_LEN-1);
+         staP2pConnect->grpid[WFA_P2P_GRP_ID_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "p2pdevid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pConnect->devId, str, WFA_P2P_DEVID_LEN-1);
+         staP2pConnect->devId[WFA_P2P_DEVID_LEN-1]='\0';
+      }		
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_CONNECT_TLV, sizeof(caStaP2pConnect_t), (BYTE *)staP2pConnect, aBuf);
+
+   *aLen = 4+sizeof(caStaP2pConnect_t);
+	
+   return TRUE;
+}
+
+
+
+int xcCmdProcStaP2pStartGroupFormation(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaP2pStartGrpForm_t *staP2pStartGrpForm= (caStaP2pStartGrpForm_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pStartGrpForm->intf, str, WFA_IF_NAME_LEN-1);
+         staP2pStartGrpForm->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "p2pdevid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pStartGrpForm->devId, str, WFA_P2P_DEVID_LEN-1);
+         staP2pStartGrpForm->devId[WFA_P2P_DEVID_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "intent_val") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staP2pStartGrpForm->intent_val= atoi(str);
+      }
+      else if(strcasecmp(str, "init_go_neg") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staP2pStartGrpForm->init_go_neg= atoi(str);
+      }
+      else if(strcasecmp(str, "oper_chn") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staP2pStartGrpForm->oper_chn= atoi(str);
+         staP2pStartGrpForm->oper_chn_flag=1;
+      }
+      else if(strcasecmp(str, "ssid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pStartGrpForm->ssid, str, WFA_SSID_NAME_LEN-1);
+         staP2pStartGrpForm->ssid[WFA_SSID_NAME_LEN-1]='\0';
+         staP2pStartGrpForm->ssid_flag =1;
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_START_GRP_FORMATION_TLV, sizeof(caStaP2pStartGrpForm_t), (BYTE *)staP2pStartGrpForm, aBuf);
+
+   *aLen = 4+sizeof(caStaP2pStartGrpForm_t);
+	
+   return TRUE;
+}
+
+int xcCmdProcStaP2pDissolve(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaP2pDissolve_t *staP2pDissolve= (caStaP2pDissolve_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pDissolve->intf, str, WFA_IF_NAME_LEN-1);
+         staP2pDissolve->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pDissolve->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staP2pDissolve->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_DISSOLVE_TLV, sizeof(dutCommand_t), (BYTE *)staP2pDissolve, aBuf);
+
+   *aLen = 4+sizeof(caStaP2pDissolve_t);
+
+   return TRUE;
+}
+
+int xcCmdProcStaSendP2pInvReq(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaSendP2pInvReq_t *staSendP2pInvReq= (caStaSendP2pInvReq_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSendP2pInvReq->intf, str, WFA_IF_NAME_LEN-1);
+         staSendP2pInvReq->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSendP2pInvReq->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staSendP2pInvReq->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "p2pdevid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSendP2pInvReq->devId, str, WFA_P2P_DEVID_LEN-1);
+         staSendP2pInvReq->devId[WFA_P2P_DEVID_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "reinvoke") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSendP2pInvReq->reinvoke= atoi(str);
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_SEND_INV_REQ_TLV, sizeof(caStaSendP2pInvReq_t), (BYTE *)staSendP2pInvReq, aBuf);
+
+   *aLen = 4+sizeof(caStaSendP2pInvReq_t);
+
+   return TRUE;
+}
+
+int xcCmdProcStaAcceptP2pInvReq(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+
+   caStaAcceptP2pInvReq_t *staAccceptP2pInvReq= (caStaAcceptP2pInvReq_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+ 
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staAccceptP2pInvReq->intf, str, WFA_IF_NAME_LEN-1);
+         staAccceptP2pInvReq->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staAccceptP2pInvReq->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staAccceptP2pInvReq->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "p2pdevid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staAccceptP2pInvReq->devId, str, WFA_P2P_DEVID_LEN-1);
+         staAccceptP2pInvReq->devId[WFA_P2P_DEVID_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "reinvoke") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staAccceptP2pInvReq->reinvoke= atoi(str);
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_ACCEPT_INV_REQ_TLV, sizeof(caStaAcceptP2pInvReq_t), (BYTE *)staAccceptP2pInvReq, aBuf);
+
+   *aLen = 4+sizeof(caStaAcceptP2pInvReq_t);
+
+   return TRUE;
+}
+
+
+
+int xcCmdProcStaSendP2pProvDisReq(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaSendP2pProvDisReq_t *staSendP2pProvDisReq= (caStaSendP2pProvDisReq_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSendP2pProvDisReq->intf, str, WFA_IF_NAME_LEN-1);
+         staSendP2pProvDisReq->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "configmethod") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSendP2pProvDisReq->confMethod, str, 15);
+      }
+      else if(strcasecmp(str, "p2pdevid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSendP2pProvDisReq->devId, str, WFA_P2P_DEVID_LEN-1);
+         staSendP2pProvDisReq->devId[WFA_P2P_DEVID_LEN-1]='\0';
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_SEND_PROV_DIS_REQ_TLV, sizeof(caStaSendP2pProvDisReq_t), (BYTE *)staSendP2pProvDisReq, aBuf);
+
+   *aLen = 4+sizeof(caStaSendP2pProvDisReq_t);
+
+   return TRUE;
+}
+
+int xcCmdProcStaSetWpsPbc(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaSetWpsPbc_t *staSetWpsPbc= (caStaSetWpsPbc_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSetWpsPbc->intf, str, WFA_IF_NAME_LEN-1);
+         staSetWpsPbc->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSetWpsPbc->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staSetWpsPbc->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+         staSetWpsPbc->grpid_flag=1;
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_WPS_SETWPS_PBC_TLV, sizeof(caStaSetWpsPbc_t), (BYTE *)staSetWpsPbc, aBuf);
+
+   *aLen = 4+sizeof(caStaSetWpsPbc_t);
+
+   return TRUE;
+}
+
+int xcCmdProcStaWpsReadPin(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaWpsReadPin_t *staWpsReadPin= (caStaWpsReadPin_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staWpsReadPin->intf, str, WFA_IF_NAME_LEN-1);
+         staWpsReadPin->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staWpsReadPin->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staWpsReadPin->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+         staWpsReadPin->grpid_flag=1;
+      }		
+   }
+
+   wfaEncodeTLV(WFA_STA_WPS_READ_PIN_TLV, sizeof(caStaWpsReadPin_t), (BYTE *)staWpsReadPin, aBuf);
+
+   *aLen = 4+sizeof(caStaWpsReadPin_t);
+
+   return TRUE;
+}
+
+
+int xcCmdProcStaWpsReadLabel(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaWpsReadLabel_t *staWpsReadLabel= (caStaWpsReadLabel_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staWpsReadLabel->intf, str, WFA_IF_NAME_LEN-1);
+         staWpsReadLabel->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staWpsReadLabel->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staWpsReadLabel->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+         staWpsReadLabel->grpid_flag=1;
+      }		
+   }
+
+   wfaEncodeTLV(WFA_STA_WPS_READ_LABEL_TLV, sizeof(caStaWpsReadLabel_t), (BYTE *)staWpsReadLabel, aBuf);
+
+   *aLen = 4+sizeof(caStaWpsReadLabel_t);
+
+   return TRUE;
+}
+
+
+int xcCmdProcStaWpsEnterPin(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaWpsEnterPin_t *staWpsEnterPin= (caStaWpsEnterPin_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+ 
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staWpsEnterPin->intf, str, WFA_IF_NAME_LEN-1);
+         staWpsEnterPin->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "pin") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staWpsEnterPin->wpsPin, str, WFA_WPS_PIN_LEN-1);
+         staWpsEnterPin->wpsPin[WFA_WPS_PIN_LEN-1]='\0';
+      }		
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staWpsEnterPin->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staWpsEnterPin->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+         staWpsEnterPin->grpid_flag=1;
+      }				
+   }
+
+   wfaEncodeTLV(WFA_STA_WPS_ENTER_PIN_TLV, sizeof(caStaWpsEnterPin_t), (BYTE *)staWpsEnterPin, aBuf);
+
+   *aLen = 4+sizeof(caStaWpsEnterPin_t);
+
+   return TRUE;
+}
+
+int xcCmdProcStaGetPsk(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaGetPsk_t *staGetPsk= (caStaGetPsk_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staGetPsk->intf, str, WFA_IF_NAME_LEN-1);
+         staGetPsk->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staGetPsk->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staGetPsk->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_GET_PSK_TLV, sizeof(caStaGetPsk_t), (BYTE *)staGetPsk, aBuf);
+
+   *aLen = 4+sizeof(caStaGetPsk_t);
+
+   return TRUE;
+}
+
+int xcCmdProcStaP2pStartAutoGo(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaStartAutoGo_t *staP2pStartAutoGo= (caStaStartAutoGo_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pStartAutoGo->intf, str,WFA_IF_NAME_LEN-1);
+         staP2pStartAutoGo->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "oper_chn") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staP2pStartAutoGo->oper_chn= atoi(str);
+      }		
+      else if(strcasecmp(str, "ssid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pStartAutoGo->ssid, str, WFA_SSID_NAME_LEN-1);
+         staP2pStartAutoGo->ssid[WFA_SSID_NAME_LEN-1]='\0';
+         staP2pStartAutoGo->ssid_flag =1;
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_START_AUTO_GO_TLV, sizeof(caStaStartAutoGo_t), (BYTE *)staP2pStartAutoGo, aBuf);
+
+   *aLen = 4+sizeof(caStaStartAutoGo_t);
+
+   return TRUE;
+}
+
+
+int xcCmdProcStaP2pReset(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   dutCommand_t *staP2pReset= (dutCommand_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staP2pReset->intf, str, WFA_IF_NAME_LEN-1);
+         staP2pReset->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_RESET_TLV, sizeof(dutCommand_t), (BYTE *)staP2pReset, aBuf);
+
+   *aLen = 4+sizeof(dutCommand_t);
+
+   return TRUE;
+}
+
+
+
+int xcCmdProcStaGetP2pIpConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaGetP2pIpConfig_t *staGetP2pIpConfig = (caStaGetP2pIpConfig_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staGetP2pIpConfig->intf, str,WFA_IF_NAME_LEN-1);
+         staGetP2pIpConfig->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staGetP2pIpConfig->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staGetP2pIpConfig->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_GET_IP_CONFIG_TLV, sizeof(caStaGetP2pIpConfig_t), (BYTE *)staGetP2pIpConfig, aBuf);
+
+   *aLen = 4+sizeof(caStaGetP2pIpConfig_t);
+
+    return TRUE;
+}
+
+int xcCmdProcStaSendServiceDiscoveryReq(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaSendServiceDiscoveryReq_t *staSendServiceDiscoveryReq = (caStaSendServiceDiscoveryReq_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSendServiceDiscoveryReq->intf, str,WFA_IF_NAME_LEN-1);
+         staSendServiceDiscoveryReq->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "p2pdevid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSendServiceDiscoveryReq->devId, str, WFA_P2P_DEVID_LEN-1);
+         staSendServiceDiscoveryReq->devId[WFA_P2P_DEVID_LEN-1]='\0';
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_SEND_SERVICE_DISCOVERY_REQ_TLV, sizeof(caStaSendServiceDiscoveryReq_t), (BYTE *)staSendServiceDiscoveryReq, aBuf);
+
+   *aLen = 4+sizeof(caStaSendServiceDiscoveryReq_t);
+
+   return TRUE;
+}
+
+int xcCmdProcStaSendP2pPresenceReq(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaSendP2pPresenceReq_t *staSendP2pPresenceReq = (caStaSendP2pPresenceReq_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSendP2pPresenceReq->intf, str,WFA_IF_NAME_LEN-1);
+         staSendP2pPresenceReq->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "interval") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSendP2pPresenceReq->interval= atoll(str);
+      }
+      else if(strcasecmp(str, "duration") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSendP2pPresenceReq->duration= atoll(str);
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_SEND_PRESENCE_REQ_TLV, sizeof(caStaSendP2pPresenceReq_t), (BYTE *)staSendP2pPresenceReq, aBuf);
+
+   *aLen = 4+sizeof(caStaSendP2pPresenceReq_t);
+
+   return TRUE;
+}
+
+
+int xcCmdProcStaSetSleepReq(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaSetSleep_t *staSetSleep = (caStaSetSleep_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSetSleep->intf, str,WFA_IF_NAME_LEN-1);
+         staSetSleep->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSetSleep->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staSetSleep->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_SET_SLEEP_TLV, sizeof(caStaSetSleep_t), (BYTE *)staSetSleep, aBuf);
+
+   *aLen = 4+sizeof(caStaSetSleep_t);
+
+   return TRUE;
+}
+
+
+int xcCmdProcStaSetOpportunistcPsReq(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaSetOpprPs_t *staSetOpprPs = (caStaSetOpprPs_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSetOpprPs->intf, str,WFA_IF_NAME_LEN-1);
+         staSetOpprPs->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "ctwindow") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staSetOpprPs->ctwindow= atoi(str);
+      }		
+      else if(strcasecmp(str, "groupid") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staSetOpprPs->grpId, str, WFA_P2P_GRP_ID_LEN-1);
+         staSetOpprPs->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_SET_OPPORTUNISTIC_PS_TLV, sizeof(caStaSetOpprPs_t), (BYTE *)staSetOpprPs, aBuf);
+
+   *aLen = 4+sizeof(caStaSetOpprPs_t);
+
+   return TRUE;
+}
+int xcCmdProcStaAddARPTableEntry(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaAddARPTableEntry_t *staAddARPTableEntry = (caStaAddARPTableEntry_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+   
+   if(aBuf == NULL)
+      return FALSE;
+   
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+      str = strtok_r(NULL, ",", &pcmdStr);
+      if(str == NULL || str[0] == '\0')
+         break;
+
+      if(strcasecmp(str, "interface") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);  
+         strncpy(staAddARPTableEntry->intf, str,WFA_IF_NAME_LEN-1);
+         staAddARPTableEntry->intf[WFA_IF_NAME_LEN-1]='\0';
+      }
+      else if(strcasecmp(str, "macaddress") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         strcpy(staAddARPTableEntry->macaddress, str);
+      }
+      else if(strcasecmp(str, "ipaddress") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         strcpy(staAddARPTableEntry->ipaddress, str);
+      }
+   }
+
+   wfaEncodeTLV(WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_TLV, sizeof(caStaAddARPTableEntry_t), (BYTE *)staAddARPTableEntry, aBuf);
+
+   *aLen = 4+sizeof(caStaAddARPTableEntry_t);
+
+   return TRUE;
+}
+int xcCmdProcStaBlockICMPResponse(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+	caStaBlockICMPResponse_t *staBlockICMPResponse = (caStaBlockICMPResponse_t *) (aBuf+sizeof(wfaTLV));
+	char *str;
+   
+	if(aBuf == NULL)
+		return FALSE;
+   
+	memset(aBuf, 0, *aLen);
+
+	for(;;)
+	{
+		str = strtok_r(NULL, ",", &pcmdStr);
+		if(str == NULL || str[0] == '\0')
+			break;
+
+		if(strcasecmp(str, "interface") == 0)
+		{
+			str = strtok_r(NULL, ",", &pcmdStr);  
+			strncpy(staBlockICMPResponse->intf, str,WFA_IF_NAME_LEN-1);
+			staBlockICMPResponse->intf[WFA_IF_NAME_LEN-1]='\0';
+		}
+		else if(strcasecmp(str, "groupid") == 0)
+        {
+			str = strtok_r(NULL, ",", &pcmdStr);
+			strcpy(staBlockICMPResponse->grpId, str);
+        }
+		else if(strcasecmp(str, "ipaddress") == 0)
+        {
+			str = strtok_r(NULL, ",", &pcmdStr);
+			strcpy(staBlockICMPResponse->ipaddress, str);
+        }
+
+	}
+
+	wfaEncodeTLV(WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_TLV, sizeof(caStaBlockICMPResponse_t), (BYTE *)staBlockICMPResponse, aBuf);
+
+	*aLen = 4+sizeof(caStaBlockICMPResponse_t);
+	
+	return TRUE;
+}
 int xcCmdProcStaSetPwrSave(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetPwrSave_t *setps = (caStaSetPwrSave_t *) (aBuf+sizeof(wfaTLV));
@@ -2563,6 +3594,7 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
 int xcCmdProcStaSetEapFAST(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapFAST_t *setsec = (caStaSetEapFAST_t *) (aBuf+sizeof(wfaTLV));
+    caStaSetEapFAST_t defparams = {"", "", "", "", "", "", "", "", 0, ""};
     char *str;
 
 #ifndef WFA_PC_CONSOLE
@@ -2571,6 +3603,7 @@ int xcCmdProcStaSetEapFAST(char *pcmdStr, BYTE *aBuf, int *aLen)
        return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapFAST_t));
 
     for(;;)
     {
@@ -2663,6 +3696,7 @@ int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapAKA_t *setsec = (caStaSetEapAKA_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caStaSetEapAKA_t defparams = {"", "", "", "", "", "", 0, {"", "", ""}};
    
 #ifndef WFA_PC_CONSOLE
 
@@ -2670,6 +3704,7 @@ int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapAKA_t));
 
     for(;;)
     {
@@ -2826,7 +3861,8 @@ int xcCmdProcStaDisconnect(char *pcmdStr, BYTE *aBuf, int *aLen)
         if(strcasecmp(str, "interface") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);  
-            strncpy(disc->intf, str, 15);
+			strncpy(disc->intf, str,WFA_IF_NAME_LEN-1);
+			disc->intf[WFA_IF_NAME_LEN-1]='\0';
         }
     }
 
@@ -2854,12 +3890,38 @@ int wfaStandardBoolParsing (char *str)
 }
 
 #endif
+int xcCmdProcStaSendNeigReq(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+    char *str;
+    dutCommand_t *getInfo = (dutCommand_t *) (aBuf+sizeof(wfaTLV));
 
-int xcCmdProcStaSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
+    if(aBuf == NULL)
+        return FALSE;
+   
+    memset(aBuf, 0, *aLen);
+
+    str = strtok_r(NULL, ",", &pcmdStr);
+    if(str == NULL || str[0] == '\0')
+         return FALSE;
+
+    if(strcasecmp(str, "interface") == 0)
+    {
+       str = strtok_r(NULL, ",", &pcmdStr);  
+       strncpy(getInfo->intf, str, 15);
+       DPRINT_INFO(WFA_OUT, "interface %s\n", getInfo->intf);
+    }
+
+    wfaEncodeTLV(WFA_STA_SEND_NEIGREQ_TLV, sizeof(dutCommand_t), (BYTE *)getInfo, aBuf);
+
+    *aLen = 4 + sizeof(dutCommand_t);
+
+    return TRUE;
+}
+int xcCmdProcStaDevSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     char *str;
     dutCommand_t *cmd = (dutCommand_t *) (aBuf+sizeof(wfaTLV));
-    caStaSendFrame_t *sf = &cmd->cmdsu.sf;
+    caStaDevSendFrame_t *sf = &cmd->cmdsu.sf;
 
     if(aBuf == NULL)
         return WFA_FAILURE;
@@ -2878,14 +3940,14 @@ int xcCmdProcStaSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
             strncpy(cmd->intf, str, 15);
             DPRINT_INFO(WFA_OUT, "interface %s\n", cmd->intf);
         }
-        else if (strcasecmp(str, "frame") == 0)
+        else if (strcasecmp(str, "prog") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             if (strcasecmp(str, "PMF") == 0)
             {
                 pmfFrame_t *pmf = &sf->frameType.pmf;
 
-                sf->frame = FM_TYPE_PMF;
+                sf->program= PROG_TYPE_PMF;
   
                 for(;;)
                 {
@@ -2893,28 +3955,28 @@ int xcCmdProcStaSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                     if(str == NULL || str[0] == '\0')
                         break;
 
-                    if (strcasecmp(str, "type") == 0)
+                    if (strcasecmp(str, "framename") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         if (strcasecmp(str, "disassoc") == 0)
                         {
-                            pmf->type = PMF_TYPE_DISASSOC; 
+                            pmf->eFrameName= PMF_TYPE_DISASSOC; 
                         }
                         else if (strcasecmp(str, "saquery") == 0)
                         {
-                            pmf->type = PMF_TYPE_SAQUERY; 
+                            pmf->eFrameName = PMF_TYPE_SAQUERY; 
                         }
                         else if (strcasecmp(str, "assocreq") == 0)
                         {
-                            pmf->type = PMF_TYPE_ASSOCREQ; 
+                            pmf->eFrameName = PMF_TYPE_ASSOCREQ; 
                         }
                         else if (strcasecmp(str, "reassocreq") == 0)
                         {
-                            pmf->type = PMF_TYPE_REASSOCREQ; 
+                            pmf->eFrameName = PMF_TYPE_REASSOCREQ; 
                         }
                         else if (strcasecmp(str, "deauth") == 0)
                         {
-                            pmf->type = PMF_TYPE_DEAUTH; 
+                            pmf->eFrameName = PMF_TYPE_DEAUTH; 
                         }
                     }
                     else if (strcasecmp(str, "protected") == 0)
@@ -2922,16 +3984,38 @@ int xcCmdProcStaSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                         str = strtok_r(NULL, ",", &pcmdStr);
                         if (strcasecmp(str, "correctKey") == 0)
                         {
-                            pmf->protected = PMF_PROT_CORRECTKEY; 
+                            pmf->eProtected= PMF_PROT_CORRECTKEY; 
                         }
                         else if (strcasecmp(str, "incorrectKey") == 0)
                         {
-                            pmf->protected = PMF_PROT_INCORRECTKEY; 
+                            pmf->eProtected = PMF_PROT_INCORRECTKEY; 
                         }
                         else if (strcasecmp(str, "unprotected") == 0)
                         {
-                            pmf->protected = PMF_PROT_UNPROTECTED; 
+                            pmf->eProtected = PMF_PROT_UNPROTECTED; 
                         }
+                    }
+                    else if (strcasecmp(str, "stationid") == 0)
+                    {
+
+				         str = strtok_r(NULL, ",", &pcmdStr);  
+				         strncpy(pmf->staid, str, WFA_MAC_ADDR_STR_LEN-1);
+				         pmf->staid[WFA_MAC_ADDR_STR_LEN-1]='\0';
+                    }
+                    else if (strcasecmp(str, "sender") == 0)
+                    {
+
+				         str = strtok_r(NULL, ",", &pcmdStr);  
+				         strncpy(pmf->sender, str, 7);
+				         pmf->sender[7]='\0';
+						 pmf->sender_flag =1;
+                    }
+                    else if (strcasecmp(str, "bssid") == 0)
+                    {
+				         str = strtok_r(NULL, ",", &pcmdStr);  
+				         strncpy(pmf->bssid, str, WFA_MAC_ADDR_STR_LEN-1);
+				         pmf->bssid[WFA_MAC_ADDR_STR_LEN-1]='\0';
+						 pmf->bssid_flag=1;
                     }
                 } /* for */
             } /* if PMF */
@@ -2939,43 +4023,44 @@ int xcCmdProcStaSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
             {
                 tdlsFrame_t *tdls = &sf->frameType.tdls;
 
-                sf->frame = FM_TYPE_TDLS;
+                sf->program= PROG_TYPE_TDLS;
                 for(;;)
                 {
                     str = strtok_r(NULL, ",", &pcmdStr);
                     if(str == NULL || str[0] == '\0')
                         break;
 
-                    if (strcasecmp(str, "type") == 0)
+                    if (strcasecmp(str, "framename") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         if (strcasecmp(str, "discovery") == 0)
                         {
-                            tdls->type = TDLS_TYPE_DISCOVERY;
+                            tdls->eFrameName= TDLS_TYPE_DISCOVERY;
                         }
                         else if (strcasecmp(str, "setup") == 0)
                         {
-                            tdls->type = TDLS_TYPE_SETUP;
+                            tdls->eFrameName = TDLS_TYPE_SETUP;
                         }
                         else if (strcasecmp(str, "teardown") == 0)
                         {
-                            tdls->type = TDLS_TYPE_TEARDOWN;
+                            tdls->eFrameName = TDLS_TYPE_TEARDOWN;
                         }
 #if 0 /* TTG to decide whether to have this needed */
                         else if (strcasecmp(str, "channelswitch") == 0)
                         {
-                            tdls->type = TDLS_TYPE_CHANNELSWITCH;
+                            tdls->eFrameName = TDLS_TYPE_CHANNELSWITCH;
                         }
 #endif
                         else if (strcasecmp(str, "psnull") == 0)
                         {
-                            tdls->type = TDLS_TYPE_NULLFRAME;
+                            tdls->eFrameName = TDLS_TYPE_NULLFRAME;
                         }
                     }
                     else if (strcasecmp(str, "peer") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
-                        strncpy(tdls->peer, str, 17); 
+				        strncpy(tdls->peer, str, WFA_MAC_ADDR_STR_LEN-1);
+				        tdls->peer[WFA_MAC_ADDR_STR_LEN-1]='\0';						
                     }
                     else if (strcasecmp(str, "timeout") == 0)
                     {
@@ -2983,26 +4068,33 @@ int xcCmdProcStaSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                         tdls->timeout = atoi(str);
                         if(tdls->timeout <301)
                            return WFA_FAILURE; 
+						tdls->timeout_flag=1;
                     }
                     else if(strcasecmp(str, "bssid") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
-                        strncpy(tdls->bssid, str, 17); 
+			            strncpy(tdls->bssid, str, WFA_MAC_ADDR_STR_LEN-1);
+				        tdls->bssid[WFA_MAC_ADDR_STR_LEN-1]='\0';		
+						tdls->bssid_flag=1;
                     }
                     else if(strcasecmp(str, "switchtime") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         tdls->switchtime = atoi(str);
+						tdls->switchtime_flag=1;
                     }
                     else if(strcasecmp(str, "channel") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         tdls->channel = atoi(str);
+						tdls->channel_flag=1;
                     }
                     else if(strcasecmp(str, "channelOffset") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         strncpy(tdls->offset, str, 4); 
+						tdls->offset[3]=1;						
+						tdls->offset_flag=1;
                     }
                     else if(strcasecmp(str, "status") == 0)
                     {
@@ -3010,27 +4102,28 @@ int xcCmdProcStaSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                         tdls->status = atoi(str);
                         if(tdls->status != 0 && tdls->status != 37)
                            return WFA_FAILURE;
+						tdls->status_flag=1;
                     }
                     else if(strcasecmp(str, "reason") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         tdls->reason = atoi(str);
-                    }
-                    
+						tdls->reason_flag=1;
+                    }                    
                  } /* for */ 
             } /* TDLS */
             else if (strcasecmp(str, "VENT") == 0)
             {
                 ventFrame_t *vent = &sf->frameType.vent;
 
-                sf->frame = FM_TYPE_VENT;
+                sf->program= PROG_TYPE_VENT;
                 for(;;)
                 {
                     str = strtok_r(NULL, ",", &pcmdStr);
                     if(str == NULL || str[0] == '\0')
                         break;
 
-                    if (strcasecmp(str, "type") == 0)
+                    if (strcasecmp(str, "framename") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         if (strcasecmp(str, "neigreq") == 0)
@@ -3049,7 +4142,7 @@ int xcCmdProcStaSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     } /* for */
     
-    wfaEncodeTLV(WFA_STA_SENDFRAME_TLV, sizeof(dutCommand_t), (BYTE *)cmd, aBuf);
+    wfaEncodeTLV(WFA_STA_DEV_SEND_FRAME_TLV, sizeof(dutCommand_t), (BYTE *)cmd, aBuf);
 
     *aLen = 4 + sizeof(dutCommand_t);
 
@@ -3127,6 +4220,8 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
               presetTestParams->legacyPowerSave = 1;
            else if (strcasecmp(str, "fast") == 0)
               presetTestParams->legacyPowerSave = 2;
+           else if (strcasecmp(str, "psnonpoll") == 0)
+              presetTestParams->legacyPowerSave = 3;
            else
               presetTestParams->legacyPowerSave = 0;
 
@@ -3143,6 +4238,51 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
               presetTestParams->wmmState = 1;
            else if(strcasecmp(str, "off") == 0)
               presetTestParams->wmmState = 0;
+        }
+        else if(strcasecmp(str, "noack") == 0)
+        {
+	   /* uncomment and use it char *ackpol; */
+            char *setvalues =strtok_r(NULL, ",", &pcmdStr);
+//          int ackpolcnt = 0;
+            if(setvalues != NULL)
+            {
+               /* BE */
+               /* str=strtok_r(NULL, ":", &setvalues);
+               if(str != NULL)
+               {
+                   if(strcasecmp(str, "enable") == 0)
+                      presetTestParams->noack_be = 2;
+                   else if(strcasecmp(str, "disable") == 0)
+                      presetTestParams->noack_be = 1;
+                }*/
+                /* BK */
+                /* str=strtok_r(NULL, ":", &setvalues);
+                   if(str != NULL)
+                   {
+                      if(strcasecmp(str, "enable") == 0)
+                         presetTestParams->noack_bk = 2;
+                      else if(strcasecmp(str, "disable") == 0)
+                         presetTestParams->noack_bk = 1;
+		}*/
+		/* VI */
+		/*	str=strtok_r(NULL, ":", &setvalues);
+		if(str != NULL)
+		{
+                    if(strcasecmp(str, "enable") == 0)
+                        presetTestParams->noack_vi = 2;
+                    else if(strcasecmp(str, "disable") == 0)
+                        presetTestParams->noack_vi = 1;
+                }*/
+                /* VO */
+                /*  str=strtok_r(NULL, ":", &setvalues);
+                if(str != NULL)
+                {
+                    if(strcasecmp(str, "enable") == 0)
+                       presetTestParams->noack_vo = 2;
+                    else if(strcasecmp(str, "disable") == 0)
+                       presetTestParams->noack_vo = 1;
+                }*/
+            }
         }
         else if(strcasecmp(str, "ht") == 0)
         {
@@ -3496,12 +4636,12 @@ int xcCmdProcStaSendCoExistMGMT(char *pcmdStr, BYTE *aBuf, int *aLen)
     return WFA_SUCCESS;
 }
 
-caSta11n_t init11nParams = {"wifi0", 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,0xFFFF, 0xFFFF, "", "", 0xFF, 0xFF, 0xFF, 0xFF};
 
 int xcCmdProcStaSet11n(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caSta11n_t *v11nParams = (caSta11n_t *) (aBuf+sizeof(wfaTLV));
     char *str;
+    caSta11n_t init11nParams = {"wifi0", 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,0xFFFF, 0xFFFF, "", "", 0xFF, 0xFF, 0xFF, 0xFF};
 
     DPRINT_INFO(WFA_OUT,"xcCmdProcStaSet11n Starts...");
 
@@ -3516,6 +4656,12 @@ int xcCmdProcStaSet11n(char *pcmdStr, BYTE *aBuf, int *aLen)
         str = strtok_r(NULL, ",", &pcmdStr);
         if(str == NULL || str[0] == '\0')
             break;
+        if(strcasecmp(str, "interface") == 0)
+        {
+			str = strtok_r(NULL, ",", &pcmdStr);  
+			strncpy(v11nParams->intf, str,WFA_IF_NAME_LEN-1);
+			v11nParams->intf[WFA_IF_NAME_LEN-1]='\0';
+        }		
 
         if(strcasecmp(str, "ampdu") == 0)
         {
@@ -3626,7 +4772,18 @@ int xcCmdProcStaSet11n(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "smps") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            v11nParams->smps = atoi(str);
+            if(strcasecmp(str, "dynamic") == 0)
+            {
+                v11nParams->smps = 0;
+            } 
+            else if(strcasecmp(str, "static")==0)
+            {
+                v11nParams->smps = 1;
+            }
+            else if(strcasecmp(str, "nolimit") == 0)
+            {
+                v11nParams->smps = 2;
+            }
             DPRINT_INFO(WFA_OUT, "\n smps  -%d- \n", v11nParams->smps);
         }
         else if(strcasecmp(str, "txsp_stream") == 0 )
@@ -3701,8 +4858,23 @@ int xcCmdProcStaSetRFeature(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-    wfaEncodeTLV(WFA_STA_SET_RFEATURE_TLV, sizeof(dutCommand_t), (BYTE *)dutcmd, aBuf);
-    *aLen = 4+sizeof(dutCommand_t);
+    wfaEncodeTLV(WFA_STA_SET_RFEATURE_TLV, sizeof(caStaRFeat_t), (BYTE *)rfeat, aBuf);
+    *aLen = 4+sizeof(caStaRFeat_t);
 
     return WFA_SUCCESS;
 }
+	
+
+int xcCmdProcStaCliCommand(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+	
+	printf("\n The CA CLI command to DUT is : %s",pcmdStr);
+	printf("\n The CA CLI command to DUT Length : %d",strlen(pcmdStr));
+	wfaEncodeTLV(WFA_STA_CLI_CMD_TLV, strlen(pcmdStr), (BYTE *)pcmdStr, aBuf);
+
+	*aLen = 4+strlen(pcmdStr);
+    return TRUE;
+
+}
+
+

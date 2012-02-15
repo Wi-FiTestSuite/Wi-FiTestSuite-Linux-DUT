@@ -131,9 +131,41 @@ dutCommandRespFuncPtr wfaCmdRespProcFuncTbl[WFA_STA_RESPONSE_END+1] =
     wfaStaGenericResp,                   /* (46)*/
     wfaStaGenericResp,                   /* (47)*/
     wfaStaGenericResp,                   /* (48)*/
-    wfaStaGenericResp,                  /* (49)*/
-    wfaStaGenericResp,                  /* (50)*/
-    wfaStaGenericResp,                   /* (51)*/
+    wfaStaGenericResp,                   /* (49)*/
+    
+	/* P2P */
+	wfaStaGetP2pDevAddressResp,  		/* (WFA_STA_DISCONNECT_RESP_TLV - 524 */          
+	wfaStaGenericResp,	 		/* (WFA_STA_GET_P2P_DEV_ADDRESS_RESP_TLV -  */ 		
+	wfaStaGenericResp, 		/* (WFA_STA_SET_P2P_RESP_TLV -  */ 
+	wfaStaStartAutoGO,       		/* (WFA_STA_P2P_CONNECT_RESP_TLV -  */       
+	wfaStaP2pStartGrpFormResp, 		/* (WFA_STA_P2P_START_AUTO_GO_RESP_TLV -  */          
+
+	wfaStaGenericResp,  		/* (WFA_STA_P2P_START_GRP_FORM_RESP_TLV -  */            
+	wfaStaGenericResp, 		/* (WFA_STA_P2P_DISSOLVE_RESP_TLV -  */ 		
+	wfaStaGenericResp, 		/* (WFA_STA_SEND_P2P_INV_REQ_RESP_TLV -  */ 		
+	wfaStaGenericResp, 		/* (WFA_STA_ACCEPT_P2P_REQ_RESP_TLV -  */      
+	wfaStaGenericResp,  		/* (WFA_STA_SEND_P2P_PROV_DIS_REQ_RESP_TLV -  */ 
+	
+	wfaStaWpsReadPinResp,    		/* (WFA_STA_SET_WPS_PBC_RESP_TLV -  */    
+	wfaStaGenericResp,	 		/* (WFA_STA_WPS_READ_PIN_RESP_TLV -  */ 	
+	wfaStaGetPskResp,    		/* (WFA_STA_WPS_ENTER_PIN_RESP_TLV -  */ 
+	wfaStaGenericResp,    		/* (WFA_STA_GET_PSK_RESP_TLV -  */ 
+	wfaStaWpsReadLabelResp, 		/* (WFA_STA_P2P_RESET_RESP_TLV -  */ 
+	wfaStaGetP2pIpConfigResp, 		/* (WFA_STA_WPS_READ_LABEL_RESP_TLV -  */ 
+	wfaStaGenericResp, 		/* (WFA_STA_GET_P2P_IP_CONFIG_RESP_TLV -  */ 
+	wfaStaGenericResp,	 		/* (WFA_STA_SEND_SERVICE_DISCOVERY_REQ_RESP_TLV -  */ 
+	wfaStaGenericResp,	 		/* (WFA_STA_SEND_P2P_PRESENCE_REQ_RESP_TLV -  */ 
+	wfaStaGenericResp,	 		/* (WFA_STA_SET_SLEEP_REQ_RESP_TLV -  */ 
+
+
+	wfaStaGenericResp, 		/* (WFA_STA_DISCONNECT_RESP_TLV  */ 
+	wfaStaGenericResp,		/* (WFA_STA_ADD_ARP_TABLE_ENTRY_RESP_TLV - 545 */ 
+	/* P2P */
+    wfaStaGenericResp,                  
+    wfaStaGenericResp,                   
+	wfaStaCliCmdResp
+
+	
 };
 
 extern int gSock, gCaSockfd;
@@ -803,6 +835,220 @@ int wfaStaUploadResp(BYTE *cmdBuf)
     return done;
 }
 
+int wfaStaGetP2pDevAddressResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *p2pDevAddResp = (dutCmdResponse_t *) (cmdBuf + 4);
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaGetP2pDevAddressResp ...\n");
+
+   printf("Inside response function...");
+   printf("Inside response function...");
+   printf("Inside response function...");
+   printf("Inside response function...");
+   printf("Inside response function...");
+
+    switch(p2pDevAddResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaGetP2pDevAddressResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,devid,%s\r\n", p2pDevAddResp->cmdru.devid);
+        printf("status,COMPLETE,devid,%s\r\n", p2pDevAddResp->cmdru.devid);
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+int wfaStaStartAutoGO(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *p2pResp = (dutCmdResponse_t *) (cmdBuf + 4);
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaStartAutoGO ...\n");
+    switch(p2pResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaStartAutoGO running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+		sprintf(gRespStr, "status,COMPLETE,groupid,%s\r\n", p2pResp->cmdru.grpid);
+		printf("status,COMPLETE,groupid,%s\r\n", p2pResp->cmdru.grpid);
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);		
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+int wfaStaP2pStartGrpFormResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *p2pResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caP2pStartGrpFormResp_t *grpInfo= &p2pResp->cmdru.grpFormInfo;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaP2pStartGrpFormResp ...\n");
+    switch(p2pResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaP2pStartGrpFormResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,result,%s,groupid,%s\r\n", grpInfo->result,grpInfo->grpId);
+        printf("status,COMPLETE,result,%s,groupid,%s\r\n", grpInfo->result,grpInfo->grpId);
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+
+int wfaStaWpsReadPinResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *p2pResp = (dutCmdResponse_t *) (cmdBuf + 4);
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaWpsReadPinResp ...\n");
+    switch(p2pResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaWpsReadPinResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,pin,%s\r\n", p2pResp->cmdru.wpsPin);
+        printf("status,COMPLETE,pin,%s\r\n", p2pResp->cmdru.wpsPin);
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+int wfaStaGetPskResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *p2pResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caP2pStaGetPskResp_t *pskInfo= &p2pResp->cmdru.pskInfo;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaGetPskResp ...\n");
+    switch(p2pResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaGetPskResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,passphrase,%s,ssid,%s\r\n", pskInfo->passPhrase,pskInfo->ssid);
+        printf("status,COMPLETE,passphrase,%s,ssid,%s\r\n", pskInfo->passPhrase,pskInfo->ssid);
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+int wfaStaWpsReadLabelResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *p2pResp = (dutCmdResponse_t *) (cmdBuf + 4);
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaWpsReadLabelResp ...\n");
+    switch(p2pResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaWpsReadLabelResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,label,%s\r\n", p2pResp->cmdru.wpsPin);
+        printf("status,COMPLETE,label,%s\r\n", p2pResp->cmdru.wpsPin);
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+int wfaStaGetP2pIpConfigResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *getIpConfigResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaGetP2pIpConfigResp ...\n");
+    switch(getIpConfigResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaGetP2pIpConfigResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_ERROR:
+        sprintf(gRespStr, "status,ERROR\r\n");
+        break;
+
+        case STATUS_COMPLETE:
+        if(strlen(getIpConfigResp->cmdru.getIfconfig.dns[0]) == 0)
+                *getIpConfigResp->cmdru.getIfconfig.dns[0] = '\0';
+        if(strlen(getIpConfigResp->cmdru.getIfconfig.dns[1]) == 0)
+                *getIpConfigResp->cmdru.getIfconfig.dns[1] = '\0';
+
+        sprintf(gRespStr, "status,COMPLETE,dhcp,%i,ip,%s,mask,%s,primary-dns,%s,p2pinterfaceaddress,%s\r\n", getIpConfigResp->cmdru.getIfconfig.isDhcp,
+                      getIpConfigResp->cmdru.getIfconfig.ipaddr,
+                      getIpConfigResp->cmdru.getIfconfig.mask,
+                      getIpConfigResp->cmdru.getIfconfig.dns[0],
+					  getIpConfigResp->cmdru.getIfconfig.mac);
+
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
 int wfaStaGenericResp(BYTE *cmdBuf)
 {
     int done=0;
@@ -835,3 +1081,49 @@ int wfaStaGenericResp(BYTE *cmdBuf)
 
     return done;
 }
+
+
+int wfaStaCliCmdResp(BYTE *cmdBuf)
+{
+    int done=0;
+    caStaCliCmdResp_t *staCliCmdResp = (caStaCliCmdResp_t *) (cmdBuf + 4);
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaCliCmdResp ...\n");
+    switch(staCliCmdResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaCliCmdResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+		if(staCliCmdResp->resFlag == 1)
+		{
+			sprintf(gRespStr, "status,COMPLETE,%s\r\n", staCliCmdResp->result);
+			printf("\nstatus,COMPLETE,%s****\r\n", staCliCmdResp->result);
+		}
+		else
+		{
+			sprintf(gRespStr, "status,COMPLETE\r\n");
+			printf("status,COMPLETE\r\n");
+		}
+
+        break;
+
+        case STATUS_ERROR:
+        sprintf(gRespStr, "status,ERROR\r\n");
+        printf("status,ERROR\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+        break;
+
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+
