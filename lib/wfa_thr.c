@@ -321,16 +321,16 @@ void wfaSetThreadPrio(int tid, int userPriority)
     switch(userPriority)
     {
        case TG_WMM_AC_BK:
-       tschedParam.sched_priority = 70-3;
+       tschedParam.sched_priority = -1;
        break;
        case TG_WMM_AC_VI:
-       tschedParam.sched_priority = 70-1;
+       tschedParam.sched_priority = 19-1;
        break;
        case TG_WMM_AC_VO:
-       tschedParam.sched_priority = 70;
+       tschedParam.sched_priority = 19;
        break;
        case TG_WMM_AC_BE:
-       tschedParam.sched_priority = 70-2;
+       tschedParam.sched_priority = 0;
        default:
            /* default */
          ;
@@ -430,7 +430,7 @@ int sender(char psave,int sleep_period, int userPriority)
  */
 int WfaStaSndHello(char psave,int sleep_period,int *state)
 {
-   int r;
+//   int ret = 0;
    tgWMM_t *my_wmm = &wmm_thr[wmmps_info.ps_thread];
 
    usleep(sleep_period);
@@ -438,7 +438,7 @@ int WfaStaSndHello(char psave,int sleep_period,int *state)
    if(!(num_hello++))
        create_apts_msg(APTS_HELLO, psTxMsg,0);
    wfaTGSetPrio(psSockfd, 0);
-   r = wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
+   wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
 
 
    wPT_MUTEX_LOCK(&my_wmm->thr_flag_mutex);
@@ -473,12 +473,11 @@ int WfaStaSndHello(char psave,int sleep_period,int *state)
  */
 int WfaStaSndConfirm(char psave,int sleep_period,int *state)
 {
-   int r;
    static int num_hello=0;
    wfaSetDUTPwrMgmt(psave);
    if(!num_hello)
       create_apts_msg(APTS_CONFIRM, psTxMsg,0);
-   r = wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
+   wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
    mpx("STA msg",psTxMsg,64);
    printf("Confirm Sent\n");
 
@@ -612,7 +611,6 @@ int WfaStaSndVOCyclic(char psave,int sleep_period,int *state)
  */
 int WfaStaWaitStop(char psave,int sleep_period,int *state)
 {
-   int r;
    int myid=wmmps_info.ps_thread;
    PRINTF("\n Entering Sendwait");
    wUSLEEP(sleep_period);
@@ -624,7 +622,7 @@ int WfaStaWaitStop(char psave,int sleep_period,int *state)
 
    num_stops++;
    create_apts_msg(APTS_STOP, psTxMsg,wmmps_info.my_sta_id);
-   r = wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
+   wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
    mpx("STA msg",psTxMsg,64);
 
    wmm_thr[myid].stop_flag = 1;
@@ -744,6 +742,12 @@ void * wfa_wmm_thread(void *thr_param)
 
 	   if (myProfile->profile == PROF_IPTV || myProfile->profile == PROF_FILE_TX || myProfile->profile == PROF_MCAST)
            {
+              int iOptVal, iOptLen;
+
+	          getsockopt(mySock, SOL_SOCKET, SO_SNDBUF, (char *)&iOptVal, (socklen_t *)&iOptLen);
+	          iOptVal = iOptVal * 16;
+	          setsockopt(mySock, SOL_SOCKET, SO_SNDBUF, (char *)&iOptVal, (socklen_t )iOptLen);
+
               wfaSendLongFile(mySock, myStreamId, respBuf, &respLen);
               if(mySock != -1)
               {
@@ -934,44 +938,41 @@ void * wfa_wmm_thread(void *thr_param)
            }
 	   else if (myProfile->profile == PROF_IPTV || myProfile->profile == PROF_FILE_TX || myProfile->profile == PROF_MCAST)
 	   {
-	       char recvBuf[3072];
-               int iOptVal, iOptLen;
-               struct timeval tmout;
+	       char recvBuf[MAX_RCV_BUF_LEN+1];
+           int iOptVal, iOptLen;
+           struct timeval tmout;
 
 #ifdef WFA_VOICE_EXT
-               struct timeval currtime;
-               FILE *e2eoutp = NULL;
-               char e2eResults[124];
-               int le2eCnt = 0;
+           struct timeval currtime;
+           FILE *e2eoutp = NULL;
+           char e2eResults[124];
+           int le2eCnt = 0;
 #endif
 
 	       mySock = wfaCreateUDPSock(myProfile->dipaddr, myProfile->dport);
-               if(mySock == -1)
-               {
-                  printf("Error open socket\n");
-                  continue;
-               }
+           if(mySock == -1)
+           {
+               printf("Error open socket\n");
+               continue;
+           }
 
 	       tgSockfds[myStream->tblidx] = mySock;
 
 #ifdef WFA_VOICE_EXT
-               /* only for receive stream needs to create a stats storage */
-               tgE2EStats_t *e2esp = NULL;
-               //int totalE2Cnt = myProfile->duration * WFA_G_CODEC_RATE;
-               // Currently assume the test run for 2 minutes/120 seconds
-               // will have it adjusted for variable defined by scripts 
-               // that needs a CAPI update on TG profile receiver side.
-               int totalE2Cnt = 6000;
-               printf("total %i to be counted and malloc for stored\n", totalE2Cnt);
-               if(myProfile->profile == PROF_IPTV)
+           /* only for receive stream needs to create a stats storage */
+           tgE2EStats_t *e2esp = NULL;
+           //int totalE2Cnt = myProfile->duration * WFA_G_CODEC_RATE;
+           int totalE2Cnt = 220 * WFA_G_CODEC_RATE;
+           printf("init E2Cnt %i\n", totalE2Cnt);
+           if(myProfile->profile == PROF_IPTV)
+           {
+               e2esp = malloc(totalE2Cnt * sizeof(tgE2EStats_t));
+
+               if(e2esp == NULL)
                {
-                  e2esp = malloc(totalE2Cnt * sizeof(tgE2EStats_t));
 
-                  if(e2esp == NULL)
-                  {
-
-                  }
                }
+           }
 #endif
 
                /* increase the rec queue size */

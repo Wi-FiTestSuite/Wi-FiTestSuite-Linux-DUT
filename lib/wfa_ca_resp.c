@@ -75,6 +75,8 @@
 #include "wfa_rsp.h"
 #include "wfa_sock.h"
 #include "wfa_ca_resp.h"
+#include "wfa_cmds.h"
+
 
 extern unsigned short wfa_defined_debug;
 char gRespStr[WFA_BUFF_512];
@@ -163,9 +165,13 @@ dutCommandRespFuncPtr wfaCmdRespProcFuncTbl[WFA_STA_RESPONSE_END+1] =
 	/* P2P */
     wfaStaGenericResp,                  
     wfaStaGenericResp,                   
-	wfaStaCliCmdResp
+	wfaStaStartWfdConnectionResp,
+	wfaStaCliCmdResp,  /* 75 */
+	wfaStaConnectGoStartWfdResp,  /* 76 */
+	wfaStaGenericResp,  /* 77 */
+	wfaStaGenericResp,	/* 78 */
+	wfaStaGetParameterResp,	/* 79 */
 
-	
 };
 
 extern int gSock, gCaSockfd;
@@ -1082,6 +1088,35 @@ int wfaStaGenericResp(BYTE *cmdBuf)
     return done;
 }
 
+int wfaStaStartWfdConnectionResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *wfdResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caStaStartWfdConnResp_t *wfdConnInfo= &wfdResp->cmdru.wfdConnInfo;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaStartWfdConnectionResp ...\n");
+    switch(wfdResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaStartWfdConnectionResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,result,%s,groupid,%s,wfdsessionid,%s\r\n", wfdConnInfo->result,wfdConnInfo->p2pGrpId,wfdConnInfo->wfdSessionId);
+        printf("status,COMPLETE,result,%s,groupid,%s,wfdsessionid,%s\r\n", wfdConnInfo->result,wfdConnInfo->p2pGrpId,wfdConnInfo->wfdSessionId);
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+
+}
 
 int wfaStaCliCmdResp(BYTE *cmdBuf)
 {
@@ -1126,4 +1161,75 @@ int wfaStaCliCmdResp(BYTE *cmdBuf)
 
     return done;
 }
+
+int wfaStaConnectGoStartWfdResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *wfdResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caStaStartWfdConnResp_t *wfdConnInfo= &wfdResp->cmdru.wfdConnInfo;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaConnectGoStartWfdResp ...\n");
+    switch(wfdResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaConnectGoStartWfdResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,wfdsessionid,%s\r\n",wfdConnInfo->wfdSessionId);
+        printf("status,COMPLETE,wfdsessionid,%s\r\n", wfdConnInfo->wfdSessionId);
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+
+}
+
+
+int wfaStaGetParameterResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *wfdResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caStaGetParameterResp_t *getParamInfo= &wfdResp->cmdru.getParamValue;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaGetParameterResp ...\n");
+    switch(wfdResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaGetParameterResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+		if(getParamInfo->getParamType == eDiscoveredDevList)
+		{
+	        sprintf(gRespStr, "status,COMPLETE,DeviceList,%s\r\n",getParamInfo->devList);
+	        printf("status,COMPLETE,DeviceList,%s\r\n", getParamInfo->devList);
+	        break;		
+		}
+		else
+		{
+	        sprintf(gRespStr, "status,COMPLETE,UnkownGetParmResp\r\n");
+	        printf("status,COMPLETE,UnkownGetParmResp\r\n");
+	        break;		
+		}
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+
+}
+
 

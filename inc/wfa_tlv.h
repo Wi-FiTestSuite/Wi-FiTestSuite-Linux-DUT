@@ -135,11 +135,46 @@ enum cmd_tags {
    WFA_STA_SET_RIFS_TEST_TLV,            /* 45 */
    WFA_STA_RESET_DEFAULT_TLV,            /* 46 */
    WFA_STA_DISCONNECT_TLV,               /* 47 */
-   WFA_STA_SENDFRAME_TLV,                /* 48 */
+   WFA_STA_DEV_SEND_FRAME_TLV,           /* 48 */
    WFA_STA_SET_SECURITY_TLV,             /* 49 */
-   WFA_STA_SET_RADIO_TLV,                /* 50 */
-   WFA_STA_SET_RFEATURE_TLV,             /* 51 */
-   WFA_STA_COMMANDS_END                  /* 52 */
+/* P2P */
+    WFA_STA_P2P_GET_DEV_ADDRESS_TLV,      /* 50 */
+    WFA_STA_P2P_SETP2P_TLV,               /* 51 */
+    WFA_STA_P2P_CONNECT_TLV,              /* 52 */
+    WFA_STA_P2P_START_AUTO_GO_TLV,        /* 53 */
+    WFA_STA_P2P_START_GRP_FORMATION_TLV,  /* 54 */
+    WFA_STA_P2P_DISSOLVE_TLV,             /* 55 */
+    WFA_STA_P2P_SEND_INV_REQ_TLV,         /* 56 */
+    WFA_STA_P2P_ACCEPT_INV_REQ_TLV,       /* 57 */
+    WFA_STA_P2P_SEND_PROV_DIS_REQ_TLV,    /* 58 */
+    WFA_STA_WPS_SETWPS_PBC_TLV,           /* 59 */
+    WFA_STA_WPS_READ_PIN_TLV,             /* 60 */
+    WFA_STA_WPS_ENTER_PIN_TLV,            /* 61 */
+    WFA_STA_P2P_GET_PSK_TLV,              /* 62 */
+    WFA_STA_P2P_RESET_TLV,                /* 63 */
+    WFA_STA_WPS_READ_LABEL_TLV,           /* 64 */
+    WFA_STA_P2P_GET_IP_CONFIG_TLV,        /* 65 */
+    WFA_STA_P2P_SEND_SERVICE_DISCOVERY_REQ_TLV, /* 66 */
+    WFA_STA_P2P_SEND_PRESENCE_REQ_TLV,    /* 67 */
+    WFA_STA_P2P_SET_SLEEP_TLV,            /* 68 */
+    WFA_STA_P2P_SET_OPPORTUNISTIC_PS_TLV, /* 69 */
+
+    WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_TLV,      /* 70 */
+    WFA_STA_P2P_BLOCK_ICMP_RESPONSE_TLV,      /* 71 */ 
+
+/*TDLS or PMF */
+   	WFA_STA_SET_RADIO_TLV,                /* 72 */
+   	WFA_STA_SET_RFEATURE_TLV,             /* 73 */
+/*Display */
+   	WFA_STA_START_WFD_CONNECTION_TLV,	/* 74 */
+   	WFA_STA_CLI_CMD_TLV,					/* 75 */
+   	WFA_STA_CONNECT_GO_START_WFD_TLV,	 /* 76 */
+   	WFA_STA_GENERATE_EVENT_TLV,	 		/* 77 */
+   	WFA_STA_REINVOKE_WFD_SESSION_TLV,	/* 78 */
+   	WFA_STA_GET_PARAMETER_TLV,	/* 79 */
+	   	
+
+   WFA_STA_COMMANDS_END                  /* 80 */
 };
 
 
@@ -200,11 +235,44 @@ enum resp_tags {
    WFA_STA_SET_RIFS_TEST_RESP_TLV,             /* 45 */ 
    WFA_STA_RESET_DEFAULT_RESP_TLV,             /* 46 */ 
    WFA_STA_DISCONNECT_RESP_TLV,                /* 47 */ 
-   WFA_STA_SENDFRAME_RESP_TLV,                 /* 48 */ 
+   WFA_STA_DEV_SEND_FRAME_RESP_TLV,            /* 48 */ 
    WFA_STA_SET_SECURITY_RESP_TLV,              /* 49 */
-   WFA_STA_SET_RADIO_RESP_TLV,                 /* 50 */
-   WFA_STA_SET_RFEATURE_RESP_TLV,                  /* 51 */
-   WFA_STA_RESPONSE_END                        /* 52 */
+/* P2P */
+    WFA_STA_P2P_GET_DEV_ADDRESS_RESP_TLV,      /* 50 */
+    WFA_STA_P2P_SETP2P_RESP_TLV,               /* 51 */
+    WFA_STA_P2P_CONNECT_RESP_TLV,              /* 52 */
+    WFA_STA_P2P_START_AUTO_GO_RESP_TLV,        /* 53 */
+    WFA_STA_P2P_START_GRP_FORMATION_RESP_TLV,  /* 54 */
+    WFA_STA_P2P_DISSOLVE_RESP_TLV,             /* 55 */
+    WFA_STA_P2P_SEND_INV_REQ_RESP_TLV,         /* 56 */
+    WFA_STA_P2P_ACCEPT_INV_REQ_RESP_TLV,       /* 57 */
+    WFA_STA_P2P_SEND_PROV_DIS_REQ_RESP_TLV,    /* 58 */
+    WFA_STA_WPS_SETWPS_PBC_RESP_TLV,           /* 59 */
+    WFA_STA_WPS_READ_PIN_RESP_TLV,             /* 60 */
+    WFA_STA_WPS_ENTER_PIN_RESP_TLV,            /* 61 */
+    WFA_STA_P2P_GET_PSK_RESP_TLV,              /* 62 */
+    WFA_STA_P2P_RESET_RESP_TLV,                /* 63 */
+    WFA_STA_WPS_READ_LABEL_RESP_TLV,           /* 64 */
+    WFA_STA_P2P_GET_IP_CONFIG_RESP_TLV,        /* 65 */
+    WFA_STA_P2P_SEND_SERVICE_DISCOVERY_REQ_RESP_TLV, /* 66 */
+    WFA_STA_P2P_SEND_PRESENCE_REQ_RESP_TLV,    /* 67 */
+    WFA_STA_P2P_SET_SLEEP_RESP_TLV,            /* 68 */
+    WFA_STA_P2P_SET_OPPORTUNISTIC_PS_RESP_TLV, /* 69 */
+
+    WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_RESP_TLV,  /* 70 */
+    WFA_STA_P2P_BLOCK_ICMP_RESPONSE_RESP_TLV,  /* 71 */ 
+    WFA_STA_SET_RADIO_RESP_TLV,                 /* 72 */
+    WFA_STA_SET_RFEATURE_RESP_TLV,              /* 73 */
+
+    WFA_STA_START_WFD_CONNECTION_RESP_TLV,      /* 74 */
+	WFA_STA_CLI_CMD_RESP_TLV,					/* 75 */
+    WFA_STA_CONNECT_GO_START_WFD_RESP_TLV,      /* 76 */
+	WFA_STA_GENERATE_EVENT_RESP_TLV,			/* 77 */
+	WFA_STA_REINVOKE_WFD_SESSION_RESP_TLV,		/* 78 */
+	WFA_STA_GET_PARAMETER_RESP_TLV,		/* 79 */
+	
+
+    WFA_STA_RESPONSE_END                        /* 80 */
 };
 
 #define WFA_TLV_HEAD_LEN 1+2

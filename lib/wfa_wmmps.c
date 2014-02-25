@@ -552,14 +552,13 @@ int WfaRcvProc(unsigned int *rmsg,int length,int *state)
 ** upper bound for the resets a max of three*/
 void WfaStaResetAll()
 {
-    int r;
     PRINTF("Entering Reset\n");
     num_retry++;
     if(num_retry > MAXRETRY)
     {
         create_apts_msg(APTS_RESET_STOP, psTxMsg,wmmps_info.my_sta_id);
         wfaTGSetPrio(psSockfd, TG_WMM_AC_BE);
-        r = wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
+        wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
         mpx("STA msg",psTxMsg,64);
         printf("Too many retries\n");
 	//exit(-8);
@@ -569,14 +568,14 @@ void WfaStaResetAll()
         create_apts_msg(APTS_RESET, psTxMsg,wmmps_info.my_sta_id);
         wfaTGSetPrio(psSockfd, TG_WMM_AC_BE);
         psTxMsg[1] = TOS_BE;
-        r = wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
+        wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
         mpx("STA msg",psTxMsg,64);
     }
     else
     {
         create_apts_msg(APTS_RESET_RESP, psTxMsg,wmmps_info.my_sta_id);
         wfaTGSetPrio(psSockfd, TG_WMM_AC_BE);
-        r = wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
+        wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
         mpx("STA msg",psTxMsg,64);
         reset_recd=0;
     }
@@ -766,7 +765,6 @@ void BUILD_APTS_MSG(int msg, unsigned long *txbuf)
 
 void send_txmsg(int new_prio_class)
 {
-   int r;
    int new_dscp = 0;
 
    if(new_prio_class > -1)
@@ -783,7 +781,7 @@ void send_txmsg(int new_prio_class)
       psTxMsg[13] = (wmmps_info.msgno%10) + 0x20202030; 
    }
 
-   r = wfaTrafficSendTo(psSockfd, (char *)psTxMsg, 200+(wmmps_info.msgno%200), (struct sockaddr *) &wmmps_info.psToAddr);
+   wfaTrafficSendTo(psSockfd, (char *)psTxMsg, 200+(wmmps_info.msgno%200), (struct sockaddr *) &wmmps_info.psToAddr);
 
    wmmps_info.nsent++;
 }

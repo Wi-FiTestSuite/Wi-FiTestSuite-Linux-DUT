@@ -64,12 +64,13 @@
 
 typedef struct _tg_ping_start
 {
-    char dipaddr[IPV4_ADDRESS_STRING_LEN];  /* destination/remote ip address */
+    char dipaddr[IPV6_ADDRESS_STRING_LEN];  /* destination/remote ip address */
     int  frameSize;
     int  frameRate;
     int  duration;
     int  type;
-	int  qos;
+    int  qos;
+    int  iptype;
 } tgPingStart_t;
 
 typedef struct ca_sta_set_ip_config
@@ -260,11 +261,17 @@ enum {
  
 typedef struct pmf_frame
 {
-   BYTE type;
-   BYTE protected;
+   BYTE eFrameName;
+   BYTE eProtected;
+   char staid[WFA_MAC_ADDR_STR_LEN]; /* sta mac addr */   
+
+   unsigned char sender_flag;   
    char sender[8]; /* ap or sta */
-   char bssid[18]; /* ap mac addr */
-   char staid[18]; /* sta mac addr */
+   
+   unsigned char bssid_flag;   
+   char bssid[WFA_MAC_ADDR_STR_LEN]; /* ap mac addr */
+   
+
 } pmfFrame_t;
 
 enum {
@@ -277,15 +284,23 @@ enum {
 
 typedef struct tdls_frame
 {
-   BYTE type;
-   char peer[18];
+   BYTE eFrameName;
+   char peer[WFA_MAC_ADDR_STR_LEN];
+
+   unsigned char timeout_flag;   
    int timeout;
+   unsigned char switchtime_flag;   
    int switchtime; 
+   unsigned char channel_flag;   
    int channel;
+   unsigned char offset_flag;   
    char offset[4]; /* 20 or 40 Mhz */
+   unsigned char status_flag;   
    int status;     /* status code */
+   unsigned char reason_flag;   
    int reason;     /* reason code */
-   char bssid[18];
+   unsigned char bssid_flag;   
+   char bssid[WFA_MAC_ADDR_STR_LEN];
 } tdlsFrame_t;
 
 enum {
@@ -300,23 +315,195 @@ typedef struct vent_frame
 } ventFrame_t;
 
 enum {
-    FM_TYPE_PMF = 1,
-    FM_TYPE_TDLS,
-    FM_TYPE_VENT,
+   WFD_FRAME_PRBREQ=1,
+   WFD_FRAME_RTSP,
+   WFD_FRAME_SERVDISC_REQ,   
+   WFD_FRAME_PRBREQ_TDLS_REQ,	 
+   WFD_FRAME_11V_TIMING_MSR_REQ,   
 };
 
-typedef struct ca_sta_sendframe
+enum {
+   WFD_DEV_TYPE_SOURCE=1,
+   WFD_DEV_TYPE_PSINK,
+   WFD_DEV_TYPE_SSINK,
+   
+};
+
+enum {
+   WFD_RTSP_PAUSE=1,
+   WFD_RTSP_PLAY,
+   WFD_RTSP_TEARDOWN,
+   WFD_RTSP_TRIG_PAUSE,
+   WFD_RTSP_TRIG_PLAY,
+   WFD_RTSP_TRIG_TEARDOWN,
+   WFD_RTSP_SET_PARAMETER,
+   
+};
+
+enum setParamsTypes {
+   WFD_CAP_UIBC_KEYBOARD=1,
+   WFD_CAP_UIBC_MOUSE=1,
+   WFD_CAP_RE_NEGO,
+   WFD_STANDBY,
+   WFD_UIBC_SETTINGS_ENABLE,
+   WFD_UIBC_SETTINGS_DISABLE,
+   WFD_ROUTE_AUDIO,
+   WFD_3D_VIDEOPARAM,
+   WFD_2D_VIDEOPARAM, 
+};
+
+
+typedef struct wfd_frame
 {
-   BYTE frame;
+   BYTE eframe;
+   char sa[WFA_MAC_ADDR_STR_LEN];
+   char da[WFA_MAC_ADDR_STR_LEN];   
+   unsigned char devtype_flag;      
+   BYTE eDevType;
+   unsigned char rtspmsg_flag;      
+   BYTE eRtspMsgType;
+   unsigned char wfdsessionid_flag;      
+   char wfdSessionID[WFA_WFD_SESSION_ID_LEN];   
+   unsigned char setparm_flag;      
+   int	eSetParams;
+   unsigned char audioDest_flag;      
+   int	eAudioDest;
+   unsigned char bssid_flag;	   
+   char bssid[WFA_MAC_ADDR_STR_LEN];
+   unsigned char msrReqAction_flag;	   
+   int  eMsrAction;   
+   unsigned char capReNego_flag;	   
+   int  ecapReNego;   
+   
+   
+} wfdFrame_t;
+
+enum {
+    PROG_TYPE_GEN = 1,
+    PROG_TYPE_PMF,
+    PROG_TYPE_TDLS,
+    PROG_TYPE_VENT,
+    PROG_TYPE_WFD,
+};
+
+typedef struct ca_sta_dev_sendframe
+{
+   BYTE program;
    union _frametype
    {
        pmfFrame_t pmf;
        tdlsFrame_t tdls;
        ventFrame_t vent;
+       wfdFrame_t wfd;
    } frameType;
-} caStaSendFrame_t;
+} caStaDevSendFrame_t;
 
-#ifdef WFA_STA_TB
+typedef struct ca_sta_start_wfd_conn
+{
+   char intf[WFA_IF_NAME_LEN];
+   BYTE peer_count;   
+   char peer[2][WFA_P2P_DEVID_LEN];
+   unsigned char init_wfd_flag;
+   BYTE init_wfd;
+   unsigned char intent_val_flag;
+   BYTE intent_val;   
+   unsigned char oper_chn_flag;
+   WORD oper_chn;	
+   unsigned char coupledSession_flag;
+   WORD coupledSession;	   
+} caStaStartWfdConn_t;
+
+typedef struct ca_sta_connect_go_start_wfd
+{
+   char intf[WFA_IF_NAME_LEN];
+   char grpid[WFA_P2P_GRP_ID_LEN];
+   char devId[WFA_P2P_DEVID_LEN];
+} caStaConnectGoStartWfd_t;
+
+enum {
+   eInvitationSend = 1,
+   eInvitationAccept,
+};
+
+typedef struct ca_sta_reinvoke_wfd_session
+{
+   char intf[WFA_IF_NAME_LEN];
+   unsigned char grpid_flag;
+   char grpid[WFA_P2P_GRP_ID_LEN];
+   char peer[WFA_MAC_ADDR_STR_LEN];   
+   BYTE wfdInvitationAction;   
+} caStaReinvokeWfdSession_t;
+
+enum {
+   eDiscoveredDevList = 1,
+};
+
+
+typedef struct ca_sta_get_parameter
+{
+   char intf[WFA_IF_NAME_LEN];
+   BYTE program;
+   BYTE getParamValue;
+} caStaGetParameter_t;
+
+
+enum {
+    eUibcGen = 1,
+    eUibcHid,
+    eFrameSkip,
+    eInputContent,    
+    eI2cRead,
+    eI2cWrite,
+    eIdrReq,
+};
+
+enum {
+    eSingleTouchEvent = 1,
+    eMultiTouchEvent,
+    eKeyBoardEvent,
+    eMouseEvent,
+    eBtEvent,
+};
+
+enum {
+    eProtected = 1,
+    eUnprotected,
+    //eProtectedAudio,
+    eProtectedVideoOnly,
+    //eUnProtectedAudio,    
+    //eFirstVideo60fps,
+    //eSecondVideo60fps,
+    //eSecondVideo30fps,    
+};
+
+
+typedef struct wfd_generate_event
+{
+   BYTE type;
+   BYTE wfdSessionIdflag;
+   char wfdSessionID[WFA_WFD_SESSION_ID_LEN];   
+   BYTE wfdUibcEventTypeflag;
+   BYTE wfdUibcEventType;   
+   BYTE wfdUibcEventPrepareflag;
+   BYTE wfdUibcEventPrepare;
+   BYTE wfdFrameSkipRateflag;
+   BYTE wfdInputContentTypeflag;
+   BYTE wfdInputContentType;   
+   BYTE wfdI2cDataflag;
+   char wfdI2cData[32];   
+   
+} caWfdStaGenEvent_t;
+
+
+typedef struct ca_sta_generate_event
+{
+   char intf[WFA_IF_NAME_LEN];
+   BYTE program;
+   caWfdStaGenEvent_t wfdEvent;
+} caStaGenEvent_t;
+
+
+//#ifdef WFA_STA_TB
 typedef enum wfa_supplicant_names
 {	
    eWindowsZeroConfig = 1,	
@@ -327,6 +514,220 @@ typedef enum wfa_supplicant_names
    eOpen1x,
    eDefault
 } wfaSupplicantName;
+
+/* P2P */
+/*
+typedef struct ca_sta_get_p2p_dev_address
+{
+   char intf[WFA_IF_NAME_LEN];
+} caStaGetP2pDevAddress_t;
+*/
+
+typedef struct ca_sta_set_p2p
+{
+   char intf[WFA_IF_NAME_LEN];
+
+   unsigned char listen_chn_flag;
+   WORD listen_chn;  
+
+   unsigned char p2p_mode_flag;
+   char p2p_mode[16];
+
+   unsigned char presistent_flag;
+   int presistent;
+
+   unsigned char intra_bss_flag;
+   int intra_bss;
+
+   unsigned char noa_duration_flag;
+   int noa_duration;
+
+   unsigned char noa_interval_flag;
+   int noa_interval;
+
+   unsigned char noa_count_flag;
+   int noa_count;   
+
+   unsigned char concurrency_flag;
+   int concurrency;	 
+
+   unsigned char p2p_invitation_flag;
+   int p2p_invitation;	 
+
+   unsigned char bcn_int_flag;
+   int bcn_int;	
+
+   unsigned char ext_listen_time_int_flag;
+   int ext_listen_time_int;	
+
+   unsigned char ext_listen_time_period_flag;
+   int ext_listen_time_period;	
+
+   unsigned char discoverability_flag;
+   int discoverability;	
+
+
+   unsigned char service_discovry_flag;
+   int service_discovery;	
+	
+   unsigned char crossconnection_flag;
+   int crossconnection;		
+
+   unsigned char p2pmanaged_flag;
+   int p2pmanaged;		
+
+   unsigned char go_apsd_flag;
+   int go_apsd;		
+
+   unsigned char discover_type_flag;
+   int discoverType;		
+   
+} caStaSetP2p_t;
+
+typedef struct ca_sta_p2p_connect
+{
+   char intf[WFA_IF_NAME_LEN];
+   char grpid[WFA_P2P_GRP_ID_LEN];
+   char devId[WFA_P2P_DEVID_LEN];
+} caStaP2pConnect_t;
+
+typedef struct ca_sta_start_auto_go
+{
+   char intf[WFA_IF_NAME_LEN];
+   WORD oper_chn;
+   unsigned char ssid_flag;   
+   char ssid[WFA_SSID_NAME_LEN];    
+   unsigned char rtsp_flag;   
+   WORD rtsp;
+   
+} caStaStartAutoGo_t;
+
+
+typedef struct ca_sta_p2p_start_grp_formation
+{
+   char intf[WFA_IF_NAME_LEN];
+   char devId[WFA_P2P_DEVID_LEN];
+   WORD intent_val;
+   WORD init_go_neg;
+   unsigned char oper_chn_flag;
+   WORD oper_chn;	
+   unsigned char ssid_flag;
+   char ssid[WFA_SSID_NAME_LEN];    
+} caStaP2pStartGrpForm_t;
+
+typedef struct ca_sta_p2p_dissolve
+{
+   char intf[WFA_IF_NAME_LEN];
+   char grpId[WFA_P2P_GRP_ID_LEN];   
+} caStaP2pDissolve_t;
+
+typedef struct ca_sta_send_p2p_inv_req
+{
+   char intf[WFA_IF_NAME_LEN];
+   char devId[WFA_P2P_DEVID_LEN];   
+   char grpId[WFA_P2P_GRP_ID_LEN];   
+   int reinvoke;
+} caStaSendP2pInvReq_t;
+
+typedef struct ca_sta_accept_p2p_inv_req
+{
+   char intf[WFA_IF_NAME_LEN];
+   char devId[WFA_P2P_DEVID_LEN];   
+   char grpId[WFA_P2P_GRP_ID_LEN];   
+   int reinvoke;
+} caStaAcceptP2pInvReq_t;
+
+
+typedef struct ca_sta_send_p2p_prov_dis_req
+{
+   char intf[WFA_IF_NAME_LEN];
+   char confMethod[16]; 
+   char devId[WFA_P2P_DEVID_LEN];
+} caStaSendP2pProvDisReq_t;
+
+typedef struct ca_sta_set_wps_pbc
+{
+   char intf[WFA_IF_NAME_LEN];
+   unsigned char grpid_flag;   
+   char grpId[WFA_P2P_GRP_ID_LEN]; 
+} caStaSetWpsPbc_t;
+
+typedef struct ca_sta_wps_read_pin
+{
+   char intf[WFA_IF_NAME_LEN];
+   unsigned char grpid_flag;   
+   char grpId[WFA_P2P_GRP_ID_LEN]; 
+} caStaWpsReadPin_t;
+
+typedef struct ca_sta_wps_read_label
+{
+   char intf[WFA_IF_NAME_LEN];
+   unsigned char grpid_flag;   
+   char grpId[WFA_P2P_GRP_ID_LEN]; 
+} caStaWpsReadLabel_t;
+
+typedef struct ca_sta_wps_enter_pin
+{
+   char intf[WFA_IF_NAME_LEN];
+   char wpsPin[WFA_WPS_PIN_LEN];
+   unsigned char grpid_flag;   
+   char grpId[WFA_P2P_GRP_ID_LEN];  
+} caStaWpsEnterPin_t;
+
+typedef struct ca_sta_get_psk
+{
+   char intf[WFA_IF_NAME_LEN];
+   char grpId[WFA_P2P_GRP_ID_LEN];      
+} caStaGetPsk_t;
+
+typedef struct ca_sta_get_p2p_ip_config
+{
+   char intf[WFA_IF_NAME_LEN];
+   char grpId[WFA_P2P_GRP_ID_LEN];      
+} caStaGetP2pIpConfig_t;
+
+typedef struct ca_sta_send_service_discovery_req
+{
+   char intf[WFA_IF_NAME_LEN];
+   char devId[WFA_P2P_DEVID_LEN];
+} caStaSendServiceDiscoveryReq_t;
+
+typedef struct ca_sta_send_p2p_presence_req
+{
+   char intf[WFA_IF_NAME_LEN];
+   long long int duration;
+   long long int interval;
+} caStaSendP2pPresenceReq_t;
+
+typedef struct ca_sta_add_arp_table_entry
+{
+   char intf[WFA_IF_NAME_LEN];
+   char macaddress [WFA_MAC_ADDR_STR_LEN];
+   char ipaddress [WFA_MAC_ADDR_STR_LEN];
+} caStaAddARPTableEntry_t;
+
+typedef struct ca_sta_block_icmp_reponse
+{
+   char intf[WFA_IF_NAME_LEN];
+   char ipaddress [WFA_MAC_ADDR_STR_LEN];
+   char grpId[WFA_P2P_GRP_ID_LEN];      
+} caStaBlockICMPResponse_t;
+
+
+typedef struct ca_sta_set_sleep
+{
+   char intf[WFA_IF_NAME_LEN];
+   char grpId[WFA_P2P_GRP_ID_LEN];      
+} caStaSetSleep_t;
+
+typedef struct ca_sta_set_opportunistic_ps
+{
+   char intf[WFA_IF_NAME_LEN];
+   int ctwindow;
+   char grpId[WFA_P2P_GRP_ID_LEN];      
+} caStaSetOpprPs_t;
+
+/* P2P */
 
 typedef enum wfa_preambleType
 {	
@@ -343,6 +744,7 @@ typedef enum wfa_WirelessMode
    eModeAN,
    eModeGN,
    eModeNL,
+   eModeAC,
 } wfaWirelessMode;
 
 typedef enum wfa_reset_prog
@@ -360,10 +762,112 @@ typedef enum wfa_tdlsMode
    eIgnChnlSWProh,  /* if it is present, ignore channel switch prohibit */
 } wfaTDLSMode;
 
+typedef enum wfa_wfdDevType
+{	
+   eSource = 1,
+   ePSink,
+   eSSink,   
+   eDual,
+} wfaWfdDevType;
+
+typedef enum wfa_UiInput
+{	
+   eKeyBoard = 1,
+   eMouse,
+   eBt,
+   eJoyStick,
+   eSingleTouch,
+   eMultiTouch,
+} wfaUiInput;
+
+typedef enum wfa_AudioModes
+{	
+   eMandatoryAudioMode = 1,
+   eDefaultAudioMode,
+} wfaAudioModes;
+
+
+
+
+typedef enum wfa_VideoFormats
+{	
+	eCEA = 1,
+	e640x480p60,
+	e720x480p60,
+	e20x480i60,
+	e720x576p50,
+	e720x576i50,
+	e1280x720p30,
+	e1280x720p60,
+	e1920x1080p30,
+	e1920x1080p60,
+	e1920x1080i60,
+	e1280x720p25,
+	e1280x720p50,
+	e1920x1080p25,
+	e1920x1080p50,
+	e1920x1080i50,
+	e1280x720p24,
+	e1920x1080p24,
+
+	eVesa,
+	e800x600p30,
+	e800x600p60,
+	e1024x768p30,
+	e1024x768p60,
+	e1152x864p30,
+	e1152x864p60,
+	e1280x768p30,
+	e1280x768p60,
+	e1280x800p30,
+	e1280x800p60,
+	e1360x768p30,
+	e1360x768p60,
+	e1366x768p30,
+	e1366x768p60,
+	e1280x1024p30,
+	e1280x1024p60,
+	e1400x1050p30,
+	e1400x1050p60,
+	e1440x900p30,
+	e1440x900p60,
+	e1600x900p30,
+	e1600x900p60,
+	e1600x1200p30,
+	e1600x1200p60,
+	e1680x1024p30,
+	e1680x1024p60,
+	e1680x1050p30,
+	e1680x1050p60,
+	e1920x1200p30,
+	e1920x1200p60,
+
+	eHH,
+	e800x480p30,
+	e800x480p60,
+	e854x480p30,
+	e854x480p60,
+	e864x480p30,
+	e864x480p60,
+	e640x360p30,
+	e640x360p60,
+	e960x540p30,
+	e960x540p60,
+	e848x480p30,
+	e848x480p60,
+} wfavideoFormats;
+
+
+
 typedef struct ca_sta_preset_parameters
 {
    char intf[WFA_IF_NAME_LEN];	
    wfaSupplicantName supplicant;
+
+   BYTE programFlag;
+   WORD program;
+
+   
    BYTE rtsFlag;
    WORD rtsThreshold;
    BYTE fragFlag;
@@ -384,6 +888,58 @@ typedef struct ca_sta_preset_parameters
 //   BYTE ignChSwitchProh;
    BYTE tdls;
    BYTE tdlsMode;
+
+   BYTE tdlsFlag;
+
+   BYTE wfdDevTypeFlag;
+   BYTE wfdDevType ;
+   BYTE wfdUibcGenFlag;
+   BYTE wfdUibcGen ;
+   BYTE wfdUibcHidFlag;
+   BYTE wfdUibcHid ;
+   BYTE wfdUiInputFlag;
+   BYTE wfdUiInputs ;   
+   BYTE wfdUiInput[3] ;
+   BYTE wfdHdcpFlag;
+   BYTE wfdHdcp ;
+   BYTE wfdFrameSkipFlag;
+   BYTE wfdFrameSkip ;
+   BYTE wfdAvChangeFlag;
+   BYTE wfdAvChange ;
+   BYTE wfdStandByFlag;
+   BYTE wfdStandBy ;
+   BYTE wfdInVideoFlag;
+   BYTE wfdInVideo ;
+   BYTE wfdVideoFmatFlag;
+   BYTE wfdInputVideoFmats;
+   BYTE wfdVideoFmt[64];
+   BYTE wfdAudioFmatFlag;
+   BYTE wfdAudioFmt ;   
+   BYTE wfdI2cFlag;
+   BYTE wfdI2c ;
+   BYTE wfdVideoRecoveryFlag;
+   BYTE wfdVideoRecovery ;   
+   BYTE wfdPrefDisplayFlag;
+   BYTE wfdPrefDisplay ;   
+   BYTE wfdServiceDiscoveryFlag;
+   BYTE wfdServiceDiscovery ;   
+   BYTE wfd3dVideoFlag;
+   BYTE wfd3dVideo ;   
+   BYTE wfdMultiTxStreamFlag;
+   BYTE wfdMultiTxStream ;   
+   BYTE wfdTimeSyncFlag;
+   BYTE wfdTimeSync ;   
+   BYTE wfdEDIDFlag;
+   BYTE wfdEDID ;   
+   BYTE wfdUIBCPrepareFlag;
+   BYTE wfdUIBCPrepare ;      
+   BYTE wfdCoupledCapFlag;
+   BYTE wfdCoupledCap ; 
+   BYTE wfdOptionalFeatureFlag;
+   BYTE wfdSessionAvail ; 
+   BYTE wfdSessionAvailFlag;
+   BYTE wfdDeviceDiscoverability ; 
+   BYTE wfdDeviceDiscoverabilityFlag;
 } caStaPresetParameters_t;
 
 typedef struct ca_sta_set_11n
@@ -405,18 +961,10 @@ typedef struct ca_sta_set_11n
    unsigned char rxsp_stream;
 } caSta11n_t;
 
-
-#define WFA_ENABLED          1
-#define WFA_OPTIONAL         1
-#define WFA_DISABLED         0
-#define WFA_REQUIRED         2
-#define WFA_F_REQUIRED       3            /* forced required */
-#define WFA_F_DISABLED       4            /* forced disabled */
-#define WFA_INVALID_BOOL 0xFF
-
 typedef struct ca_sta_set_wireless
 {
    char intf[WFA_IF_NAME_LEN];
+   char program[WFA_PROGNAME_LEN];
    char band [8];
 #define NOACK_BE       0
 #define NOACK_BK       1
@@ -424,6 +972,7 @@ typedef struct ca_sta_set_wireless
 #define NOACK_VO       3
    unsigned char noAck[4];
 } caStaSetWireless_t;
+
 
 typedef struct ca_sta_send_addba
 {
@@ -444,7 +993,7 @@ typedef struct ca_sta_send_coexist_mgmt
    char type[16];
    char value[16];
 } caStaSendCoExistMGMT_t;
-#endif
+//#endif
 
 typedef struct ca_sta_set_uapsd
 {
@@ -571,6 +1120,7 @@ typedef struct ca_sta_associate
 {
    char ssid[WFA_SSID_NAME_LEN];
    char bssid[18];
+   unsigned char wps;
 } caStaAssociate_t;
 
 typedef enum wfa_onoffType
@@ -605,6 +1155,7 @@ typedef struct dut_commands
        char resetProg[16];
        char macaddr[18];
        caStaAssociate_t assoc;
+       char ssid[WFA_SSID_NAME_LEN];
        caStaSetIpConfig_t ipconfig;
        caStaVerifyIpConnect_t verifyIp;
        caStaSetEncryption_t wep;       
@@ -622,7 +1173,7 @@ typedef struct dut_commands
        caStaSetWMM_t        setwmm;
        staDebugSet_t        dbg;
        caDevInfo_t          dev;
-       caStaSendFrame_t     sf;
+       caStaDevSendFrame_t     sf;
        caStaSetRadio_t      sr;
        caStaRFeat_t         rfeat;
    } cmdsu;    

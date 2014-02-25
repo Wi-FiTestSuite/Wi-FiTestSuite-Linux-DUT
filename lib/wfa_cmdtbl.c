@@ -196,7 +196,13 @@ xcCommandFuncPtr gWfaCmdFuncTbl[WFA_STA_COMMANDS_END] =
     wfaStaSetRadio,           /*    WFA_STA_SET_RADIO_TLV              (72)*/
     wfaStaSetRFeature,        /*    WFA_STA_RFEATURE_TLV               (73)*/
 
-	wfaStaCliCommand,         /*   WFA_STA_CLI_CMD_TLV            (74)*/
+	wfaStaStartWfdConnection,   /*    WFA_STA_START_WFD_CONNECTION_TLV               (74)*/
+	wfaStaCliCommand,         /*   WFA_STA_CLI_CMD_TLV            (75)*/
+	wfaStaConnectGoStartWfd,   /*    WFA_STA_CONNECT_GO_START_WFD_TLV               (76)*/
+	wfaStaGenerateEvent,         /*   WFA_STA_GENERATE_EVENT_TLV            (77)*/
+	wfaStaReinvokeWfdSession,         /*   WFA_STA_REINVOKE_WFD_SESSION_TLV            (78)*/
+	wfaStaGetParameter,         /*   WFA_STA_GET_PARAMETER_TLV            (79)*/
+	
 };
     
 

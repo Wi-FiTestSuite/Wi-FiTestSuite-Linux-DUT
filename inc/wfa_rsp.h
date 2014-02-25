@@ -75,6 +75,8 @@ typedef struct ca_sta_get_ipconfig_resp
     char ipaddr[WFA_IP_ADDR_STR_LEN];
     char mask[WFA_IP_MASK_STR_LEN];
     char dns[WFA_MAX_DNS_NUM][WFA_IP_ADDR_STR_LEN];
+    char mac[WFA_MAC_ADDR_STR_LEN];
+	
 } caStaGetIpConfigResp_t;
 
 typedef struct ca_sta_get_stats_resp
@@ -112,7 +114,42 @@ typedef struct ca_device_list_if_resp
    char ifs[3][16];
 } caDeviceListIFResp_t;
 
+typedef struct ca_sta_cli_command_resp
+{
+   int status;
+   short resFlag;
+   char result[WFA_CLI_CMD_RESP_LEN]; 
+} caStaCliCmdResp_t;
+/* P2P */
+typedef struct ca_P2p_sta_get_psk_resp
+{
+   char ssid[WFA_SSID_NAME_LEN];
+   char passPhrase[WFA_PSK_PP_LEN];
+} caP2pStaGetPskResp_t;
 
+typedef struct ca_P2p_start_grp_form_resp
+{
+   char result[8];
+   char grpId[WFA_P2P_GRP_ID_LEN];
+} caP2pStartGrpFormResp_t;
+/* P2P */
+
+/* WFD */
+typedef struct ca_sta_start_wfd_conn_resp
+{
+   char result[8];
+   char wfdSessionId[WFA_WFD_SESSION_ID_LEN];
+   char p2pGrpId[WFA_P2P_GRP_ID_LEN];   
+} caStaStartWfdConnResp_t;
+
+typedef struct ca_sta_get_parameter_resp
+{
+
+	BYTE getParamType;
+	char devList[128];
+} caStaGetParameterResp_t;
+
+/* WFD */
 
 typedef struct dut_cmd_response
 {
@@ -131,6 +168,19 @@ typedef struct dut_cmd_response
        char info[WFA_INFO_BUFSIZE];
        char bssid[WFA_MAC_ADDR_STR_LEN];
        char mac[WFA_MAC_ADDR_STR_LEN];       
+/* P2P */
+       char devid[WFA_P2P_DEVID_LEN];
+	   char grpid[WFA_P2P_GRP_ID_LEN];	
+	   char p2presult[8];
+	   char wpsPin[WFA_WPS_PIN_LEN];
+	   caP2pStaGetPskResp_t pskInfo;
+	   caP2pStartGrpFormResp_t grpFormInfo;
+/* P2P */
+/* WFD */
+	   caStaStartWfdConnResp_t	wfdConnInfo;
+	   caStaGetParameterResp_t getParamValue;
+
+/* WFD */
        int connected;
    } cmdru;
 }dutCmdResponse_t;

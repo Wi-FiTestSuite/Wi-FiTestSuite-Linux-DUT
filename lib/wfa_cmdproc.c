@@ -335,7 +335,7 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
               str = NULL;
               break;
 
-	      case KW_STARTDELAY:
+      case KW_STARTDELAY:
               str = strtok_r(NULL, ",", &pcmdStr);
               if(isNumber(str) == WFA_FAILURE)
               {
@@ -364,8 +364,8 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
               str = strtok_r(NULL, ",", &pcmdStr);  
 
               // if user priority is used, tclass is ignored.
-	      if(userPrio == 1)
-	          break;
+      if(userPrio == 1)
+          break;
 
               if(strcasecmp(str, "voice") == 0 )
               {
@@ -384,15 +384,15 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
                  pf->trafficClass = TG_WMM_AC_BE; 
               }
               else
-	      {
-	         pf->trafficClass = TG_WMM_AC_BE;
+              {
+                 pf->trafficClass = TG_WMM_AC_BE;
               }
               
               kwcnt++;
               str = NULL;
               break;
 
-	      case KW_USERPRIORITY:
+      case KW_USERPRIORITY:
               str = strtok_r(NULL, ",", &pcmdStr);  
 
               if( strcasecmp(str, "6") == 0 )
@@ -429,7 +429,7 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
               }
 
               // if User Priority is used 
-	      userPrio = 1;
+              userPrio = 1;
 
               kwcnt++;
               str = NULL;
@@ -439,7 +439,7 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
               kwcnt++;
               break;
 
-	      case KW_NUMFRAME:
+      case KW_NUMFRAME:
               str = strtok_r(NULL, ",", &pcmdStr);  
               if(isNumber(str) == WFA_FAILURE)
               {
@@ -449,9 +449,9 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
               DPRINT_INFO(WFA_OUT, "num frame %s\n", str);
               kwcnt++;
               str = NULL;
-	      break;
+      break;
 
-	      case KW_USESYNCCLOCK:
+      case KW_USESYNCCLOCK:
               str = strtok_r(NULL, ",", &pcmdStr);  
               if(isNumber(str) == WFA_FAILURE)
               {
@@ -461,7 +461,7 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
               DPRINT_INFO(WFA_OUT, "sync clock %s\n", str);
               kwcnt++;
               str = NULL;
-	      break;
+      break;
 
               default:
                 ;
@@ -708,7 +708,7 @@ int xcCmdProcAgentRecvStop(char *pcmdStr, BYTE *aBuf, int *aLen)
 
         memcpy(aBuf+4*id_cnt, (char *)&strid, 4);
     }
-	
+
     hdr->tag =  WFA_TRAFFIC_AGENT_RECV_STOP_TLV;   
     hdr->len = 4*id_cnt;  /* multiple 4s if more streams */
 
@@ -738,7 +738,7 @@ int xcCmdProcAgentSendPing(char *pcmdStr, BYTE *aBuf, int *aLen)
         if(strcasecmp(str, "destination") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);  
-            strncpy(staping->dipaddr, str, 15);
+            strncpy(staping->dipaddr, str, 39);
             DPRINT_INFO(WFA_OUT, "destination %s\n", staping->dipaddr);
         }
         if(strcasecmp(str, "frameSize") == 0)
@@ -767,14 +767,20 @@ int xcCmdProcAgentSendPing(char *pcmdStr, BYTE *aBuf, int *aLen)
             else
                 staping->type = 0;
         }
-	if(strcasecmp(str, "qos") == 0)
-	{
+        if(strcasecmp(str, "iptype") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            staping->iptype=atoi(str);
+            DPRINT_INFO(WFA_OUT, "iptype %i\n", staping->iptype);
+        }
+if(strcasecmp(str, "qos") == 0)
+{
             str = strtok_r(NULL, ",", &pcmdStr);
             if(strcasecmp(str, "vo") == 0)
             {
                 staping->qos = TG_WMM_AC_VO;
             }
-	    else if(strcasecmp(str, "vi") == 0)
+    else if(strcasecmp(str, "vi") == 0)
             {
                 staping->qos = TG_WMM_AC_VI;
             }
@@ -1233,7 +1239,6 @@ int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     int secType = 0;
 
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1316,7 +1321,6 @@ int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen)
            }
         }
     }
-#endif
 
     return ret;
 }
@@ -1327,7 +1331,6 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetPSK_t defparams = {"", "", "", "", 0, WFA_DISABLED};
 
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1383,8 +1386,6 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
                setencryp->pmf = WFA_DISABLED;
         }
     }
-
-#endif
             
     wfaEncodeTLV(WFA_STA_SET_PSK_TLV, sizeof(caStaSetPSK_t), (BYTE *)setencryp, aBuf);
 
@@ -1399,8 +1400,6 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetEapTLS_t defparams = {"", "", "", "", "", ""};
    
-#ifndef WFA_PC_CONSOLE
-
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1461,8 +1460,6 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
             
-#endif
-
     wfaEncodeTLV(WFA_STA_SET_EAPTLS_TLV, sizeof(caStaSetEapTLS_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapTLS_t);
@@ -1476,7 +1473,6 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
     caStaSetEapTTLS_t defparams = {"", "", "", "", "", "", "", ""};
     char *str;
    
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1543,8 +1539,6 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-#endif
-
     wfaEncodeTLV(WFA_STA_SET_EAPTTLS_TLV, sizeof(caStaSetEapTTLS_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapTTLS_t);
@@ -1558,7 +1552,6 @@ int xcCmdProcStaSetEapSIM(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetEapSIM_t defparams = {"", "", "", "", "", "", 0, {"", "", ""}};
    
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1636,8 +1629,6 @@ int xcCmdProcStaSetEapSIM(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-#endif
-
     wfaEncodeTLV(WFA_STA_SET_EAPSIM_TLV, sizeof(caStaSetEapSIM_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapSIM_t);
@@ -1651,7 +1642,6 @@ int xcCmdProcStaSetPEAP(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetEapPEAP_t defparams = {"", "", "", "", "", "", "", "", 0};
    
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1699,11 +1689,11 @@ int xcCmdProcStaSetPEAP(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strcpy(setsec->innerEAP, str);
         }
-	else if(strcasecmp(str, "trustedRootCA") == 0)
-	{
-	    str = strtok_r(NULL, ",", &pcmdStr);
+        else if(strcasecmp(str, "trustedRootCA") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(setsec->trustedRootCA, str,31);
-	}
+        }
         else if(strcasecmp(str, "peapVersion") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
@@ -1723,7 +1713,6 @@ int xcCmdProcStaSetPEAP(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-#endif
 
     wfaEncodeTLV(WFA_STA_SET_PEAP_TLV, sizeof(caStaSetEapPEAP_t), (BYTE *)setsec, aBuf);
 
@@ -1889,13 +1878,13 @@ int xcCmdProcStaUpload(char *pcmdStr, BYTE *aBuf, int *aLen)
     if(strcasecmp(str, "test") == 0)
     {
         str = strtok_r(NULL, ",", &pcmdStr);  
-	if(strcasecmp(str, "voice") == 0)
-	{
-	    tdp->type = WFA_UPLOAD_VHSO_RPT;
+        if(strcasecmp(str, "voice") == 0)
+        {
+            tdp->type = WFA_UPLOAD_VHSO_RPT;
             DPRINT_INFO(WFA_OUT, "testdata voice %i\n", tdp->type);
             str = strtok_r(NULL, ",", &pcmdStr);
             tdp->next = atoi(str);
-	}
+        }
     }
 
     wfaEncodeTLV(WFA_STA_UPLOAD_TLV, sizeof(dutCommand_t), (BYTE *)dutCmd, aBuf);
@@ -2086,7 +2075,7 @@ int xcCmdProcStaSetUAPSD(char *pcmdStr, BYTE *aBuf, int *aLen)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             setuapsd->acBE = atoi(str);
-	
+
         }
         else if(strcasecmp(str, "acBK") == 0)
         {
@@ -2430,6 +2419,19 @@ int xcCmdProcStaSetP2p(char *pcmdStr, BYTE *aBuf, int *aLen)
          staSetP2p->go_apsd= atoi(str);
          staSetP2p->go_apsd_flag= 1;
       }
+      else if(strcasecmp(str, "DiscoverType") == 0)
+      {
+         staSetP2p->discover_type_flag= 1;
+
+         str = strtok_r(NULL, ",", &pcmdStr);
+         printf("DiscoverType is %s\n", str);
+         if(strcasecmp(str, "WFD") == 0)
+            staSetP2p->discoverType= 1;
+         else if (strcasecmp(str, "P2P") == 0)
+            staSetP2p->discoverType = 2;
+         else if (strcasecmp(str, "TDLS") == 0)
+            staSetP2p->discoverType = 3;
+      }
    }
 
    wfaEncodeTLV(WFA_STA_P2P_SETP2P_TLV, sizeof(caStaSetP2p_t), (BYTE *)staSetP2p, aBuf);
@@ -2473,13 +2475,13 @@ int xcCmdProcStaP2pConnect(char *pcmdStr, BYTE *aBuf, int *aLen)
          str = strtok_r(NULL, ",", &pcmdStr);  
          strncpy(staP2pConnect->devId, str, WFA_P2P_DEVID_LEN-1);
          staP2pConnect->devId[WFA_P2P_DEVID_LEN-1]='\0';
-      }		
+      }
    }
 
    wfaEncodeTLV(WFA_STA_P2P_CONNECT_TLV, sizeof(caStaP2pConnect_t), (BYTE *)staP2pConnect, aBuf);
 
    *aLen = 4+sizeof(caStaP2pConnect_t);
-	
+
    return TRUE;
 }
 
@@ -2541,7 +2543,7 @@ int xcCmdProcStaP2pStartGroupFormation(char *pcmdStr, BYTE *aBuf, int *aLen)
    wfaEncodeTLV(WFA_STA_P2P_START_GRP_FORMATION_TLV, sizeof(caStaP2pStartGrpForm_t), (BYTE *)staP2pStartGrpForm, aBuf);
 
    *aLen = 4+sizeof(caStaP2pStartGrpForm_t);
-	
+
    return TRUE;
 }
 
@@ -2789,7 +2791,7 @@ int xcCmdProcStaWpsReadPin(char *pcmdStr, BYTE *aBuf, int *aLen)
          strncpy(staWpsReadPin->grpId, str, WFA_P2P_GRP_ID_LEN-1);
          staWpsReadPin->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
          staWpsReadPin->grpid_flag=1;
-      }		
+      }
    }
 
    wfaEncodeTLV(WFA_STA_WPS_READ_PIN_TLV, sizeof(caStaWpsReadPin_t), (BYTE *)staWpsReadPin, aBuf);
@@ -2828,7 +2830,7 @@ int xcCmdProcStaWpsReadLabel(char *pcmdStr, BYTE *aBuf, int *aLen)
          strncpy(staWpsReadLabel->grpId, str, WFA_P2P_GRP_ID_LEN-1);
          staWpsReadLabel->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
          staWpsReadLabel->grpid_flag=1;
-      }		
+      }
    }
 
    wfaEncodeTLV(WFA_STA_WPS_READ_LABEL_TLV, sizeof(caStaWpsReadLabel_t), (BYTE *)staWpsReadLabel, aBuf);
@@ -2866,14 +2868,14 @@ int xcCmdProcStaWpsEnterPin(char *pcmdStr, BYTE *aBuf, int *aLen)
          str = strtok_r(NULL, ",", &pcmdStr);  
          strncpy(staWpsEnterPin->wpsPin, str, WFA_WPS_PIN_LEN-1);
          staWpsEnterPin->wpsPin[WFA_WPS_PIN_LEN-1]='\0';
-      }		
+      }
       else if(strcasecmp(str, "groupid") == 0)
       {
          str = strtok_r(NULL, ",", &pcmdStr);  
          strncpy(staWpsEnterPin->grpId, str, WFA_P2P_GRP_ID_LEN-1);
          staWpsEnterPin->grpId[WFA_P2P_GRP_ID_LEN-1]='\0';
          staWpsEnterPin->grpid_flag=1;
-      }				
+      }
    }
 
    wfaEncodeTLV(WFA_STA_WPS_ENTER_PIN_TLV, sizeof(caStaWpsEnterPin_t), (BYTE *)staWpsEnterPin, aBuf);
@@ -2946,13 +2948,19 @@ int xcCmdProcStaP2pStartAutoGo(char *pcmdStr, BYTE *aBuf, int *aLen)
       {
          str = strtok_r(NULL, ",", &pcmdStr);
          staP2pStartAutoGo->oper_chn= atoi(str);
-      }		
+      }
       else if(strcasecmp(str, "ssid") == 0)
       {
          str = strtok_r(NULL, ",", &pcmdStr);  
          strncpy(staP2pStartAutoGo->ssid, str, WFA_SSID_NAME_LEN-1);
          staP2pStartAutoGo->ssid[WFA_SSID_NAME_LEN-1]='\0';
          staP2pStartAutoGo->ssid_flag =1;
+      }
+      else if(strcasecmp(str, "RTSP") == 0)
+      {
+         str = strtok_r(NULL, ",", &pcmdStr);
+         staP2pStartAutoGo->rtsp_flag= 1;  
+         staP2pStartAutoGo->rtsp= atoi(str);
       }
    }
 
@@ -3177,7 +3185,7 @@ int xcCmdProcStaSetOpportunistcPsReq(char *pcmdStr, BYTE *aBuf, int *aLen)
       {
          str = strtok_r(NULL, ",", &pcmdStr);
          staSetOpprPs->ctwindow= atoi(str);
-      }		
+      }
       else if(strcasecmp(str, "groupid") == 0)
       {
          str = strtok_r(NULL, ",", &pcmdStr);  
@@ -3234,45 +3242,45 @@ int xcCmdProcStaAddARPTableEntry(char *pcmdStr, BYTE *aBuf, int *aLen)
 }
 int xcCmdProcStaBlockICMPResponse(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
-	caStaBlockICMPResponse_t *staBlockICMPResponse = (caStaBlockICMPResponse_t *) (aBuf+sizeof(wfaTLV));
-	char *str;
+   caStaBlockICMPResponse_t *staBlockICMPResponse = (caStaBlockICMPResponse_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
    
-	if(aBuf == NULL)
-		return FALSE;
+   if(aBuf == NULL)
+      return FALSE;
    
-	memset(aBuf, 0, *aLen);
+   memset(aBuf, 0, *aLen);
 
-	for(;;)
-	{
-		str = strtok_r(NULL, ",", &pcmdStr);
-		if(str == NULL || str[0] == '\0')
-			break;
+   for(;;)
+   {
+       str = strtok_r(NULL, ",", &pcmdStr);
+       if(str == NULL || str[0] == '\0')
+           break;
 
-		if(strcasecmp(str, "interface") == 0)
-		{
-			str = strtok_r(NULL, ",", &pcmdStr);  
-			strncpy(staBlockICMPResponse->intf, str,WFA_IF_NAME_LEN-1);
-			staBlockICMPResponse->intf[WFA_IF_NAME_LEN-1]='\0';
-		}
-		else if(strcasecmp(str, "groupid") == 0)
-        {
-			str = strtok_r(NULL, ",", &pcmdStr);
-			strcpy(staBlockICMPResponse->grpId, str);
-        }
-		else if(strcasecmp(str, "ipaddress") == 0)
-        {
-			str = strtok_r(NULL, ",", &pcmdStr);
-			strcpy(staBlockICMPResponse->ipaddress, str);
-        }
+       if(strcasecmp(str, "interface") == 0)
+       {
+           str = strtok_r(NULL, ",", &pcmdStr);  
+           strncpy(staBlockICMPResponse->intf, str,WFA_IF_NAME_LEN-1);
+           staBlockICMPResponse->intf[WFA_IF_NAME_LEN-1]='\0';
+       }
+       else if(strcasecmp(str, "groupid") == 0)
+       {
+           str = strtok_r(NULL, ",", &pcmdStr);
+           strcpy(staBlockICMPResponse->grpId, str);
+       }
+       else if(strcasecmp(str, "ipaddress") == 0)
+       {
+           str = strtok_r(NULL, ",", &pcmdStr);
+           strcpy(staBlockICMPResponse->ipaddress, str);
+       }
+   }
 
-	}
+   wfaEncodeTLV(WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_TLV, sizeof(caStaBlockICMPResponse_t), (BYTE *)staBlockICMPResponse, aBuf);
 
-	wfaEncodeTLV(WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_TLV, sizeof(caStaBlockICMPResponse_t), (BYTE *)staBlockICMPResponse, aBuf);
+   *aLen = 4+sizeof(caStaBlockICMPResponse_t);
 
-	*aLen = 4+sizeof(caStaBlockICMPResponse_t);
-	
-	return TRUE;
+   return TRUE;
 }
+
 int xcCmdProcStaSetPwrSave(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetPwrSave_t *setps = (caStaSetPwrSave_t *) (aBuf+sizeof(wfaTLV));
@@ -3335,30 +3343,30 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "GROUP") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);  
-	    if(strcasecmp(str,"WMMAC") == 0)
-              setwmm->group = GROUP_WMMAC;
-	    else if(strcasecmp(str,"WMM-CONFIG") == 0)
+            if(strcasecmp(str,"WMMAC") == 0)
+                setwmm->group = GROUP_WMMAC;
+            else if(strcasecmp(str,"WMM-CONFIG") == 0)
             {
-              setwmm->group = GROUP_WMMCONF;
-              setwmm->actions.config.frag_thr = 2346;
-              setwmm->actions.config.rts_thr = 2346;
-              setwmm->actions.config.wmm = 1;
+                setwmm->group = GROUP_WMMCONF;
+                setwmm->actions.config.frag_thr = 2346;
+                setwmm->actions.config.rts_thr = 2346;
+                setwmm->actions.config.wmm = 1;
             }
         }
         else if(strcasecmp(str, "ACTION") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);  
-	    if(strcasecmp(str,"addts") == 0)
+            if(strcasecmp(str,"addts") == 0)
             {
                //Put default values for the tspec element
-	       setwmm->action = WMMAC_ADDTS;
+               setwmm->action = WMMAC_ADDTS;
                setwmm->actions.addts.accesscat = WMMAC_AC_BE;
                setwmm->actions.addts.tspec.tsinfo.dummy1 = 1;
                setwmm->actions.addts.tspec.tsinfo.dummy2 = 0;
             }
-	    else if(strcasecmp(str,"delts") == 0)
-	       setwmm->action = WMMAC_DELTS;
-	    DPRINT_INFO(WFA_OUT,"action is %d\n",setwmm->action);
+            else if(strcasecmp(str,"delts") == 0)
+               setwmm->action = WMMAC_DELTS;
+            DPRINT_INFO(WFA_OUT,"action is %d\n",setwmm->action);
         }
         else if(strcasecmp(str, "RTS_thr") == 0)
         {
@@ -3368,10 +3376,10 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "wmm") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-	    if(atoi(str) != 0)
-            setwmm->actions.config.wmm = 1;
-	    else
-            setwmm->actions.config.wmm = 0;
+            if(atoi(str) != 0)
+               setwmm->actions.config.wmm = 1;
+            else
+               setwmm->actions.config.wmm = 0;
         }
         else if(strcasecmp(str, "Frag_thr") == 0)
         {
@@ -3394,10 +3402,10 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "SENDTRIG") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-	    	if(strcasecmp(str,"true") == 0)
-            	   setwmm->send_trig=1;
-			else
-            	   setwmm->send_trig=0;
+            if(strcasecmp(str,"true") == 0)
+               setwmm->send_trig=1;
+            else
+               setwmm->send_trig=0;
         }
         else if(strcasecmp(str, "DEST") == 0)
         {
@@ -3419,20 +3427,20 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "DIRECTION") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-	    if(strcasecmp(str,"UP") == 0)
+            if(strcasecmp(str,"UP") == 0)
                setwmm->actions.addts.tspec.tsinfo.direction = WMMAC_UPLINK;
-	    else if(strcasecmp(str,"DOWN") == 0)
+            else if(strcasecmp(str,"DOWN") == 0)
                setwmm->actions.addts.tspec.tsinfo.direction = WMMAC_DOWNLINK;
-	    else if(strcasecmp(str,"BIDI") == 0)
+            else if(strcasecmp(str,"BIDI") == 0)
                setwmm->actions.addts.tspec.tsinfo.direction = WMMAC_BIDIR;
         }
         else if(strcasecmp(str, "PSB") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-	    if(strcasecmp(str,"UAPSD") == 0)
-            setwmm->actions.addts.tspec.tsinfo.PSB = 1;
-	    else
-            setwmm->actions.addts.tspec.tsinfo.PSB = 0;
+            if(strcasecmp(str,"UAPSD") == 0)
+                setwmm->actions.addts.tspec.tsinfo.PSB = 1;
+            else
+                setwmm->actions.addts.tspec.tsinfo.PSB = 0;
         }
         else if(strcasecmp(str, "UP") == 0)
         {
@@ -3447,7 +3455,6 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
             else
                setwmm->actions.addts.tspec.Fixed = 0;
         }
-        //else if(strcasecmp(str, "MSDU") == 0)
         else if(strcasecmp(str, "SIZE") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
@@ -3529,19 +3536,19 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ACCESSCAT") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-	    if(strcasecmp(str,"VO") == 0)
+            if(strcasecmp(str,"VO") == 0)
                setwmm->actions.addts.accesscat = WMMAC_AC_VO;
-	    else if(strcasecmp(str,"VI") == 0)
+            else if(strcasecmp(str,"VI") == 0)
                setwmm->actions.addts.accesscat = WMMAC_AC_VI;
-	    else if(strcasecmp(str,"BE") == 0)
+            else if(strcasecmp(str,"BE") == 0)
                setwmm->actions.addts.accesscat = WMMAC_AC_BE;
-	    else if(strcasecmp(str,"BK") == 0)
+            else if(strcasecmp(str,"BK") == 0)
                setwmm->actions.addts.accesscat = WMMAC_AC_BK;
         }
         else if(strcasecmp(str, "infoAck") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-	    if(strcasecmp(str,"HT") == 0)
+            if(strcasecmp(str,"HT") == 0)
             {
                 setwmm->actions.addts.tspec.tsinfo.infoAck = 1;
             }
@@ -3553,7 +3560,7 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "BurstSizeDef") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-	    if(strcasecmp(str,"SET") == 0)
+            if(strcasecmp(str,"SET") == 0)
             {
                 setwmm->actions.addts.tspec.tsinfo.bstSzDef = 1;
             }
@@ -3565,7 +3572,7 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
     }
     if(setwmm->action == WMMAC_ADDTS)
        printf("ADDTS AC PARAMS: dialog id: %d, TID: %d, DIRECTION: %d, PSB: %d, UP: %d, INFOACK: %d BURST SIZE DEFN: %d\
-	 Fixed %d, MSDU Size: %d, Max MSDU Size %d, MIN SERVICE INTERVAL: %d, MAX SERVICE INTERVAL: %d\
+ Fixed %d, MSDU Size: %d, Max MSDU Size %d, MIN SERVICE INTERVAL: %d, MAX SERVICE INTERVAL: %d\
         ,INACTIVITY: %d,SUSPENSION %d,SERVICE START TIME: %d,MIN DATARATE: %d,MEAN DATA RATE: %d\
         , PEAK DATA RATE: %d,BURSTSIZE or MSDU Aggreg: %d,DELAY BOUND: %d,PHYRATE: %d, SPLUSBW: %f,MEDIUM TIME: %d, ACCESSCAT: %d\n"\
         ,setwmm->actions.addts.dialog_token,setwmm->actions.addts.tspec.tsinfo.TID\
@@ -3577,9 +3584,9 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
          setwmm->actions.addts.tspec.srvc_strt_tim,setwmm->actions.addts.tspec.mindatarate,setwmm->actions.addts.tspec.meandatarate\
         ,setwmm->actions.addts.tspec.peakdatarate,setwmm->actions.addts.tspec.burstsize,\
          setwmm->actions.addts.tspec.delaybound,setwmm->actions.addts.tspec.PHYrate,setwmm->actions.addts.tspec.sba,\
-	 setwmm->actions.addts.tspec.medium_time,setwmm->actions.addts.accesscat);
+ setwmm->actions.addts.tspec.medium_time,setwmm->actions.addts.accesscat);
     else
-	 printf("DELTS AC PARAMS: TID:  %d\n", setwmm->actions.delts);
+ printf("DELTS AC PARAMS: TID:  %d\n", setwmm->actions.delts);
 
     hdr->tag =  WFA_STA_SET_WMM_TLV;   
     hdr->len = sizeof(caStaSetWMM_t);
@@ -3596,8 +3603,6 @@ int xcCmdProcStaSetEapFAST(char *pcmdStr, BYTE *aBuf, int *aLen)
     caStaSetEapFAST_t *setsec = (caStaSetEapFAST_t *) (aBuf+sizeof(wfaTLV));
     caStaSetEapFAST_t defparams = {"", "", "", "", "", "", "", "", 0, ""};
     char *str;
-
-#ifndef WFA_PC_CONSOLE
    
     if(aBuf == NULL)
        return WFA_FAILURE;
@@ -3682,8 +3687,6 @@ int xcCmdProcStaSetEapFAST(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-#endif
-
     wfaEncodeTLV(WFA_STA_SET_EAPFAST_TLV, sizeof(caStaSetEapFAST_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapFAST_t);
@@ -3698,8 +3701,6 @@ int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetEapAKA_t defparams = {"", "", "", "", "", "", 0, {"", "", ""}};
    
-#ifndef WFA_PC_CONSOLE
-
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -3776,8 +3777,6 @@ int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
                setsec->pmf = WFA_DISABLED;
         }
     }
-
-#endif
 
     wfaEncodeTLV(WFA_STA_SET_EAPAKA_TLV, sizeof(caStaSetEapAKA_t), (BYTE *)setsec, aBuf);
 
@@ -3861,8 +3860,8 @@ int xcCmdProcStaDisconnect(char *pcmdStr, BYTE *aBuf, int *aLen)
         if(strcasecmp(str, "interface") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);  
-			strncpy(disc->intf, str,WFA_IF_NAME_LEN-1);
-			disc->intf[WFA_IF_NAME_LEN-1]='\0';
+strncpy(disc->intf, str,WFA_IF_NAME_LEN-1);
+disc->intf[WFA_IF_NAME_LEN-1]='\0';
         }
     }
 
@@ -3873,23 +3872,23 @@ int xcCmdProcStaDisconnect(char *pcmdStr, BYTE *aBuf, int *aLen)
 
 }
 
-#ifdef WFA_STA_TB
+//#ifdef WFA_STA_TB
 /* Check for enable/disable and return WFA_ENABLE/WFA_DISABLE. WFA_INVALID_BOOL if invalid */
 int wfaStandardBoolParsing (char *str)
 {
     int rc;
 
     if(strcasecmp(str, "enable") == 0)
-        rc=WFA_ENABLED;				
+        rc=WFA_ENABLED;
     else if(strcasecmp(str, "disable") == 0)
-        rc=WFA_DISABLED;	
+        rc=WFA_DISABLED;
     else 
         rc=WFA_INVALID_BOOL;
-	
+
     return rc;
 }
+//#endif
 
-#endif
 int xcCmdProcStaSendNeigReq(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     char *str;
@@ -3940,7 +3939,7 @@ int xcCmdProcStaDevSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
             strncpy(cmd->intf, str, 15);
             DPRINT_INFO(WFA_OUT, "interface %s\n", cmd->intf);
         }
-        else if (strcasecmp(str, "prog") == 0)
+        else if (strcasecmp(str, "program") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             if (strcasecmp(str, "PMF") == 0)
@@ -3997,25 +3996,23 @@ int xcCmdProcStaDevSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                     }
                     else if (strcasecmp(str, "stationid") == 0)
                     {
-
-				         str = strtok_r(NULL, ",", &pcmdStr);  
-				         strncpy(pmf->staid, str, WFA_MAC_ADDR_STR_LEN-1);
-				         pmf->staid[WFA_MAC_ADDR_STR_LEN-1]='\0';
+                        str = strtok_r(NULL, ",", &pcmdStr);  
+                        strncpy(pmf->staid, str, WFA_MAC_ADDR_STR_LEN-1);
+                        pmf->staid[WFA_MAC_ADDR_STR_LEN-1]='\0';
                     }
                     else if (strcasecmp(str, "sender") == 0)
                     {
-
-				         str = strtok_r(NULL, ",", &pcmdStr);  
-				         strncpy(pmf->sender, str, 7);
-				         pmf->sender[7]='\0';
-						 pmf->sender_flag =1;
+                        str = strtok_r(NULL, ",", &pcmdStr);  
+                        strncpy(pmf->sender, str, 7);
+                        pmf->sender[7]='\0';
+                        pmf->sender_flag =1;
                     }
                     else if (strcasecmp(str, "bssid") == 0)
                     {
-				         str = strtok_r(NULL, ",", &pcmdStr);  
-				         strncpy(pmf->bssid, str, WFA_MAC_ADDR_STR_LEN-1);
-				         pmf->bssid[WFA_MAC_ADDR_STR_LEN-1]='\0';
-						 pmf->bssid_flag=1;
+                        str = strtok_r(NULL, ",", &pcmdStr);  
+                        strncpy(pmf->bssid, str, WFA_MAC_ADDR_STR_LEN-1);
+                        pmf->bssid[WFA_MAC_ADDR_STR_LEN-1]='\0';
+                        pmf->bssid_flag=1;
                     }
                 } /* for */
             } /* if PMF */
@@ -4059,8 +4056,8 @@ int xcCmdProcStaDevSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                     else if (strcasecmp(str, "peer") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
-				        strncpy(tdls->peer, str, WFA_MAC_ADDR_STR_LEN-1);
-				        tdls->peer[WFA_MAC_ADDR_STR_LEN-1]='\0';						
+                        strncpy(tdls->peer, str, WFA_MAC_ADDR_STR_LEN-1);
+                        tdls->peer[WFA_MAC_ADDR_STR_LEN-1]='\0';
                     }
                     else if (strcasecmp(str, "timeout") == 0)
                     {
@@ -4068,33 +4065,33 @@ int xcCmdProcStaDevSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                         tdls->timeout = atoi(str);
                         if(tdls->timeout <301)
                            return WFA_FAILURE; 
-						tdls->timeout_flag=1;
+                        tdls->timeout_flag=1;
                     }
                     else if(strcasecmp(str, "bssid") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
-			            strncpy(tdls->bssid, str, WFA_MAC_ADDR_STR_LEN-1);
-				        tdls->bssid[WFA_MAC_ADDR_STR_LEN-1]='\0';		
-						tdls->bssid_flag=1;
+                        strncpy(tdls->bssid, str, WFA_MAC_ADDR_STR_LEN-1);
+                        tdls->bssid[WFA_MAC_ADDR_STR_LEN-1]='\0';
+                        tdls->bssid_flag=1;
                     }
                     else if(strcasecmp(str, "switchtime") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         tdls->switchtime = atoi(str);
-						tdls->switchtime_flag=1;
+                        tdls->switchtime_flag=1;
                     }
                     else if(strcasecmp(str, "channel") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         tdls->channel = atoi(str);
-						tdls->channel_flag=1;
+                        tdls->channel_flag=1;
                     }
                     else if(strcasecmp(str, "channelOffset") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         strncpy(tdls->offset, str, 4); 
-						tdls->offset[3]=1;						
-						tdls->offset_flag=1;
+                        tdls->offset[3]=1;
+                        tdls->offset_flag=1;
                     }
                     else if(strcasecmp(str, "status") == 0)
                     {
@@ -4102,13 +4099,13 @@ int xcCmdProcStaDevSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                         tdls->status = atoi(str);
                         if(tdls->status != 0 && tdls->status != 37)
                            return WFA_FAILURE;
-						tdls->status_flag=1;
+                        tdls->status_flag=1;
                     }
                     else if(strcasecmp(str, "reason") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         tdls->reason = atoi(str);
-						tdls->reason_flag=1;
+                        tdls->reason_flag=1;
                     }                    
                  } /* for */ 
             } /* TDLS */
@@ -4139,6 +4136,212 @@ int xcCmdProcStaDevSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                     }
                 }
             }
+            else if (strcasecmp(str, "WFD") == 0)
+            {
+                wfdFrame_t *wfd = &sf->frameType.wfd;
+
+                sf->program= PROG_TYPE_WFD;
+                for(;;)
+                {
+                    str = strtok_r(NULL, ",", &pcmdStr);
+                    if(str == NULL || str[0] == '\0')
+                        break;
+                    if (strcasecmp(str, "framename") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "wfd_probereq") == 0)
+                        {
+                            wfd->eframe= WFD_FRAME_PRBREQ;
+                        }
+                        if (strcasecmp(str, "rtsp") == 0)
+                        {
+                            wfd->eframe= WFD_FRAME_RTSP;
+                        }
+                        if (strcasecmp(str, "WFD_ServDiscReq") == 0)
+                        {
+                            wfd->eframe= WFD_FRAME_SERVDISC_REQ;
+                        }
+                        if (strcasecmp(str, "WFD_ProbeReqTdls") == 0)
+                        {
+                            wfd->eframe= WFD_FRAME_PRBREQ_TDLS_REQ;
+                        }
+                        if (strcasecmp(str, "11v_TimingMsrReq") == 0)
+                        {
+                            wfd->eframe= WFD_FRAME_11V_TIMING_MSR_REQ;
+                        }
+
+
+                    }
+                    else if(strcasecmp(str, "source") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        strncpy(wfd->sa, str, WFA_MAC_ADDR_STR_LEN-1);
+                        wfd->sa[WFA_MAC_ADDR_STR_LEN-1]='\0';
+                    }
+                    else if(strcasecmp(str, "destination") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        strncpy(wfd->da, str, WFA_MAC_ADDR_STR_LEN-1);
+                        wfd->da[WFA_MAC_ADDR_STR_LEN-1]='\0';
+                    }
+                    else if(strcasecmp(str, "devtype") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "source") == 0)
+                        {
+                            wfd->eDevType= WFD_DEV_TYPE_SOURCE;
+                        }
+                        if (strcasecmp(str, "p-sink") == 0)
+                        {
+                            wfd->eDevType= WFD_DEV_TYPE_PSINK;
+                        }
+                        if (strcasecmp(str, "s-sink") == 0)
+                        {
+                            wfd->eDevType= WFD_DEV_TYPE_SSINK;
+                        }
+                        wfd->devtype_flag=1;
+                    }
+                    else if(strcasecmp(str, "rtspmsgtype") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "pause") == 0)
+                        {
+                            wfd->eRtspMsgType= WFD_RTSP_PAUSE;
+                        }
+                        if (strcasecmp(str, "play") == 0)
+                        {
+                            wfd->eRtspMsgType= WFD_RTSP_PLAY;
+                        }
+                        if (strcasecmp(str, "teardown") == 0)
+                        {
+                            wfd->eRtspMsgType= WFD_RTSP_TEARDOWN;
+                        }
+                        if (strcasecmp(str, "trigger-pause") == 0)
+                        {
+                            wfd->eRtspMsgType= WFD_RTSP_TRIG_PAUSE;
+                        }
+                        if (strcasecmp(str, "trigger-play") == 0)
+                        {
+                            wfd->eRtspMsgType= WFD_RTSP_TRIG_PLAY;
+                        }
+                        if (strcasecmp(str, "trigger-teardown") == 0)
+                        {
+                            wfd->eRtspMsgType= WFD_RTSP_TRIG_TEARDOWN;
+                        }
+                        if (strcasecmp(str, "set_parameter") == 0)
+                        {
+                            wfd->eRtspMsgType= WFD_RTSP_SET_PARAMETER;
+                        }
+                        wfd->rtspmsg_flag=1;
+                    }
+                    else if(strcasecmp(str, "wfdsession") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        strncpy(wfd->wfdSessionID, str, WFA_WFD_SESSION_ID_LEN-1);
+                        wfd->wfdSessionID[WFA_WFD_SESSION_ID_LEN-1]='\0';
+                        wfd->wfdsessionid_flag=1;
+                    }
+                    else if(strcasecmp(str, "setparameter") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "capUibcKeyBoard") == 0)
+                        {
+                            wfd->eSetParams= WFD_CAP_UIBC_KEYBOARD;
+                        }
+                        if (strcasecmp(str, "CapUibcMouse") == 0)
+                        {
+                            wfd->eSetParams= WFD_CAP_UIBC_MOUSE;
+                        }
+                        if (strcasecmp(str, "capReNego") == 0)
+                        {
+                            wfd->eSetParams= WFD_CAP_RE_NEGO;
+                        }
+                        if (strcasecmp(str, "standBy") == 0)
+                        {
+                            wfd->eSetParams= WFD_STANDBY;
+                        }
+                        if (strcasecmp(str, "UibcSettingEnable") == 0)
+                        {
+                            wfd->eSetParams= WFD_UIBC_SETTINGS_ENABLE;
+                        }
+                        if (strcasecmp(str, "UibcSettingDisable") == 0)
+                        {
+                            wfd->eSetParams= WFD_UIBC_SETTINGS_DISABLE;
+                        }
+                        if (strcasecmp(str, "route_audio") == 0)
+                        {
+                            wfd->eSetParams= WFD_ROUTE_AUDIO;
+                        }
+                        if (strcasecmp(str, "3dVideoParam") == 0)
+                        {
+                            wfd->eSetParams= WFD_3D_VIDEOPARAM;
+                        }
+                        if (strcasecmp(str, "2dVideoParam") == 0)
+                        {
+                            wfd->eSetParams= WFD_2D_VIDEOPARAM;
+                        }
+                        wfd->setparm_flag=1;
+                    }
+                    else if(strcasecmp(str, "audioDest") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "p-sink") == 0)
+                        {
+                            wfd->eAudioDest= WFD_DEV_TYPE_PSINK;
+                        }
+                        if (strcasecmp(str, "s-sink") == 0)
+                        {
+                            wfd->eAudioDest= WFD_DEV_TYPE_SSINK;
+                        }
+                        wfd->audioDest_flag=1;
+                    }
+                    else if(strcasecmp(str, "bssid") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        strncpy(wfd->bssid, str, WFA_MAC_ADDR_STR_LEN-1);
+                        wfd->bssid[WFA_MAC_ADDR_STR_LEN-1]='\0';
+                        wfd->bssid_flag=1;
+                    }
+                    else if(strcasecmp(str, "MsrReqAction") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "enable") == 0)
+                        {
+                            wfd->eMsrAction= eEnable;
+                        }
+                        else
+                        {
+                            wfd->eMsrAction= eDisable;
+                        }
+                        wfd->msrReqAction_flag=1;
+                    }
+                    else if(strcasecmp(str, "CapReNegotiateParam") == 0)
+                    {
+                        int temp1;
+                        char *tstr1,*tstr2;
+                        wfd->capReNego_flag= 1;
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        printf("\n The Video format is : %s",str);
+                        tstr1 = strtok_r(str, "-", &str);
+                        tstr2 = strtok_r(str, "-", &str);
+                        temp1 = atoi(tstr2);
+                        printf("\n The Video format is : %s****%d*****",tstr1,temp1);
+
+                        if(strcasecmp(tstr1, "cea") == 0)
+                        {
+                            wfd->ecapReNego = eCEA+1+temp1;
+                        }
+                        else if(strcasecmp(tstr1, "vesa") == 0)
+                        {
+                            wfd->ecapReNego = eVesa+1+temp1;
+                        }
+                        else
+                        {
+                            wfd->ecapReNego = eHH+1+temp1;
+                        }
+                    }
+                }
+            }
         }
     } /* for */
     
@@ -4164,23 +4367,25 @@ int xcCmdProcStaTestBedCmd(char *pcmdStr, BYTE *aBuf, int *aLen)
 
 }
 
-#ifdef WFA_STA_TB
 int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaPresetParameters_t *presetTestParams = (caStaPresetParameters_t *) (aBuf+sizeof(wfaTLV));
     char *str;
-    caStaPresetParameters_t initParams = { "0", 0, 0, 0x00, 0x0000, 0x00, 0x0000, 0x00, 0, 0x00, 0, 0xFF};
+    char *tstr1,*tstr2;
+
+    //caStaPresetParameters_t initParams = { "0", 0, 0, 0x00, 0x0000, 0x00, 0x0000, 0x00, 0, 0x00, 0, 0xFF};
 
     if(aBuf == NULL)
         return WFA_FAILURE;
 
     memset(aBuf, 0, *aLen);
+    memset(presetTestParams, 0, sizeof(caStaPresetParameters_t));
 
-    memcpy(presetTestParams, &initParams, sizeof(caStaPresetParameters_t));
+    //memcpy(presetTestParams, &initParams, sizeof(caStaPresetParameters_t));
 
     for(;;)
     {
-        str = strtok_r(NULL, ",", &pcmdStr);
+        str = strtok_r(pcmdStr, ",", &pcmdStr);
         if(str == NULL || str[0] == '\0')
             break;
 
@@ -4208,6 +4413,8 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
               presetTestParams->wirelessMode = eModeGN;
            else if(strcasecmp(str, "11nl") == 0)
               presetTestParams->wirelessMode = eModeNL;   // n+abg
+           else if(strcasecmp(str, "11ac") == 0)
+              presetTestParams->wirelessMode = eModeAC;
 
            presetTestParams->modeFlag = 1;
            printf("\nSetting Mode as %d\n", presetTestParams->wirelessMode);
@@ -4241,11 +4448,10 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
         else if(strcasecmp(str, "noack") == 0)
         {
-	   /* uncomment and use it char *ackpol; */
-            char *setvalues =strtok_r(NULL, ",", &pcmdStr);
-//          int ackpolcnt = 0;
-            if(setvalues != NULL)
-            {
+           /* uncomment and use it char *ackpol; */
+           char *setvalues =strtok_r(NULL, ",", &pcmdStr);
+           if(setvalues != NULL)
+           {
                /* BE */
                /* str=strtok_r(NULL, ":", &setvalues);
                if(str != NULL)
@@ -4263,11 +4469,11 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
                          presetTestParams->noack_bk = 2;
                       else if(strcasecmp(str, "disable") == 0)
                          presetTestParams->noack_bk = 1;
-		}*/
-		/* VI */
-		/*	str=strtok_r(NULL, ":", &setvalues);
-		if(str != NULL)
-		{
+                    }*/
+                /* VI */
+                /*str=strtok_r(NULL, ":", &setvalues);
+                if(str != NULL)
+                {
                     if(strcasecmp(str, "enable") == 0)
                         presetTestParams->noack_vi = 2;
                     else if(strcasecmp(str, "disable") == 0)
@@ -4360,6 +4566,7 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
 #endif
         else if(strcasecmp(str, "tdls") == 0)
         {
+           presetTestParams->tdlsFlag= 1;
            str = strtok_r(NULL, ",", &pcmdStr);
            if(strcasecmp(str, "Enabled") == 0)
            {
@@ -4398,6 +4605,401 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
               presetTestParams->tdlsMode = eIgnChnlSWProh;
            }
         }
+        else if(strcasecmp(str, "wfddevtype") == 0)
+        {
+           presetTestParams->wfdDevTypeFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "source") == 0)
+           {
+              presetTestParams->wfdDevType= eSource;
+           }
+           else if(strcasecmp(str, "p-sink") == 0)
+           {
+              presetTestParams->wfdDevType= ePSink;
+           }
+           else if(strcasecmp(str, "s-sink") == 0)
+           {
+              presetTestParams->wfdDevType= eSSink;
+           }   
+           else if(strcasecmp(str, "dual") == 0)
+           {
+              presetTestParams->wfdDevType= eDual;
+           }
+        }
+        else if(strcasecmp(str, "uibc_gen") == 0)
+        {
+           presetTestParams->wfdUibcGenFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdUibcGen= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdUibcGen= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "uibc_hid") == 0)
+        {
+           presetTestParams->wfdUibcHidFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdUibcHid= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdUibcHid= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "ui_input") == 0)
+        {
+           char *uilist;
+           presetTestParams->wfdUiInputFlag= 1;
+
+           uilist = strtok_r(NULL, ",", &pcmdStr);
+           presetTestParams->wfdUiInputs=0;
+           for(;;)
+           {
+              str = strtok_r(uilist, " ", &uilist);
+              if(str == NULL || str[0] == '\0')
+                  break;
+
+              if(strcasecmp(str, "keyboard") == 0)
+              {
+                  presetTestParams->wfdUiInput[presetTestParams->wfdUiInputs]= eKeyBoard;
+              }
+              else if(strcasecmp(str, "mouse") == 0)
+              {
+                  presetTestParams->wfdUiInput[presetTestParams->wfdUiInputs]= eMouse;
+              }
+              presetTestParams->wfdUiInputs++;
+           }
+        }
+        else if(strcasecmp(str, "hdcp") == 0)
+        {
+           presetTestParams->wfdHdcpFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdHdcp= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdHdcp= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "frameskip") == 0)
+        {
+           presetTestParams->wfdFrameSkipFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdFrameSkip= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdFrameSkip= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "avchange") == 0)
+        {
+           presetTestParams->wfdAvChangeFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdAvChange= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdAvChange= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "standby") == 0)
+        {
+           presetTestParams->wfdStandByFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdStandBy= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdStandBy= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "inputcontent") == 0)
+        {
+           presetTestParams->wfdInVideoFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Protected") == 0)
+           {
+              presetTestParams->wfdInVideo= eProtected;
+           }
+           else if(strcasecmp(str, "Unprotected") == 0)
+           {
+              presetTestParams->wfdInVideo= eUnprotected;
+           }
+         //  else if(strcasecmp(str, "ProtectedAudio") == 0)
+         //  {
+         //     presetTestParams->wfdInVideo= eProtectedAudio;
+         //  }
+           else if(strcasecmp(str, "ProtectedVideoOnly") == 0)
+           {
+              presetTestParams->wfdInVideo= eProtectedVideoOnly;
+           }
+         //  else if(strcasecmp(str, "UnprotectedAudio") == 0)
+         //  {
+         //     presetTestParams->wfdInVideo= eUnProtectedAudio;
+         //  }
+
+        }
+
+
+        else if(strcasecmp(str, "videoformat") == 0)
+        {
+           int temp1;
+           char *videolist;
+           presetTestParams->wfdVideoFmatFlag= 1;
+
+           videolist = strtok_r(NULL, ",", &pcmdStr);
+           presetTestParams->wfdInputVideoFmats=0;
+
+           for(;;)
+           {
+               str = strtok_r(videolist, " ", &videolist);
+               if(str == NULL || str[0] == '\0')
+                   break;
+
+               tstr1 = strtok_r(str, "-", &str);
+               tstr2 = strtok_r(str, "-", &str);
+
+               temp1 = atoi(tstr2);
+               printf("\n The Video format is : %s****%d*****",tstr1,temp1);
+
+
+               if(strcasecmp(tstr1, "cea") == 0)
+               {
+                   presetTestParams->wfdVideoFmt[presetTestParams->wfdInputVideoFmats]= eCEA+1+temp1;
+               }
+               else if(strcasecmp(tstr1, "vesa") == 0)
+               {
+                   presetTestParams->wfdVideoFmt[presetTestParams->wfdInputVideoFmats]=  eVesa+1+temp1;
+               }
+               else
+               {
+                   presetTestParams->wfdVideoFmt[presetTestParams->wfdInputVideoFmats]=  eHH+1+temp1;
+               }
+               presetTestParams->wfdInputVideoFmats++;
+           }
+        }
+        else if(strcasecmp(str, "AudioFormat") == 0)
+        {
+           presetTestParams->wfdAudioFmatFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Mandatory") == 0)
+           {
+              presetTestParams->wfdAudioFmt= eMandatoryAudioMode;
+           }
+           else
+           {
+              presetTestParams->wfdAudioFmt= eDefaultAudioMode;
+           }
+        }
+
+        else if(strcasecmp(str, "i2c") == 0)
+        {
+           presetTestParams->wfdI2cFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdI2c= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdI2c= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "videorecovery") == 0)
+        {
+           presetTestParams->wfdVideoRecoveryFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdVideoRecovery= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdVideoRecovery= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "PrefDisplay") == 0)
+        {
+           presetTestParams->wfdPrefDisplayFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdPrefDisplay= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdPrefDisplay= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "ServiceDiscovery") == 0)
+        {
+           presetTestParams->wfdServiceDiscoveryFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdServiceDiscovery= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdServiceDiscovery= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "3dVideo") == 0)
+        {
+           presetTestParams->wfd3dVideoFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfd3dVideo= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfd3dVideo= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "MultiTxStream") == 0)
+        {
+           presetTestParams->wfdMultiTxStreamFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdMultiTxStream= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdMultiTxStream= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "TimeSync") == 0)
+        {
+           presetTestParams->wfdTimeSyncFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdTimeSync= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdTimeSync= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "EDID") == 0)
+        {
+           presetTestParams->wfdEDIDFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdEDID= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdEDID= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "UIBC_Prepare") == 0)
+        {
+           presetTestParams->wfdUIBCPrepareFlag= 1;
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdUIBCPrepare= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdUIBCPrepare= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "OptionalFeature") == 0)
+        {
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "DisableAll") == 0)
+           {
+              presetTestParams->wfdOptionalFeatureFlag= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdOptionalFeatureFlag= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "SessionAvailability") == 0)
+        {
+           presetTestParams->wfdSessionAvailFlag= 1;        
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+              presetTestParams->wfdSessionAvail= eEnable;
+           }
+           else
+           {
+              presetTestParams->wfdSessionAvail= eDisable;
+           }
+        }
+        else if(strcasecmp(str, "DeviceDiscoverability") == 0)
+        {
+           presetTestParams->wfdDeviceDiscoverabilityFlag= 1; 
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if(strcasecmp(str, "Enable") == 0)
+           {
+               presetTestParams->wfdDeviceDiscoverability= eEnable;
+           }
+           else
+           {
+               presetTestParams->wfdDeviceDiscoverability= eDisable;
+           }
+        }
+        else if (strcasecmp(str, "program") == 0)
+        {
+            presetTestParams->programFlag= 1;
+            str = strtok_r(NULL, ",", &pcmdStr);
+            if (strcasecmp(str, "PMF") == 0)
+            {
+                presetTestParams->program=PROG_TYPE_PMF;
+            }
+            else if (strcasecmp(str, "General") == 0)
+            {
+                presetTestParams->program=PROG_TYPE_GEN;
+            }
+            else if (strcasecmp(str, "TDLS") == 0)
+            {
+                presetTestParams->program=PROG_TYPE_TDLS;
+            }
+            else if (strcasecmp(str, "VOE") == 0)
+            {
+                presetTestParams->program=PROG_TYPE_VENT;
+            }
+            else if (strcasecmp(str, "WFD") == 0)
+            {
+                presetTestParams->program=PROG_TYPE_WFD;
+            }
+        }
+        else if(strcasecmp(str, "CoupledCap") == 0)
+        {
+            presetTestParams->wfdCoupledCapFlag=1;
+            str = strtok_r(NULL, ",", &pcmdStr);
+            if(strcasecmp(str, "Enable") == 0)
+            {
+               presetTestParams->wfdCoupledCap= eEnable;
+            }
+            else
+            {
+               presetTestParams->wfdCoupledCap= eDisable;
+            }
+        }
     }
 
     wfaEncodeTLV(WFA_STA_PRESET_PARAMETERS_TLV, sizeof(caStaPresetParameters_t), (BYTE *)presetTestParams, aBuf);
@@ -4428,10 +5030,15 @@ int xcCmdProcStaResetDefault(char *pcmdStr, BYTE *aBuf, int *aLen)
            str = strtok_r(NULL, ",", &pcmdStr);
            strncpy(reset->intf, str, 15);
         }
-        else if(strcasecmp(str, "prog") == 0)
+        else if(strcasecmp(str, "prog") == 0) // VHT, 11n, VOE, etc
         {
            str = strtok_r(NULL, ",", &pcmdStr);
-           strncpy(reset->prog, str, 64);
+           strncpy(reset->prog, str, 8);
+        }
+        else if(strcasecmp(str, "type") == 0) // dut or sta
+        {
+           str == strtok_r(NULL, ",", &pcmdStr);
+           strncpy(reset->prog, str, 8);
         }
     }
 
@@ -4478,10 +5085,10 @@ int xcCmdProcStaSetRadio(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-    wfaEncodeTLV(WFA_STA_SET_RADIO_TLV, sizeof(dutCommand_t), (BYTE *)cmd, aBuf);
-    *aLen = 4+sizeof(dutCommand_t);
     return WFA_SUCCESS; 
 }
+
+/* If you decide to use CLI, the function is to be disabled */
 
 int xcCmdProcStaSetWireless(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
@@ -4502,30 +5109,17 @@ int xcCmdProcStaSetWireless(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(staWirelessParams->intf, str, 15);
         }
-        else if(strcasecmp(str, "band") == 0)
+        if(strcasecmp(str, "program") == 0) // VHT or 11n or Voice
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(staWirelessParams->band,str,7);
-            DPRINT_INFO(WFA_OUT, "\n Band -%s- \n", staWirelessParams->band);
-        }
-        else if(strcasecmp(str, "noack") == 0)
-        {
-            char *ackpol;
-            int ackpolcnt = 0;
-            char *setvalues =strtok_r(NULL, ",", &pcmdStr);
+            strncpy(staWirelessParams->program, str, 15);
 
-            if(setvalues != NULL)
+            if(strcasecmp(staWirelessParams->program, "VHT") == 0)
             {
-                while((ackpol = strtok_r(NULL, ":", &setvalues)) != NULL && ackpolcnt < 4)
-                {
-                    if(strcasecmp(str, "enable") == 0)
-                       staWirelessParams->noAck[ackpolcnt] = 1;
-                    else if(strcasecmp(str, "disable") == 0)
-                       staWirelessParams->noAck[ackpolcnt] = 0;
-
-                    ackpolcnt++;
-                }
-           }
+                // process addba_reject, ampdu, amsdu, stbc_rx, width, smps, txsp_stream, rxsp_stream, band, DYN_BW_SGNL
+                // SGI80, TXBF, LDPC, Opt_md_notif_ie, nss_mcs_cap, tx_lgi_rate, zero_crc, vht_tkip, vht_wep, bw_sgnl
+               
+            }
         }
     }
 
@@ -4639,6 +5233,8 @@ int xcCmdProcStaSendCoExistMGMT(char *pcmdStr, BYTE *aBuf, int *aLen)
 
 int xcCmdProcStaSet11n(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
+
+
     caSta11n_t *v11nParams = (caSta11n_t *) (aBuf+sizeof(wfaTLV));
     char *str;
     caSta11n_t init11nParams = {"wifi0", 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,0xFFFF, 0xFFFF, "", "", 0xFF, 0xFF, 0xFF, 0xFF};
@@ -4658,10 +5254,10 @@ int xcCmdProcStaSet11n(char *pcmdStr, BYTE *aBuf, int *aLen)
             break;
         if(strcasecmp(str, "interface") == 0)
         {
-			str = strtok_r(NULL, ",", &pcmdStr);  
-			strncpy(v11nParams->intf, str,WFA_IF_NAME_LEN-1);
-			v11nParams->intf[WFA_IF_NAME_LEN-1]='\0';
-        }		
+            str = strtok_r(NULL, ",", &pcmdStr);  
+            strncpy(v11nParams->intf, str,WFA_IF_NAME_LEN-1);
+            v11nParams->intf[WFA_IF_NAME_LEN-1]='\0';
+        }
 
         if(strcasecmp(str, "ampdu") == 0)
         {
@@ -4805,7 +5401,7 @@ int xcCmdProcStaSet11n(char *pcmdStr, BYTE *aBuf, int *aLen)
     return WFA_SUCCESS;
 }
 
-#endif
+//#endif
 
 
 int xcCmdProcStaSetRFeature(char *pcmdStr, BYTE *aBuf, int *aLen)
@@ -4863,18 +5459,384 @@ int xcCmdProcStaSetRFeature(char *pcmdStr, BYTE *aBuf, int *aLen)
 
     return WFA_SUCCESS;
 }
-	
+
+int xcCmdProcStaStartWfdConnection(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+    caStaStartWfdConn_t *staStartWfdConn = (caStaStartWfdConn_t *) (aBuf+sizeof(wfaTLV));
+    char *str;
+    BYTE tmp_cnt;
+    char *tmp_str;
+
+    if(aBuf == NULL)
+        return FALSE;
+
+     memset(aBuf, 0, *aLen);
+
+     for(;;)
+     {
+         str = strtok_r(pcmdStr, ",", &pcmdStr);
+         if(str == NULL || str[0] == '\0')
+             break;
+
+         if(strcasecmp(str, "interface") == 0)
+         {
+             str = strtok_r(NULL, ",", &pcmdStr);
+             strncpy(staStartWfdConn->intf, str,WFA_IF_NAME_LEN-1);
+             staStartWfdConn->intf[WFA_IF_NAME_LEN-1]='\0';
+         }
+         else if(strcasecmp(str, "peeraddress") == 0)
+         {
+             str = strtok_r(NULL, ",", &pcmdStr);
+
+             for(tmp_cnt=0;;tmp_cnt++)
+             {
+                 tmp_str = strtok_r(str, " ", &str);
+                 if(str == NULL || str[0] == '\0')
+                     break;
+ 
+                 strncpy(staStartWfdConn->peer[tmp_cnt], tmp_str, WFA_MAC_ADDR_STR_LEN-1);
+                 staStartWfdConn->peer[tmp_cnt][WFA_MAC_ADDR_STR_LEN-1]='\0';
+             }
+         }
+         else if(strcasecmp(str, "init_wfd") == 0)
+         {
+             str = strtok_r(NULL, ",", &pcmdStr);
+             staStartWfdConn->init_wfd= atoi(str);  
+             staStartWfdConn->init_wfd_flag=1;  
+         }
+         else if(strcasecmp(str, "intent_val") == 0)
+         {
+             str = strtok_r(NULL, ",", &pcmdStr);
+             staStartWfdConn->intent_val= atoi(str);  
+             staStartWfdConn->intent_val_flag=1;  
+         }
+         else if(strcasecmp(str, "oper_chn") == 0)
+         {
+             str = strtok_r(NULL, ",", &pcmdStr);
+             staStartWfdConn->oper_chn= atoi(str);  
+             staStartWfdConn->oper_chn_flag=1;  
+         }
+         else if(strcasecmp(str, "coupledSession") == 0)
+         {
+             str = strtok_r(NULL, ",", &pcmdStr);
+             staStartWfdConn->coupledSession= atoi(str);  
+             staStartWfdConn->coupledSession_flag=1;  
+         }
+     }
+
+     wfaEncodeTLV(WFA_STA_START_WFD_CONNECTION_TLV,sizeof(caStaStartWfdConn_t), (BYTE *)staStartWfdConn, aBuf);
+
+     *aLen = 4+sizeof(caStaStartWfdConn_t);
+     return WFA_SUCCESS;
+}
 
 int xcCmdProcStaCliCommand(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
-	
-	printf("\n The CA CLI command to DUT is : %s",pcmdStr);
-	printf("\n The CA CLI command to DUT Length : %d",strlen(pcmdStr));
-	wfaEncodeTLV(WFA_STA_CLI_CMD_TLV, strlen(pcmdStr), (BYTE *)pcmdStr, aBuf);
 
-	*aLen = 4+strlen(pcmdStr);
+    printf("\n The CA CLI command to DUT is : %s",pcmdStr);
+    printf("\n The CA CLI command to DUT Length : %d",strlen(pcmdStr));
+    wfaEncodeTLV(WFA_STA_CLI_CMD_TLV, strlen(pcmdStr), (BYTE *)pcmdStr, aBuf);
+
+    *aLen = 4+strlen(pcmdStr);
     return TRUE;
 
 }
 
+int xcCmdProcStaConnectGoStartWfd(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+    caStaConnectGoStartWfd_t *staConnectGoStartWfd= (caStaConnectGoStartWfd_t *) (aBuf+sizeof(wfaTLV));
+    char *str;
+
+    if(aBuf == NULL)
+       return FALSE;
+
+    memset(aBuf, 0, *aLen);
+
+    for(;;)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        if(str == NULL || str[0] == '\0')
+            break;
+
+        if(strcasecmp(str, "interface") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(staConnectGoStartWfd->intf, str,WFA_IF_NAME_LEN-1);
+            staConnectGoStartWfd->intf[WFA_IF_NAME_LEN-1]='\0';
+        }
+        else if(strcasecmp(str, "groupid") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(staConnectGoStartWfd->grpid, str, WFA_P2P_GRP_ID_LEN-1);
+            staConnectGoStartWfd->grpid[WFA_P2P_GRP_ID_LEN-1]='\0';
+        }
+        else if(strcasecmp(str, "p2pdevid") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(staConnectGoStartWfd->devId, str, WFA_P2P_DEVID_LEN-1);
+            staConnectGoStartWfd->devId[WFA_P2P_DEVID_LEN-1]='\0';
+        } 
+    }
+
+    wfaEncodeTLV(WFA_STA_CONNECT_GO_START_WFD_TLV, sizeof(caStaConnectGoStartWfd_t), (BYTE *)staConnectGoStartWfd, aBuf);
+
+    *aLen = 4+sizeof(caStaConnectGoStartWfd_t);
+  
+    return WFA_SUCCESS;
+}
+
+int xcCmdProcStaGenerateEvent(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+    caStaGenEvent_t *staGenEvent= (caStaGenEvent_t *) (aBuf+sizeof(wfaTLV));
+    char *str;
+    caWfdStaGenEvent_t *pWfdEvent;
+ 
+    if(aBuf == NULL)
+       return FALSE;
+
+    memset(aBuf, '\0', *aLen);
+
+    for(;;)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        if(str == NULL || str[0] == '\0')
+            break;
+
+        if(strcasecmp(str, "interface") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(staGenEvent->intf, str,WFA_IF_NAME_LEN-1);
+            staGenEvent->intf[WFA_IF_NAME_LEN-1]='\0';
+        }
+        else if(strcasecmp(str, "program") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+
+            if (strcasecmp(str, "WFD") == 0)
+            {
+                staGenEvent->program= PROG_TYPE_WFD;
+                pWfdEvent = (caWfdStaGenEvent_t *) &staGenEvent->wfdEvent;
+  
+                for(;;)
+                {
+                    str = strtok_r(NULL, ",", &pcmdStr);
+                    if(str == NULL || str[0] == '\0')
+                        break;
+                    if (strcasecmp(str, "type") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "uibc_gen") == 0)
+                        {
+                            pWfdEvent->type= eUibcGen;
+                        }
+                        if (strcasecmp(str, "uibc_hid") == 0)
+                        {
+                            pWfdEvent->type= eUibcHid;
+                        }  
+                        if (strcasecmp(str, "frameskip") == 0)
+                        {
+                            pWfdEvent->type= eFrameSkip;
+                        }
+                        if (strcasecmp(str, "inputContent") == 0)
+                        {
+                            pWfdEvent->type= eInputContent;
+                        }
+                        if (strcasecmp(str, "i2cread") == 0)
+                        {
+                            pWfdEvent->type= eI2cRead;
+                        }
+                        if (strcasecmp(str, "i2cwrite") == 0)
+                        {
+                            pWfdEvent->type= eI2cWrite;
+                        }
+                        if (strcasecmp(str, "idrReq") == 0)
+                        {
+                            pWfdEvent->type= eIdrReq;
+                        }  
+                    }
+                    else if(strcasecmp(str, "sessionid") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        strncpy(pWfdEvent->wfdSessionID, str, WFA_WFD_SESSION_ID_LEN-1);
+                        pWfdEvent->wfdSessionID[WFA_WFD_SESSION_ID_LEN-1]='\0';  
+                        pWfdEvent->wfdSessionIdflag=1;
+                    }   
+                    else if(strcasecmp(str, "uibceventtype") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "KeyBoard") == 0)
+                        {
+                            pWfdEvent->wfdUibcEventType= eKeyBoardEvent;
+                        }
+                        if (strcasecmp(str, "Mouse") == 0)
+                        {
+                            pWfdEvent->wfdUibcEventType= eMouseEvent;
+                        }
+                        pWfdEvent->wfdUibcEventTypeflag=1;  
+                    }
+                    else if(strcasecmp(str, "uibc_prepare") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "KeyBoard") == 0)
+                        {
+                           pWfdEvent->wfdUibcEventPrepare= eKeyBoardEvent;
+                        }
+                        if (strcasecmp(str, "Mouse") == 0)
+                        {
+                           pWfdEvent->wfdUibcEventPrepare= eMouseEvent;
+                        }
+                        pWfdEvent->wfdUibcEventPrepareflag=1;
+                    }
+                    else if(strcasecmp(str, "frameSkip") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "Start") == 0)
+                        {
+                            pWfdEvent->wfdFrameSkipRateflag=1;  
+                        }
+                        else
+                        {  
+                            pWfdEvent->wfdFrameSkipRateflag=0;
+                        }
+                    }
+                    else if(strcasecmp(str, "InputContentType") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "Protected") == 0)
+                        {
+                            pWfdEvent->wfdInputContentType= eProtected;
+                        }
+                        if (strcasecmp(str, "Unprotected") == 0)
+                        {
+                            pWfdEvent->wfdInputContentType= eUnprotected;
+                        }   
+                        if (strcasecmp(str, "ProtectedVideoOnly") == 0)
+                        {
+                            pWfdEvent->wfdInputContentType= eProtectedVideoOnly;
+                        }
+                        pWfdEvent->wfdInputContentTypeflag=1;  
+                    }
+                    else if(strcasecmp(str, "I2c_Struct") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        strncpy(pWfdEvent->wfdI2cData, str, strlen(str));
+                        pWfdEvent->wfdI2cData[31]='\0';  
+                        pWfdEvent->wfdI2cDataflag=1;
+                    }
+                }
+            }
+        }
+    }
+
+   wfaEncodeTLV(WFA_STA_GENERATE_EVENT_TLV, sizeof(caStaGenEvent_t), (BYTE *)staGenEvent, aBuf);
+
+   *aLen = 4+sizeof(caStaGenEvent_t);
+ 
+   return WFA_SUCCESS;
+}
+
+
+int xcCmdProcStaReinvokeWfdSession(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaReinvokeWfdSession_t *staReinvokeWfdSession= (caStaReinvokeWfdSession_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+
+   if(aBuf == NULL)
+       return FALSE;
+
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+       str = strtok_r(NULL, ",", &pcmdStr);
+       if(str == NULL || str[0] == '\0')
+           break;
+
+       if(strcasecmp(str, "interface") == 0)
+       {
+           str = strtok_r(NULL, ",", &pcmdStr);
+           strncpy(staReinvokeWfdSession->intf, str,WFA_IF_NAME_LEN-1);
+           staReinvokeWfdSession->intf[WFA_IF_NAME_LEN-1]='\0';
+       }
+       else if(strcasecmp(str, "groupid") == 0)
+       {
+           str = strtok_r(NULL, ",", &pcmdStr);
+           strncpy(staReinvokeWfdSession->grpid, str, WFA_P2P_GRP_ID_LEN-1);
+           staReinvokeWfdSession->grpid[WFA_P2P_GRP_ID_LEN-1]='\0';
+           staReinvokeWfdSession->grpid_flag=1;
+       }
+       else if(strcasecmp(str, "PeerAddress") == 0)
+       {
+           str = strtok_r(NULL, ",", &pcmdStr);
+           strncpy(staReinvokeWfdSession->peer, str, WFA_MAC_ADDR_STR_LEN-1);
+           staReinvokeWfdSession->peer[WFA_MAC_ADDR_STR_LEN-1]='\0';
+       }
+       else if(strcasecmp(str, "invitationaction") == 0)
+       {
+           str = strtok_r(NULL, ",", &pcmdStr);
+           if (strcasecmp(str, "Send") == 0)
+           {
+              staReinvokeWfdSession->wfdInvitationAction= eInvitationSend;
+           }
+           else if (strcasecmp(str, "Accept") == 0)
+           {
+              staReinvokeWfdSession->wfdInvitationAction= eInvitationAccept;  
+           }
+       }
+   }
+
+   wfaEncodeTLV(WFA_STA_REINVOKE_WFD_SESSION_TLV, sizeof(caStaReinvokeWfdSession_t), (BYTE *)staReinvokeWfdSession, aBuf);
+   *aLen = 4+sizeof(caStaReinvokeWfdSession_t);
+ 
+   return WFA_SUCCESS;
+}
+
+int xcCmdProcStaGetParameter(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+   caStaGetParameter_t *staGetParameter = (caStaGetParameter_t *) (aBuf+sizeof(wfaTLV));
+   char *str;
+
+   if(aBuf == NULL)
+      return FALSE;
+
+   memset(aBuf, 0, *aLen);
+
+   for(;;)
+   {
+       str = strtok_r(NULL, ",", &pcmdStr);
+       if(str == NULL || str[0] == '\0')
+          break;
+
+       if(strcasecmp(str, "interface") == 0)
+       {
+          str = strtok_r(NULL, ",", &pcmdStr);
+          strncpy(staGetParameter->intf, str,WFA_IF_NAME_LEN-1);
+          staGetParameter->intf[WFA_IF_NAME_LEN-1]='\0';
+       }
+       else if(strcasecmp(str, "program") == 0)
+       {
+          str = strtok_r(NULL, ",", &pcmdStr);
+
+          if (strcasecmp(str, "WFD") == 0)
+          {
+              staGetParameter->program= PROG_TYPE_WFD;
+              str = strtok_r(NULL, ",", &pcmdStr);
+              if(strcasecmp(str, "Parameter") == 0)
+              {
+                  str = strtok_r(NULL, ",", &pcmdStr);  
+                  if (strcasecmp(str, "DiscoveredDevList") == 0)
+                  {
+                      staGetParameter->getParamValue= eDiscoveredDevList;
+                  }
+              }
+          }
+       }
+   }
+
+   wfaEncodeTLV(WFA_STA_GET_PARAMETER_TLV, sizeof(caStaGetParameter_t), (BYTE *)staGetParameter, aBuf);
+
+   *aLen = 4+sizeof(caStaGetParameter_t);
+ 
+   return WFA_SUCCESS;
+}
 

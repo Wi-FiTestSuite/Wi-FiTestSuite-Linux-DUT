@@ -108,4 +108,35 @@ int wfaStaDisconnectResp(BYTE * cmdBuf);
 int wfaStandardReturn(BYTE *cmdBuf);
 
 int wfaStaGenericResp(BYTE *cmdBuf);
+/* P2P */
+int 	wfaStaGetP2pDevAddressResp(BYTE *cmdBuf);          
+int 	wfaStaSetP2pResp(BYTE *cmdBuf);			
+int 	wfaStaP2pConnectResp(BYTE *cmdBuf);
+int 	wfaStaStartAutoGO(BYTE *cmdBuf);
+int 	wfaStaP2pStartGrpFormResp(BYTE *cmdBuf);         
+int 	wfaStaP2pDissolveResp(BYTE *cmdBuf);            
+int 	wfaStaSendP2pInvReqResp(BYTE *cmdBuf);		
+int 	wfaStaAcceptP2pInvReqResp(BYTE *cmdBuf);		
+int 	wfaStaSendP2pProvDisReqResp(BYTE *cmdBuf);     
+int 	wfaStaSetWpsPbcResp(BYTE *cmdBuf); 
+int 	wfaStaWpsReadPinResp(BYTE *cmdBuf);      
+int 	wfaStaWpsEnterPinResp(BYTE *cmdBuf);		
+int 	wfaStaGetPskResp(BYTE *cmdBuf);      
+int 	wfaStaP2pResetResp(BYTE *cmdBuf);    
+int 	wfaStaWpsReadLabelResp(BYTE *cmdBuf);
+int 	wfaStaGetP2pIpConfigResp(BYTE *cmdBuf);
+int 	wfaStaSendServiceDiscoveryReqResp(BYTE *cmdBuf);
+int 	wfaStaSendP2pPresenceReqResp(BYTE *cmdBuf);
+int 	wfaStaSetSleepReqResp(BYTE *cmdBuf);
+int 	wfaStaSetOpportunisticPsReqResp(BYTE *cmdBuf);
+int     wfaStaAddArpTableEntryResp(BYTE * cmdBuf);
+int     wfaStaBlockICMPResponseResp(BYTE * cmdBuf);
+/* P2P */
+int     wfaStaStartWfdConnectionResp(BYTE * cmdBuf);
+int		wfaStaCliCmdResp(BYTE * cmdBuf);
+int		wfaStaConnectGoStartWfdResp(BYTE * cmdBuf);
+int		wfaStaGenericResp(BYTE * cmdBuf);
+int     wfaStaGetParameterResp(BYTE * cmdBuf);
+
+
 #endif

@@ -122,7 +122,8 @@ int main(int argc, char *argv[])
     int bytesRcvd;                   
     fd_set sockSet;
     char cmdName[WFA_BUFF_32];
-    int i, isFound = 0, nbytes, tag, ret_status, slen;
+    int i, isFound = 0, nbytes, ret_status, slen;
+    WORD tag;
     int tmsockfd, cmdLen = WFA_BUFF_1K;
     int maxfdn1;
     BYTE xcCmdBuf[WFA_BUFF_4K];
@@ -329,7 +330,7 @@ int main(int argc, char *argv[])
 					if(strcmp(cliCmd,cmdName) == 0)
 					{
 						strcpy(cmdName,"wfa_cli_cmd");
-						pcmdStr = &xcCmdBuf[0];
+						pcmdStr = (char *)&xcCmdBuf[0];
 						break;
 					}
 				}
@@ -407,7 +408,6 @@ int main(int argc, char *argv[])
             tag = ((wfaTLV *)caCmdBuf)->tag;     
           
             memcpy(&ret_status, caCmdBuf+4, 4);
-            DPRINT_INFO(WFA_OUT, "bytes=%i, %i,%i,%x %x %x %x \n", bytesRcvd, ((wfaTLV *)caCmdBuf)->tag,((wfaTLV *)caCmdBuf)->len, *(caCmdBuf+4), *(caCmdBuf+5), *(caCmdBuf+6), *(caCmdBuf+7));
 
             DPRINT_INFO(WFA_OUT, "tag %i \n", tag);
             if(tag != 0 && wfaCmdRespProcFuncTbl[tag] != NULL)

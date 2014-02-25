@@ -55,13 +55,15 @@
 #ifndef WFA_VER_H
 #define WFA_VER_H
 
-#define WFA_VERNAM_LEN      16
+#define WFA_VERNAM_LEN      32
 /*
  * Current version support baseline programs and upcoming programs:
  *     Voice Enterprise
  *     WMM-AC
  *     PMF
  *     TDLS
+ *     VHT
+ *     Passpoint release 1
  *
  *     Releases:
  *     3.2 -- This release includes PMF and TDLS support
@@ -77,12 +79,17 @@
  *     3.3.9 -- add "sta_set_rfeature" command for TDLS
  *              add "tdlsMode" to Preset Command
  *     3.3.10 - fix a few bug during TDLS PF 
- *     4.2    - Release 4.2 Sigma
- *              it has all the latest Voice, PMF and TDLS changes & 
- *              latest bug fixes
+ *     6.0.0 -- This release includes Wi-Fi Display support ( Base )
+ *     6.0.1 -- PF#1 - based on CAPI version 6.0.1
+ *     6.0.2 -- PF#2 - based on CAPI version 6.0.2
+ *	   6.0.0-DISP-v0.3 -- PF#3 - based on CAPI version 6.0.2 	
+ *	   6.0.0-DISP-v0.4 -- PF#4 - based on Test plan version 0.13 	
+ *	   6.0.0-DISP-v0.5 -- PF#5 
+ *	   6.0.0-DISP-v0.5 -- TBRE 
+ *     8.0.0 -- This release includes all changes from VHT program.
+ *              This includes IPv6 ping support needed for Passpoint
  */
-#define WFA_SYSTEM_VER      "DUTPCE-7.1.0"     /* PC-ENDPOINT 4.3.0       */
-                                             /* Sigma DUT 4.3.0          */
+#define WFA_SYSTEM_VER      "PCEDUT-SIGMA-8.0.0"     
                                  
 
 #endif

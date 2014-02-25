@@ -63,6 +63,7 @@
 
 /* maximum number of streams to support */
 #define IPV4_ADDRESS_STRING_LEN    16
+#define IPV6_ADDRESS_STRING_LEN    40
 
 #define  MINISECONDS            1000
 #define  MICROSECONDS           1000000

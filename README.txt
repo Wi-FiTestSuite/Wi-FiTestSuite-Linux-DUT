@@ -2,49 +2,21 @@
 #  WFA Test Engine Source Code (DUT and Control PC) Revision 2.41 (April 4, 08)
 
 # Release History:
-# Initial Release: Version 01.00, July 10 2006, Qiumin Hu, Wi-Fi Alliance
+# Base Release: Version 3.3.10 Qiumin Hu, Wi-Fi Alliance
 #
-# Revision: 01.05, September 28 2006   bug fixes, maintenance release
-# Revision: 01.06, October 26 2006     bug fixes (environment variables), maintenance release
-# Revision: 01.10, January 11 2007     bug fixes, maintenance release
-# Revision: 01.40, March 30 2007       bug fixed, enhancement and official WMM Beta
-# Revision: 02.00, April 20 2007       WPA2 maintenance and official WMM 
-# Revision: 02.10, August 17, 2007     WMM Power Save and IBSS support
-# Revision: 02.30, November 7, 2007    Voice - Personal support
-#
-# REFER TO THE ReleaseNote-230.txt FOR THE SET OF UPDATES THAT 
-# DOCUMENT THE SPECIFIC CHANGES BETWEEN THIS VERSION AND
-# THE PREVIOUS Released VERSION
-#
-# The revisions are done in the following files:
-#     wfa_dut.c     -- Voice - Personal 
-#     wfa_cmdproc.c -- Voice - Personal 
-#     wfa_tg.c      -- Voice - Personal 
-#     wfa_tg.h      -- Voice - Personal 
-#     wfa_cs.c      -- Voice - Personal 
-#     wfa_misc.c    -- Voice - Personal
-#     wfa_dut_init.c -- newly added support.
-#
-# Revision: 02.32, Dec 11, 2007        UCC script and commands, initial release
-      This README file is updated. The section 3.5 and 3.6 are removed and 
-      UCC is only better way to go.
-           
-# Revision: 02.40, Feb. 15, 2008       New WMM-Power Save
-#           Add the section 3.8 for WMM-Power Save
-#
-# Revision: 02.41, Apr. 4, 2008        Bug fixes for Voice-Personal Release.
+# Revision: Version 4.0.0  Chandra Duba, Wi-Fi Alliance
+#		- Added feature "CLI handling using shell scirpts"
 
-0. Introduction
-   This source code package contains a sample Linux implementation of the DUT code for 
-   the Wi-Fi Test Engine.  This DUT code includes the Wi-Fi Traffic Generator.  
-   The DUT code is written to be portable to other platforms.
-  
-   Also included here is Linux source code for the Control PC component of the Wi-Fi Test Engine.
-   The sample code uses TCP over USB to provide connectivity between the DUT and the Control PC. 
-   This code will need to be modified to support alternate connectivity methods. 
-   
-   The third component included is called the Test Console.  This component is a peer traffic 
-   Generator to the DUT's traffic generator that can run on the Control PC 
+This source code package contains a sample Linux implementation of the DUT code for 
+the Wi-Fi Test Engine.  This DUT code includes the Wi-Fi Traffic Generator.  
+The DUT code is written to be portable to other platforms.
+
+Also included here is Linux source code for the Control PC component of the Wi-Fi Test Engine.
+The sample code uses TCP over USB to provide connectivity between the DUT and the Control PC. 
+This code will need to be modified to support alternate connectivity methods. 
+
+The third component included is called the Test Console.  This component is a peer traffic 
+Generator to the DUT's traffic generator that can run on the Control PC 
 
 Please refer to the WFA Porting Guidelines document for detailed instructions on the porting process. 
 
@@ -64,7 +36,6 @@ original build-line.
 To support Voice, the build in the Makefile.inc must include WFA_WMM_EXT and 
 WFA_WMM_VOICE
 
-The current code supports WPA2, WMM, WMM-PS, and Voice.
 
 1. Building the software
    a. build all
@@ -122,7 +93,8 @@ The current code supports WPA2, WMM, WMM-PS, and Voice.
 
    b. Start the control agent:
       wfa_ca <local ethernet interface to communicate to others such as Test 
-              Manager> <local port to listen on, e.g. 9000> 
+              Manager, CLI commander or Console with Python scripts e.g eth0> 
+	      <local port to listen on, e.g. 9000> 
 
    c. Now you are ready.
 
@@ -153,7 +125,7 @@ The current code supports WPA2, WMM, WMM-PS, and Voice.
        
 
 4. Debug Command
-   There is a CAPI command implemented to enable debug output. The debug levels
+   There is a CLI command implemented to enable debug output. The debug levels
    include
    a. ERROR -- Default and not Changeable  (level 1)
    b. INFO  -- Can be turned on/off        (level 2)
@@ -164,5 +136,17 @@ The current code supports WPA2, WMM, WMM-PS, and Voice.
    sta_debug_set,level,2,enable,0
       will disable it.
 
-For questions, send emails to sigmasupport@wi-fi.org
+
+5.To enable the CLI handling using shell scripts
+	1) copy the wfa_cli.txt to /etc/WfaEndpoint folder.
+	2) modify the wfa_cli.txt to include the CLI's that are handled by shell script.
+		- The format is <shell script>-<ResultFlag>
+		
+		- The ResultFlag can be either TRUE or FALSE. 
+			TRUE represents that there is some return string which should be sent to UCC
+			FALSE represents that there is no retrun string to send UCC
+		EX: wfa_test_cli-TRUE,
+	3) keep the named shell script ( should match with CLI defined in wfa_cli.txt) in /usr/bin or /usr/sbin so that the system can call.
+
+For questions, send emails to sigmasupport@wi-fi.org or cduba@wi-fi.org or qhu@wi-fi.org
 

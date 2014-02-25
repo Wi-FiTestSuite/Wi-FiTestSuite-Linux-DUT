@@ -157,7 +157,14 @@ extern int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen);
 extern int xcCmdProcStaSetRadio(char *pcmdStr, BYTE *aBuf, int *aLen);
 extern int xcCmdProcStaSetRFeature(char *pcmdStr, BYTE *aBuf, int *aLen);
 
+extern int xcCmdProcStaStartWfdConnection(char *pcmdStr, BYTE *aBuf, int *aLen);
 extern int xcCmdProcStaCliCommand(char *, BYTE *, int *);
+
+extern int xcCmdProcStaConnectGoStartWfd(char *pcmdStr, BYTE *aBuf, int *aLen);
+extern int xcCmdProcStaGenerateEvent(char *, BYTE *, int *);
+extern int xcCmdProcStaReinvokeWfdSession(char *, BYTE *, int *);
+extern int xcCmdProcStaGetParameter(char *, BYTE *, int *);
+
 
 /*
  * Initialize a command name table to its defined type and process function
@@ -243,7 +250,13 @@ typeNameStr_t nameStr[] =
    {WFA_STA_SET_RADIO_TLV, "sta_set_radio", xcCmdProcStaSetRadio},
    {WFA_STA_SET_RFEATURE_TLV, "sta_set_rfeature", xcCmdProcStaSetRFeature},
    
+   {WFA_STA_START_WFD_CONNECTION_TLV, "start_wfd_connection", xcCmdProcStaStartWfdConnection},
    {WFA_STA_CLI_CMD_TLV, "wfa_cli_cmd", xcCmdProcStaCliCommand},
+   {WFA_STA_CONNECT_GO_START_WFD_TLV, "connect_go_start_wfd", xcCmdProcStaConnectGoStartWfd},
+   {WFA_STA_GENERATE_EVENT_TLV, "sta_generate_event", xcCmdProcStaGenerateEvent},
+   {WFA_STA_REINVOKE_WFD_SESSION_TLV, "reinvoke_wfd_session", xcCmdProcStaReinvokeWfdSession},
+   {WFA_STA_GET_PARAMETER_TLV, "sta_get_parameter", xcCmdProcStaGetParameter},
    
+      
    {-1, "", NULL},
 };

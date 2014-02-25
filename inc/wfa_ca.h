@@ -118,8 +118,43 @@ extern int wfaStaResetDefault(int, BYTE *, int *, BYTE *);
 extern int wfaStaSendNeigReq(int, BYTE *, int *, BYTE *);
 extern int wfaStaTestBedCmd(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int  wfaStaGetP2pDevAddress(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf); 	
+extern int wfaStaSetP2p(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);			
+extern int wfaStaP2pConnect(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
+extern int wfaStaStartAutoGo(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
+extern int wfaStaP2pStartGrpFormation(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
+
+extern int wfaStaP2pDissolve(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);			
+extern int wfaStaSendP2pInvReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
+extern int wfaStaAcceptP2pInvReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
+extern int wfaStaSendP2pProvDisReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
+extern int wfaStaSetWpsPbc(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+
+extern int wfaStaWpsReadPin(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);						
+extern int wfaStaWpsEnterPin(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);			 
+extern int wfaStaGetPsk(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);			 
+extern int wfaStaP2pReset(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaWpsReadLabel(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);						
+extern int wfaStaGetP2pIpConfig(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaSendServiceDiscoveryReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaSendP2pPresenceReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaSetSleepReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaSetOpportunisticPsReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaAddArpTableEntry(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaBlockICMPResponse(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaDevSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetRadio(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetRFeature(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetSecurity(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+
+extern int wfaStaStartWfdConnection(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaCliCommand(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaConnectGoStartWfd(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaGenerateEvent(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaReinvokeWfdSession(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaGetParameter(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+
+
+
 
 #endif

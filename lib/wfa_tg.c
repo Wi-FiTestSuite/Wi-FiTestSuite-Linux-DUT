@@ -239,7 +239,7 @@ int wfaTGSendPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
         spresp->status = STATUS_COMPLETE;
         spresp->streamId = streamid;
-#elif
+#else
         printf("Only support UDP ECHO\n");
 #endif
         break;
@@ -866,7 +866,7 @@ void wfaTxSleepTime(int profile, int rate, int *sleepTime, int *throttledRate)
          */
         case PROF_IPTV:
         case PROF_FILE_TX:
-        if(rate >=50 || rate == 0)
+        if(rate >50)
         {
 	    /* 
 	     * this sleepTime indeed is now being used for time period  
@@ -876,8 +876,14 @@ void wfaTxSleepTime(int profile, int rate, int *sleepTime, int *throttledRate)
 	     * then go sleep for rest of time.
 	     */
             *sleepTime = 20000; /* fixed 20 miniseconds */
-            *throttledRate = (rate?rate:25000)/50; 
-	    printf("Sleep time %i, throttledRate %i\n", *sleepTime, *throttledRate);
+            *throttledRate = (rate?rate:10000)/50;   
+	        printf("Hi Sleep time %i, throttledRate %i\n", *sleepTime, *throttledRate);
+        }
+        else if(rate == 0)
+        {
+            *sleepTime = 20000; /* fixed 20 miniseconds */
+            *throttledRate = (rate?rate:10000)/50;  
+	        printf("Hi Sleep time %i, throttledRate %i\n", *sleepTime, *throttledRate);
         }
         else if (rate > 0 && rate <= 50) /* typically for voice */
         {
@@ -934,7 +940,7 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
     struct timeval before, after,af; 
     int difftime = 0, counter = 0;
     struct timeval stime;
-    int throttled_est_cost;
+//    int throttled_est_cost;
     int act_sleep_time;
     gettimeofday(&af,0);
    
@@ -954,11 +960,15 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
         return WFA_FAILURE;
     }
 
-    packLen = theProf->pksize;
+    /* If RATE is 0 which means to send as much as possible, the frame size set to max UDP length */
+    if(theProf->rate == 0)
+      packLen = MAX_UDP_LEN;
+    else 
+      packLen = theProf->pksize;
 
     /* allocate a buf */
-    packBuf = (char *)malloc(packLen);
-    wMEMSET(packBuf, 1, packLen);
+    packBuf = (char *)malloc(packLen+1);
+    wMEMSET(packBuf, 0, packLen);
 
     /* fill in the header */
     wSTRNCPY(packBuf, "1345678", sizeof(tgHeader_t));
@@ -993,7 +1003,7 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
 	//interval = 1*1000000/theProf->rate ; // in usec;
 
 	// Here assumes it takes 20 usec to send a packet
-	throttled_est_cost = throttledRate * 20;  // MUST estimate the cost per ppk
+	//throttled_est_cost = throttledRate * 20;  // MUST estimate the cost per ppk
 	act_sleep_time = sleepTime - adj_latency;
 	if (act_sleep_time <= 0)
 	    act_sleep_time = sleepTime;  

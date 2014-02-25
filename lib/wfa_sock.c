@@ -370,7 +370,8 @@ int wfaTrafficRecv(int sock, char *buf, struct sockaddr *from)
 #endif
 
 //   bytesRecvd = wRECVFROM(sock, buf, MAX_UDP_LEN, 0, from, &addrLen); 
-   bytesRecvd = recv(sock, buf, MAX_UDP_LEN, 0); 
+//   bytesRecvd = recv(sock, buf, MAX_UDP_LEN, 0); 
+   bytesRecvd = recv(sock, buf, MAX_RCV_BUF_LEN, 0); 
 
    return bytesRecvd;
 }

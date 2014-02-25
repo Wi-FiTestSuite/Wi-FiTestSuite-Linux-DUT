@@ -64,12 +64,22 @@
 #define _WFA_TYPES_H 
 
 #define WFA_IF_NAME_LEN 16
-#define WFA_VERSION_LEN 16
+#define WFA_VERSION_LEN 32
 #define WFA_SSID_NAME_LEN 64
 #define WFA_IP_ADDR_STR_LEN  16
 #define WFA_IP_MASK_STR_LEN  16
 #define WFA_MAX_DNS_NUM      2
-#define WFA_MAC_ADDR_STR_LEN 20
+#define WFA_MAC_ADDR_STR_LEN 18
+#define WFA_PROGNAME_LEN 8
+
+#define WFA_CLI_CMD_RESP_LEN 128
+#define WFA_P2P_DEVID_LEN 18
+#define WFA_P2P_GRP_ID_LEN 128
+#define WFA_WPS_PIN_LEN 256
+#define WFA_PSK_PP_LEN	256
+
+#define WFA_WFD_SESSION_ID_LEN 64
+
 
 #define IF_80211   1
 #define IF_ETH     2
@@ -106,5 +116,17 @@ typedef enum returnTypes
    WFA_SUCCESS = 0,
    WFA_FAILURE = 1,
 } retType_t;
+
+enum wfa_state
+{
+   WFA_DISABLED = 0,
+   WFA_ENABLED = 1,
+   WFA_OPTIONAL = 1,
+   WFA_REQUIRED = 2,
+   WFA_F_REQUIRED = 3,            /* forced required */
+   WFA_F_DISABLED = 4,            /* forced disabled */
+   WFA_INVALID_BOOL = 0xFF
+};
+
 
 #endif

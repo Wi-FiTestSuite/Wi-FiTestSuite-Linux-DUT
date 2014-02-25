@@ -339,7 +339,7 @@ main(int argc, char **argv)
                if(xcCmdTag != 0 && gWfaCmdFuncTbl[xcCmdTag] != NULL)
                {
 	           /* since the new commands are expanded to new block */
-		   gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
+		           gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
                }
                else
                {       // no command defined
