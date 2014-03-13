@@ -2717,10 +2717,10 @@ int wfaExecuteCLI(char *CLI)
 void wfaSendPing(tgPingStart_t *staPing, float *interval, int streamid)
 {
     int totalpkts;
-    char cmdStr[128];
+    char cmdStr[256];
 //    char *addr = staPing->dipaddr;
 #ifdef WFA_PC_CONSOLE
-    char addr[20];
+    char addr[40];
     char bflag[] = "-b";
     char *tmpstr;
     int inum=0;
