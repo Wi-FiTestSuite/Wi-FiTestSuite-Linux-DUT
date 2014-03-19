@@ -220,7 +220,11 @@ int wfaTGSendPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     if(staPing->frameSize == 0)
          staPing->frameSize = 100;
 
-    printf("fr %i\n", staPing->frameRate);
+    //<<<----------------------------------------------------
+    //jira issue: SIG-523
+    printf("framerate %f\n", staPing->frameRate);
+    ////printf("fr %i\n", staPing->frameRate);
+    //---------------------------------------------------->>>
     if(staPing->frameRate == 0)
          staPing->frameRate = 1;
 

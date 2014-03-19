@@ -2727,7 +2727,12 @@ void wfaSendPing(tgPingStart_t *staPing, float *interval, int streamid)
 #else
     char bflag[] = "  ";
 #endif
-    totalpkts = staPing->duration * staPing->frameRate;
+    //<<<-------------------------------------------------
+    //jira issue: SIG-523
+    //totalpkts should be integer
+    totalpkts = (int)(staPing->duration * staPing->frameRate);
+    ////totalpkts = staPing->duration * staPing->frameRate;
+    //-------------------------------------------------->>>
 #ifdef WFA_PC_CONSOLE
 
     printf("\nCS : The Stream ID is %d",streamid);
