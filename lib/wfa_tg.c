@@ -1268,13 +1268,13 @@ int wfaRecvFile(int mySockfd, int streamid, char *recvBuf)
     myStream = findStreamProfile(streamid);
     if(myStream == NULL)
     {
-        return WFA_FAILURE;
+        return WFA_ERROR;
     }
 
     theProf = &myStream->profile;
     if(theProf == NULL)
     {
-        return WFA_FAILURE;
+        return WFA_ERROR;
     }
 
     wMEMSET(packBuf, 0, MAX_UDP_LEN);

@@ -115,6 +115,7 @@ typedef enum returnTypes
 {
    WFA_SUCCESS = 0,
    WFA_FAILURE = 1,
+   WFA_ERROR = -1,
 } retType_t;
 
 enum wfa_state
