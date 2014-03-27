@@ -65,13 +65,8 @@
 typedef struct _tg_ping_start
 {
     char dipaddr[IPV6_ADDRESS_STRING_LEN];  /* destination/remote ip address */
-    int  frameSize;
-    //<<<----------------------------------------------------------------------------------
-    //jira issue: SIG-523
-    //define it as float type to resolve the rounding issue when the framerate is not int
-    float  frameRate;
-    ////int  frameRate;
-    //---------------------------------------------------------------------------------->>>
+    int  frameSize;    
+    float  frameRate;    
     int  duration;
     int  type;
     int  qos;
