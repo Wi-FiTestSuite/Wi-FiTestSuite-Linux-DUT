@@ -749,14 +749,9 @@ int xcCmdProcAgentSendPing(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
         if(strcasecmp(str, "frameRate") == 0)
         {
-            str = strtok_r(NULL, ",", &pcmdStr);  
-            //<<<------------------------------------------------------------------------
-            //jira issue: SIG-523
+            str = strtok_r(NULL, ",", &pcmdStr);
             staping->frameRate=atof(str);
             DPRINT_INFO(WFA_OUT, "framerate %f\n", staping->frameRate);
-            ////staping->frameRate=atoi(str);
-            ////DPRINT_INFO(WFA_OUT, "framerate %i\n", staping->frameRate);
-            //------------------------------------------------------------------------>>>
         }
         if(strcasecmp(str, "duration") == 0)
         {
