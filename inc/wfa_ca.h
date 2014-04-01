@@ -59,6 +59,8 @@
 #define ENCRYPT_WEP          1
 #define ENCRYPT_TKIP         2
 #define ENCRYPT_AESCCMP      3
+#define ENCRYPT_AESCCMP_TKIP 4
+
 #define WMMAC_UPLINK         0
 #define WMMAC_DOWNLINK       1
 #define WMMAC_BIDIR          3
