@@ -124,6 +124,9 @@ typedef struct ca_sta_set_psk
    char keyMgmtType[16];  /* WPA-PSK */
    int encpType;    /* TKIP    */
    int pmf;               /* PMF enable or disable */
+   char micAlg[16];
+   char prog[16];
+   BOOL perfer;
 } caStaSetPSK_t;
 
 typedef struct ca_sta_set_eaptls
@@ -148,6 +151,9 @@ typedef struct ca_sta_set_eapttls
    char trustedRootCA[32];
    char clientCertificate[32];
    int pmf;               /* PMF enable or disable */
+   char micAlg[16];
+   char prog[16];
+   BOOL perfer;
 } caStaSetEapTTLS_t;
 
 typedef struct ca_sta_set_eapsim
