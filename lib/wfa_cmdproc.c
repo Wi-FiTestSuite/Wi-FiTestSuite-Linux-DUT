@@ -1372,6 +1372,8 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
                setencryp->encpType = ENCRYPT_TKIP;
             else if(strcasecmp(str, "aes-ccmp") == 0)
                setencryp->encpType = ENCRYPT_AESCCMP;
+	    else if (strcasecmp(str, "aes-ccmp-tkip") == 0)
+	       setencryp->encpType = ENCRYPT_AESCCMP_TKIP;
         }
         else if(strcasecmp(str, "pmf") == 0)
         {
@@ -1385,6 +1387,24 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
             else
                setencryp->pmf = WFA_DISABLED;
         }
+	else if (strcasecmp(str, "micAlg") == 0)
+	{
+	    str = strtok_r(NULL, ",", &pcmdStr);
+	    if (strcasecmp(str, "SHA-1") != 0)
+		strncpy(setencryp->micAlg, str, 15);
+	    else
+		strncpy(setencryp->micAlg, "SHA-1", 15);
+	}
+	else if (strcasecmp(str, "Prog") == 0)
+	{
+	    str = strtok_r(NULL, ",", &pcmdStr);
+	    strncpy(setencryp->prog, str, 15);
+	}
+	else if (strcasecmp(str, "Perfer") == 0)
+	{
+	    str = strtok_r(NULL, ",", &pcmdStr);
+	    setencryp->perfer = (atoi(str) == 1)?1:0;
+	}
     }
             
     wfaEncodeTLV(WFA_STA_SET_PSK_TLV, sizeof(caStaSetPSK_t), (BYTE *)setencryp, aBuf);
@@ -1537,6 +1557,24 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
             else
                setsec->pmf = WFA_DISABLED;
         }
+	else if (strcasecmp(str, "micALg") == 0)
+	{
+	    str = strtok_r(NULL, ",", &pcmdStr);
+	    if (strcasecmp(str, "SHA-1") != 0)
+		strncpy(setsec->micAlg, str, 15);
+	    else
+		strncpy(setsec->micAlg, "SHA-1", 15);
+	}
+	else if (strcasecmp(str, "Prog") == 0)
+	{
+	    str = strtok_r(NULL, ",", &pcmdStr);
+	    strncpy(setsec->prog, str, 15);
+	}
+	else if (strcasecmp(str, "Perfer") == 0)
+	{
+	    str = strtok_r(NULL, ",", &pcmdStr);
+	    setsec->perfer = (atoi(str) == 1)?1:0;
+	}
     }
 
     wfaEncodeTLV(WFA_STA_SET_EAPTTLS_TLV, sizeof(caStaSetEapTTLS_t), (BYTE *)setsec, aBuf);
@@ -5000,6 +5038,14 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
                presetTestParams->wfdCoupledCap= eDisable;
             }
         }
+	else if (strcasecmp(str, "supplicant") == 0)
+	{
+	    str = strtok_r(NULL, ",", &pcmdStr);
+	    if (strcasecmp(str, "Default") == 0 || strcasecmp(str, "WPA_Supplicant") == 0)
+	    {
+		presetTestParams->supplicant = eWpaSupplicant;
+	    }
+	}
     }
 
     wfaEncodeTLV(WFA_STA_PRESET_PARAMETERS_TLV, sizeof(caStaPresetParameters_t), (BYTE *)presetTestParams, aBuf);
