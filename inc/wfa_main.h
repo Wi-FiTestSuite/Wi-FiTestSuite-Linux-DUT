@@ -82,7 +82,7 @@
 #ifdef WFA_PC_CONSOLE
 #define WFA_RESP_BUF_SZ    WFA_BUFF_4K
 #else
-#define WFA_RESP_BUF_SZ    WFA_BUFF_1K
+#define WFA_RESP_BUF_SZ    WFA_BUFF_4K
 #endif
 
 #define WFA_CMD_STR_SZ      512 
