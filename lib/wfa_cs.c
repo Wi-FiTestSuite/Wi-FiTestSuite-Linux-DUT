@@ -1032,6 +1032,10 @@ int wfaStaSetPSK(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
    {
 
    }
+   else if (strcasecmp(setPSK->keyMgmtType, "wpa2-wpa-psk") == 0)
+   {
+
+   }
    else
        sprintf(gCmdStr, "wpa_cli -i %s set_network 0 key_mgmt WPA-PSK", setPSK->intf); 
 
