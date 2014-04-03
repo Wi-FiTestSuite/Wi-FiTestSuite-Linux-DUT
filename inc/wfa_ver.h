@@ -89,7 +89,7 @@
  *     8.0.0 -- This release includes all changes from VHT program.
  *              This includes IPv6 ping support needed for Passpoint
  */
-#define WFA_SYSTEM_VER      "PCEDUT-SIGMA-8.0.0"     
+#define WFA_SYSTEM_VER      "PCEDUT-SIGMA-8.1.0"     
                                  
 
 #endif
