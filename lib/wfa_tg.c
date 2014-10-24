@@ -475,7 +475,7 @@ int wfaTGRecvStart(int len, BYTE *parms, int *respLen, BYTE *respBuf)
 #else
 
            case PROF_TRANSC:
-	   case PROF_CALI_RTD:  /* Calibrate roundtrip delay */
+           case PROF_CALI_RTD:  /* Calibrate roundtrip delay */
               gtgTransac = streamid;
            case PROF_MCAST:
            case PROF_FILE_TX:
@@ -486,7 +486,7 @@ int wfaTGRecvStart(int len, BYTE *parms, int *respLen, BYTE *respBuf)
               wPT_COND_SIGNAL(&wmm_thr[usedThread].thr_flag_cond);
               wPT_MUTEX_UNLOCK(&wmm_thr[usedThread].thr_flag_mutex);
               printf("Recv Start in thread %i for streamid %i\n", usedThread, streamid);
-	      usedThread++;
+              usedThread++;
            break;
 #endif       
            case PROF_UAPSD:

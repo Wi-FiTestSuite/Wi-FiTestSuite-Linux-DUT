@@ -955,8 +955,19 @@ void * wfa_wmm_thread(void *thr_param)
                printf("Error open socket\n");
                continue;
            }
+           
+           if (myProfile->profile == PROF_MCAST)
+           {
+               int so = wfaSetSockMcastRecvOpt(mySock, myProfile->dipaddr);
+               if(so < 0)
+               {
+                   DPRINT_ERR(WFA_ERR, "Join the multicast group failed\n");
+                   wCLOSE(mySock);                   
+                   continue;
+               }
+           }           
 
-	       tgSockfds[myStream->tblidx] = mySock;
+           tgSockfds[myStream->tblidx] = mySock;
 
 #ifdef WFA_VOICE_EXT
            /* only for receive stream needs to create a stats storage */
