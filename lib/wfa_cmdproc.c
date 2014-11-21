@@ -1239,7 +1239,8 @@ int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     int secType = 0;
 
-    if(aBuf == NULL)
+#ifndef WFA_PC_CONSOLE    
+	if(aBuf == NULL)
         return WFA_FAILURE;
    
     memset(aBuf, 0, *aLen);
@@ -1321,7 +1322,7 @@ int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen)
            }
         }
     }
-
+#endif
     return ret;
 }
 
@@ -1331,6 +1332,7 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetPSK_t defparams = {"", "", "", "", 0, WFA_DISABLED};
 
+#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1406,7 +1408,7 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
 	    setencryp->perfer = (atoi(str) == 1)?1:0;
 	}
     }
-            
+#endif            
     wfaEncodeTLV(WFA_STA_SET_PSK_TLV, sizeof(caStaSetPSK_t), (BYTE *)setencryp, aBuf);
 
     *aLen = 4+sizeof(caStaSetPSK_t);
@@ -1420,6 +1422,7 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetEapTLS_t defparams = {"", "", "", "", "", ""};
    
+#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1480,6 +1483,7 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
             
+#endif
     wfaEncodeTLV(WFA_STA_SET_EAPTLS_TLV, sizeof(caStaSetEapTLS_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapTLS_t);
@@ -1493,6 +1497,7 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
     caStaSetEapTTLS_t defparams = {"", "", "", "", "", "", "", ""};
     char *str;
    
+#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1577,6 +1582,7 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
 	}
     }
 
+#endif
     wfaEncodeTLV(WFA_STA_SET_EAPTTLS_TLV, sizeof(caStaSetEapTTLS_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapTTLS_t);
@@ -1590,6 +1596,7 @@ int xcCmdProcStaSetEapSIM(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetEapSIM_t defparams = {"", "", "", "", "", "", 0, {"", "", ""}};
    
+#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1667,6 +1674,7 @@ int xcCmdProcStaSetEapSIM(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
+#endif
     wfaEncodeTLV(WFA_STA_SET_EAPSIM_TLV, sizeof(caStaSetEapSIM_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapSIM_t);
@@ -1680,6 +1688,7 @@ int xcCmdProcStaSetPEAP(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetEapPEAP_t defparams = {"", "", "", "", "", "", "", "", 0};
    
+#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1751,7 +1760,7 @@ int xcCmdProcStaSetPEAP(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-
+#endif
     wfaEncodeTLV(WFA_STA_SET_PEAP_TLV, sizeof(caStaSetEapPEAP_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapPEAP_t);
@@ -3641,7 +3650,7 @@ int xcCmdProcStaSetEapFAST(char *pcmdStr, BYTE *aBuf, int *aLen)
     caStaSetEapFAST_t *setsec = (caStaSetEapFAST_t *) (aBuf+sizeof(wfaTLV));
     caStaSetEapFAST_t defparams = {"", "", "", "", "", "", "", "", 0, ""};
     char *str;
-   
+#ifndef WFA_PC_CONSOLE   
     if(aBuf == NULL)
        return WFA_FAILURE;
    
@@ -3725,6 +3734,7 @@ int xcCmdProcStaSetEapFAST(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
+#endif
     wfaEncodeTLV(WFA_STA_SET_EAPFAST_TLV, sizeof(caStaSetEapFAST_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapFAST_t);
@@ -3739,6 +3749,7 @@ int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     caStaSetEapAKA_t defparams = {"", "", "", "", "", "", 0, {"", "", ""}};
    
+#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -3816,6 +3827,7 @@ int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
+#endif
     wfaEncodeTLV(WFA_STA_SET_EAPAKA_TLV, sizeof(caStaSetEapAKA_t), (BYTE *)setsec, aBuf);
 
     *aLen = 4+sizeof(caStaSetEapAKA_t);
@@ -4405,6 +4417,7 @@ int xcCmdProcStaTestBedCmd(char *pcmdStr, BYTE *aBuf, int *aLen)
 
 }
 
+//#ifdef WFA_STA_TB
 int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaPresetParameters_t *presetTestParams = (caStaPresetParameters_t *) (aBuf+sizeof(wfaTLV));
@@ -5131,6 +5144,8 @@ int xcCmdProcStaSetRadio(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
+    wfaEncodeTLV(WFA_STA_SET_RADIO_TLV, sizeof(dutCommand_t), (BYTE *)cmd, aBuf);
+    *aLen = 4+sizeof(dutCommand_t);
     return WFA_SUCCESS; 
 }
 
@@ -5155,7 +5170,32 @@ int xcCmdProcStaSetWireless(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(staWirelessParams->intf, str, 15);
         }
-        if(strcasecmp(str, "program") == 0) // VHT or 11n or Voice
+        else if(strcasecmp(str, "band") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(staWirelessParams->band,str,7);
+            DPRINT_INFO(WFA_OUT, "\n Band -%s- \n", staWirelessParams->band);
+        }
+        else if(strcasecmp(str, "noack") == 0)
+        {
+            char *ackpol;
+            int ackpolcnt = 0;
+            char *setvalues =strtok_r(NULL, ",", &pcmdStr);
+
+            if(setvalues != NULL)
+            {
+                while((ackpol = strtok_r(NULL, ":", &setvalues)) != NULL && ackpolcnt < 4)
+                {
+                    if(strcasecmp(str, "enable") == 0)
+                       staWirelessParams->noAck[ackpolcnt] = 1;
+                    else if(strcasecmp(str, "disable") == 0)
+                       staWirelessParams->noAck[ackpolcnt] = 0;
+
+                    ackpolcnt++;
+                }
+           }
+        }
+        else if(strcasecmp(str, "program") == 0) // VHT or 11n or Voice
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(staWirelessParams->program, str, 15);

@@ -408,7 +408,6 @@ int main(int argc, char *argv[])
             tag = ((wfaTLV *)caCmdBuf)->tag;     
           
             memcpy(&ret_status, caCmdBuf+4, 4);
-
             DPRINT_INFO(WFA_OUT, "tag %i \n", tag);
             if(tag != 0 && wfaCmdRespProcFuncTbl[tag] != NULL)
             {
