@@ -24,6 +24,7 @@ mkdir /etc/WfaEndpoint
 cp -f ../wfa_cli.txt /etc/WfaEndpoint/.
 cp -f ../scripts/* /usr/local/sbin/
 cp  SigmaWTG ../dut/wfa_dut ../ca/wfa_ca /usr/bin
+cp ../console_src/wfa_con  /usr/bin/.
 cp  SigmaWTG.conf /etc
 if [ ! -d /SIGMA_WTG ] 
 then

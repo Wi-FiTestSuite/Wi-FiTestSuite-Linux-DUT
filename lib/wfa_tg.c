@@ -653,6 +653,7 @@ int wfaTGSendStart(int len, BYTE *parms, int *respLen, BYTE *respBuf)
 {
     int i=0, streamid=0;
     int numStreams = len/4;
+   char gCmdStr[WFA_CMD_STR_SZ];
 
     tgProfile_t *theProfile;
     tgStream_t *myStream = NULL;
@@ -722,11 +723,31 @@ int wfaTGSendStart(int len, BYTE *parms, int *respLen, BYTE *respBuf)
         usedThread++;
         //wfaSetProcPriority(90);
 
+        *respLen = 0;
         break;
-        } 
-    }
+        case PROF_UAPSD://Aaron's//Calls up the wfa_con.c
+        {
+           int ttout = 20;
+        
+           printf(" Run wfa_con timer = %d sec\n", ttout);
+	       sprintf(gCmdStr,"/usr/bin/wfa_con -t %d %s",ttout,theProfile->WmmpsTagName);
+	       if(system(gCmdStr))
+		   		 printf("Done with wfa_con\n");
 
-    *respLen = 0;
+           staSendResp.status = STATUS_COMPLETE;
+           staSendResp.streamId = streamid;
+           myStream->stats.txFrames = 10;
+           myStream->stats.txPayloadBytes = 10000;
+           wMEMCPY(&staSendResp.cmdru.stats, &myStream->stats, sizeof(tgStats_t)); 
+           wfaEncodeTLV(WFA_TRAFFIC_AGENT_SEND_RESP_TLV, sizeof(dutCmdResponse_t), 
+                 (BYTE *)&staSendResp, (BYTE *)respBuf);
+           *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+        }
+        break;
+        } /* switch  */
+    }/*  for */
+
+    //*respLen = 0;
     return WFA_SUCCESS;
 }
 
@@ -860,7 +881,7 @@ void wfaTxSleepTime(int profile, int rate, int *sleepTime, int *throttledRate)
          */
         case PROF_IPTV:
         case PROF_FILE_TX:
-        if(rate >50)
+        if(rate >=50 || rate == 0)
         {
 	    /* 
 	     * this sleepTime indeed is now being used for time period  

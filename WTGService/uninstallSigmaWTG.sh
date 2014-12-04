@@ -22,6 +22,7 @@
 
 sh $PWD/SigmaWTGService.sh stop
 rm -f /usr/bin/SigmaWTG /usr/bin/wfa_dut /usr/bin/wfa_ca
+rm -f /usr/bin/wfa_con
 rm -f /etc/SigmaWTG.conf
 rm -f /etc/rc.local
 rm -f /etc/WfaEndpoint/*

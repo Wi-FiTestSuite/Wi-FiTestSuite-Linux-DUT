@@ -31,43 +31,6 @@ THE USE OR PERFORMANCE OF THIS SOFTWARE.
  *   own ways to interact its systems, supplicants and process these commands
  *   such as using the native APIs.
  *
- *   Revision History:
- *        2006/03/10  -- initially created by qhu
- *        2006/06/01  -- BETA Release by qhu
- *        2006/06/13  -- 00.02 Release by qhu
- *        2006/06/30  -- 00.10 Release by qhu
- *        2006/07/10  -- 01.00 Release by qhu
- *        2006/09/01  -- 01.05 Release by qhu
- *        2006/10/26  -- 01.06 Released by qhu
- *                       replace hardcoded buf size with macro
- *        2006/12/02  -- bugs: 1. fixes incorrect order of getipconfig.sh
- *                                input parameters reported by p.schwann
- *                             2. will add a new network for wap_cli command
- *                                in case the network id 0 not present,
- *                                recommended by c.benson
- *                                the solution is to reimplement with calling
- *                                native C API
- *        2007/01/11  -- 01.10 released by qhu
- *        2007/02/15  -- WMM Extension Beta released by qhu, mkaroshi
- *        2007/03/18  -- add file close statements
- *        2007/03/21  -- rename the file to avoid the confusion.
- *        2007/03/30  -- 01.40 WPA2 and Official WMM Beta Release by qhu
- *        2007/04/20  -- 02.00 WPA2 and Official WMM Release by qhu
- *        2007/08/15 --  02.10 WMM-Power Save release by qhu
- *        2007/10/10 --  02.20 Voice SOHO beta -- qhu
- *        2007/11/07 --  02.30 Voice HSO -- qhu
- *        2007/12/10 --  02.32 Add a function to upload test results.
- *        2008/01/03 --  02.34 Support the result upload command.
- *        2008/03/12 --  02.41 Bug #16, incorrect file descriptor used. Change 
- *                       the "tmpfile" to "tmpfd" and a few places. Make a macro
- *                       WFA_STAUT_IF in file "inc/wfa_cs.h" for WLAN interface
- *                       name in the function "wfaDeviceListIF()
- *                      
- *                       Not A Bug. Put back to the function from 
- *                       wfaSetEncryption1() to wfaSetEncryption() for 
- *                       supporting WEP. Porting could select which should be 
- *                       used according to WEP support or not.
- *                        
  *        
  */ 
 #include <stdio.h>
@@ -971,9 +934,11 @@ int wfaStaSetEapTLS(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
  *   4. encrypType - tkip or aes-ccmp
  */
 int wfaStaSetPSK(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
-{
+{ /*Incompleted function*/
    caStaSetPSK_t *setPSK = (caStaSetPSK_t *)caCmdBuf;
    dutCmdResponse_t *setPskResp = &gGenericResp;
+
+#ifndef WFA_PC_CONSOLE
 
 #ifdef WFA_NEW_CLI_FORMAT
    sprintf(gCmdStr, "wfa_set_psk %s %s %s", setPSK->intf, setPSK->ssid, setPSK->passphrase); 
@@ -1033,6 +998,8 @@ int wfaStaSetPSK(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
    }
    
+#endif
+
 #endif
 
    setPskResp->status = STATUS_COMPLETE;

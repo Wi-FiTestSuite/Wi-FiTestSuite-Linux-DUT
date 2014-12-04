@@ -62,7 +62,7 @@ extern int gtgWmmPS;
 /*  function declaration */
 extern int wfaTGSetPrio(int sockfd, int tgClass);
 void wmmps_wait_state_proc();
- int wfa_wmmps_send_thread(void* input);
+int wfa_wmmps_send_thread(void* input);
 
 /* APTS messages*/
 struct apts_msg apts_msgs[] ={

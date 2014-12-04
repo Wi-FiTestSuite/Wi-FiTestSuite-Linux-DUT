@@ -22,26 +22,6 @@
  *      to an internal format for DUT. They should be called by Control Agent
  *      and Test console while receiving commands from CLI or TM
  *
- *      Revision History:
- *        2006/03/10  -- initially created by qhu
- *        2006/06/01    -- BETA release by qhu
- *        2006/06/13    -- 00.02 release by qhu
- *        2006/06/30    -- 00.10 Release by qhu
- *        2006/07/10  -- 01.00 Release by qhu
- *        2006/08/30  -- add some print statements by Isaac in Epson.
- *        2006/09/01  -- 01.05 release by qhu
- *        2006/10/26    -- 01.06 release by qhu
- *        2006/12/02    -- bug fix reported by p.schwan
- *        2007/01/11    -- 01.10 release by qhu
- *        2007/02/15  -- WMM Extension Beta released by qhu, mkaroshi
- *        2007/03/30  -- 01.40 WPA2 and Official WMM Beta Release by qhu
- *        2007/04/20  -- 02.00 WPA2 and Official WMM Release by qhu
- *        2007/08/15 --  02.10 WMM-Power Save release by qhu
- *        2007/10/10 --  02.20 Voice SOHO beta -- qhu
- *        2007/11/07 --  02.30 Voice HSO -- qhu
- *        2007/12/10 --  02.32 Add a funtion to upload test results.
- *        2008/01/03 --  02.34 Support the result upload command.
- *        2008/02/11 --  02.40 Fix the BUG 5, multiple issues. 
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,6 +59,7 @@ typeNameStr_t keywordStr[] =
     { KW_USESYNCCLOCK, "useSyncClock",  NULL},
     { KW_USERPRIORITY, "userpriority",  NULL},
     { KW_MAXCNT,       "maxcnt",        NULL},
+    { KW_TAGNAME,      "tagName",	    NULL}
 }; 
 
 /* profile type string table */
@@ -427,6 +408,12 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
               kwcnt++;
               str = NULL;
       break;
+
+	  case KW_TAGNAME:
+	  str=strtok_r(NULL,",",&pcmdStr);
+	  strncpy(pf->WmmpsTagName,str,strlen(str));
+	  printf("Got name %s\n",pf->WmmpsTagName);
+	  break;
 
               default:
                 ;
@@ -1345,8 +1332,8 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
                setencryp->encpType = ENCRYPT_TKIP;
             else if(strcasecmp(str, "aes-ccmp") == 0)
                setencryp->encpType = ENCRYPT_AESCCMP;
-	    else if (strcasecmp(str, "aes-ccmp-tkip") == 0)
-	       setencryp->encpType = ENCRYPT_AESCCMP_TKIP;
+	        else if (strcasecmp(str, "aes-ccmp-tkip") == 0)
+	           setencryp->encpType = ENCRYPT_AESCCMP_TKIP;
         }
         else if(strcasecmp(str, "pmf") == 0)
         {
@@ -1360,24 +1347,24 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
             else
                setencryp->pmf = WFA_DISABLED;
         }
-	else if (strcasecmp(str, "micAlg") == 0)
-	{
-	    str = strtok_r(NULL, ",", &pcmdStr);
-	    if (strcasecmp(str, "SHA-1") != 0)
-		strncpy(setencryp->micAlg, str, 15);
-	    else
-		strncpy(setencryp->micAlg, "SHA-1", 15);
-	}
-	else if (strcasecmp(str, "Prog") == 0)
-	{
-	    str = strtok_r(NULL, ",", &pcmdStr);
-	    strncpy(setencryp->prog, str, 15);
-	}
-	else if (strcasecmp(str, "Perfer") == 0)
-	{
-	    str = strtok_r(NULL, ",", &pcmdStr);
-	    setencryp->perfer = (atoi(str) == 1)?1:0;
-	}
+		else if (strcasecmp(str, "micAlg") == 0)
+		{
+		    str = strtok_r(NULL, ",", &pcmdStr);
+		    if (strcasecmp(str, "SHA-1") != 0)
+			strncpy(setencryp->micAlg, str, 15);
+		    else
+			strncpy(setencryp->micAlg, "SHA-1", 15);
+		}
+		else if (strcasecmp(str, "Prog") == 0)
+		{
+		    str = strtok_r(NULL, ",", &pcmdStr);
+		    strncpy(setencryp->prog, str, 15);
+		}
+		else if (strcasecmp(str, "Perfer") == 0)
+		{
+		    str = strtok_r(NULL, ",", &pcmdStr);
+		    setencryp->perfer = (atoi(str) == 1)?1:0;
+		}
     }
 #endif            
     wfaEncodeTLV(WFA_STA_SET_PSK_TLV, sizeof(caStaSetPSK_t), (BYTE *)setencryp, aBuf);
@@ -1533,24 +1520,24 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
             else
                setsec->pmf = WFA_DISABLED;
         }
-	else if (strcasecmp(str, "micALg") == 0)
-	{
-	    str = strtok_r(NULL, ",", &pcmdStr);
-	    if (strcasecmp(str, "SHA-1") != 0)
-		strncpy(setsec->micAlg, str, 15);
-	    else
-		strncpy(setsec->micAlg, "SHA-1", 15);
-	}
-	else if (strcasecmp(str, "Prog") == 0)
-	{
-	    str = strtok_r(NULL, ",", &pcmdStr);
-	    strncpy(setsec->prog, str, 15);
-	}
-	else if (strcasecmp(str, "Perfer") == 0)
-	{
-	    str = strtok_r(NULL, ",", &pcmdStr);
-	    setsec->perfer = (atoi(str) == 1)?1:0;
-	}
+		else if (strcasecmp(str, "micALg") == 0)
+		{
+		    str = strtok_r(NULL, ",", &pcmdStr);
+		    if (strcasecmp(str, "SHA-1") != 0)
+			strncpy(setsec->micAlg, str, 15);
+		    else
+			strncpy(setsec->micAlg, "SHA-1", 15);
+		}
+		else if (strcasecmp(str, "Prog") == 0)
+		{
+		    str = strtok_r(NULL, ",", &pcmdStr);
+		    strncpy(setsec->prog, str, 15);
+		}
+		else if (strcasecmp(str, "Perfer") == 0)
+		{
+		    str = strtok_r(NULL, ",", &pcmdStr);
+		    setsec->perfer = (atoi(str) == 1)?1:0;
+		}
     }
 
 #endif
@@ -3881,8 +3868,8 @@ int xcCmdProcStaDisconnect(char *pcmdStr, BYTE *aBuf, int *aLen)
         if(strcasecmp(str, "interface") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);  
-strncpy(disc->intf, str,WFA_IF_NAME_LEN-1);
-disc->intf[WFA_IF_NAME_LEN-1]='\0';
+			strncpy(disc->intf, str,WFA_IF_NAME_LEN-1);
+			disc->intf[WFA_IF_NAME_LEN-1]='\0';
         }
     }
 
@@ -5253,7 +5240,7 @@ int xcCmdProcStaResetDefault(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
         else if(strcasecmp(str, "type") == 0) // dut or sta
         {
-           str == strtok_r(NULL, ",", &pcmdStr);
+           str = strtok_r(NULL, ",", &pcmdStr);
            strncpy(reset->prog, str, 8);
         }
     }
@@ -5355,7 +5342,7 @@ int xcCmdProcStaSetWireless(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "program") == 0) // VHT or 11n or Voice
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(staWirelessParams->program, str, 15);
+            strncpy(staWirelessParams->program, str, WFA_PROGNAME_LEN);
 
             if(strcasecmp(staWirelessParams->program, "VHT") == 0)
             {
@@ -5599,7 +5586,7 @@ int xcCmdProcStaSet11n(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "mcs_fixedrate") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(v11nParams->mcs_fixedrate,str,63);
+            strncpy(v11nParams->mcs_fixedrate,str,4);
             DPRINT_INFO(WFA_OUT, "\n mcs fixedrate -%s- \n", v11nParams->mcs_fixedrate);
         }
         else if(strcasecmp(str, "stbc_rx") == 0)
@@ -5672,7 +5659,7 @@ int xcCmdProcStaSetRFeature(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "prog") == 0)
         {
            str = strtok_r(NULL, ",", &pcmdStr);
-           strncpy(rfeat->prog, str, 64);
+           strncpy(rfeat->prog, str, 8);
         }
         else if(strcasecmp(str, "uapsd") == 0)
         {

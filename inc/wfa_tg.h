@@ -55,6 +55,7 @@
 #define KW_USESYNCCLOCK            16
 #define KW_USERPRIORITY            17
 #define KW_MAXCNT                  18
+#define KW_TAGNAME                 19
 
 /* Profile Types */
 #define PROF_FILE_TX               1
@@ -157,6 +158,7 @@ typedef struct _tg_profile
     short trafficClass;      /* VO, VI, BK, BE */
     int  startdelay;
     int  maxcnt;
+    char WmmpsTagName[10];//Aaron's//Store the test case name
 } tgProfile_t;
 
 typedef struct _tg_stream

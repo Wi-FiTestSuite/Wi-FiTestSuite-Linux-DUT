@@ -109,7 +109,7 @@ int
 main(int argc, char **argv)
 {
     int	      nfds, maxfdn1 = -1, nbytes = 0, cmdLen = 0, isExit = 1;
-    int       respLen, ret = 0;
+    int       respLen;
     WORD      locPortNo = 0;   /* local control port number                  */
     fd_set    sockSet;         /* Set of socket descriptors for select()     */
     BYTE      *xcCmdBuf=NULL, *parmsVal=NULL;
@@ -214,7 +214,7 @@ main(int argc, char **argv)
 
 #ifdef WFA_WMM_PS_EXT
     /* WMMPS thread   */  
-	
+	int ret = 0;
     ret = pthread_mutex_init(&wmmps_mutex_info.thr_flag_mutex,NULL);
 	if ( ret !=0)
 	{

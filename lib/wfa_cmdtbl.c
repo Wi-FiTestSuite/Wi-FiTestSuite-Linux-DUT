@@ -23,20 +23,6 @@
  *   registered in the array/table by the order of the defined commands TLV  
  *   values.
  *
- *   Revision History:
- *      2006/03/10 -- initially created by qhu
- *      2006/06/01 -- BETA release by qhu
- *      2006/06/13 -- 00.02 release by qhu
- *      2006/06/30 -- 00.10 Release by qhu
- *      2006/07/10 -- 01.00 Release by qhu
- *      2006/09/01 -- 01.05 Release by qhu
- *      2007/02/15  -- WMM Extension Beta released by qhu, mkaroshi
- *      2007/03/30 -- 01.40 WPA2 and Official WMM Beta release by qhu
- *      2007/04/20 -- 02.00 WPA2 and Official WMM release by qhu
- *      2007/08/15 --  02.10 WMM-Power Save release by qhu
- *      2007/10/10 --  02.20 Voice SOHO beta -- qhu
- *      2007/11/07 --  02.30 Voice HSO -- qhu
- *      2007/12/10 --  02.32 Add a function to upload test results.
  *
  */
 #include <stdio.h>
