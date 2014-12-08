@@ -36,14 +36,7 @@
 #include <fcntl.h>          /* for fcntl() */
 #include <errno.h>
 
-//#define MAX_UDP_LEN     4096
 #define MAX_UDP_LEN       1470 
-//#define MAX_UDP_LEN       4410 
-//#define MAX_UDP_LEN       2900 
-//#define MAX_UDP_LEN       4350 
-//#define MAX_UDP_LEN     2048
-//#define MAX_UDP_LEN     8192 
-//#define MAX_UDP_LEN     16384 
 
 #define MAX_RCV_BUF_LEN   (32*1024)
 

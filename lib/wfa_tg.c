@@ -271,7 +271,6 @@ int wfaTGStopPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     {
         gtgTransac =0;
         gtgSend = 0;
-//        gtimeOut = 0;
         gtgRecv = 0;
         alarm(0);
 
@@ -369,7 +368,6 @@ int wfaTGRecvStart(int len, BYTE *parms, int *respLen, BYTE *respBuf)
      * performance for packet receiving. It is only for tuning and optional
      * to implement
      */
-    //wfaSetProcPriority(60);
 
     for(i=0; i<numStreams; i++)
     {
@@ -410,7 +408,6 @@ int wfaTGRecvStart(int len, BYTE *parms, int *respLen, BYTE *respBuf)
 #ifdef WFA_WPA2_SINGLE_THREAD  
            case PROF_MCAST:
            case PROF_FILE_TX:
-//           case PROF_IPTV:
                btSockfd = wfaCreateUDPSock(theProfile->dipaddr, theProfile->dport);
                gtgRecv = streamid;
 
@@ -484,10 +481,7 @@ int wfaTGRecvStart(int len, BYTE *parms, int *respLen, BYTE *respBuf)
             pthread_cond_signal(&wmmps_mutex_info.thr_flag_cond);//Aaron's//Wake up the wfa_wmmps_thread
             DPRINT_INFO(WFA_OUT, "wfaTGRecvStart PROF_UAPSD srcIPAddr=%s desIPAddr=%s streamId=%d\n",
                            theProfile->sipaddr, theProfile->dipaddr, wmmps_info.streamid );
-            //pthread_mutex_unlock(&wmm_thr[usedThread].thr_flag_mutex);
-            //usedThread++;
             gtimeOut = MINISECONDS/10;  /* in msec */
-            //gRegSec = 0;
 
 #endif   /* WFA_WMM_PS_EXT */
            break;
@@ -530,7 +524,6 @@ int wfaTGRecvStop(int len, BYTE *parms, int *respLen, BYTE *respBuf)
      * normal level. It is optional implementation if it is not called 
      * while it starts receiving for raising priority level.
      */
-    //wfaSetProcPriority(30);
     wMEMSET(dutRspBuf, 0, WFA_RESP_BUF_SZ);
     for(i=0; i<numStreams; i++)
     {
@@ -715,17 +708,15 @@ int wfaTGSendStart(int len, BYTE *parms, int *respLen, BYTE *respBuf)
          * singal the thread to Sending WMM traffic 
          */
          
-        //if(usedThread < 
         wmm_thr[usedThread].thr_flag = streamid;
         wPT_MUTEX_LOCK(&wmm_thr[usedThread].thr_flag_mutex);
         wPT_COND_SIGNAL(&wmm_thr[usedThread].thr_flag_cond);
         wPT_MUTEX_UNLOCK(&wmm_thr[usedThread].thr_flag_mutex);
         usedThread++;
-        //wfaSetProcPriority(90);
 
         *respLen = 0;
         break;
-        case PROF_UAPSD://Aaron's//Calls up the wfa_con.c
+        case PROF_UAPSD:
         {
            int ttout = 20;
         
@@ -747,7 +738,6 @@ int wfaTGSendStart(int len, BYTE *parms, int *respLen, BYTE *respBuf)
         } /* switch  */
     }/*  for */
 
-    //*respLen = 0;
     return WFA_SUCCESS;
 }
 
@@ -786,7 +776,6 @@ int wfaTGReset(int len, BYTE *parms, int *respLen, BYTE *respBuf)
 #endif
 
     totalTranPkts = 0;
-    //gtimeOut = 0;
 
     runLoop = 0;
 
@@ -803,7 +792,6 @@ int wfaTGReset(int len, BYTE *parms, int *respLen, BYTE *respBuf)
 
     wMEMSET(&wmmps_info, 0, sizeof(wfaWmmPS_t));
 
-//         wfaSetDUTPwrMgmt(PS_OFF);
 #endif
 
     e2eResults[0] = '\0';
@@ -817,7 +805,6 @@ int wfaTGReset(int len, BYTE *parms, int *respLen, BYTE *respBuf)
      * normal level. It is optional implementation if it is not called 
      * while it starts sending/receiving for raising priority level.
      */
-    //wfaSetProcPriority(20);
 
     /* encode a TLV for response for "complete ..." */
     resetResp->status = STATUS_COMPLETE; 
@@ -955,7 +942,6 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
     struct timeval before, after,af; 
     int difftime = 0, counter = 0;
     struct timeval stime;
-//    int throttled_est_cost;
     int act_sleep_time;
     gettimeofday(&af,0);
    
@@ -1013,12 +999,7 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
          * to improve the real-time performance of packet sending.
          * Since this is for tuning purpose, it is optional implementation.
          */
-        //wfaSetProcPriority(60);
-	
-	//interval = 1*1000000/theProf->rate ; // in usec;
 
-	// Here assumes it takes 20 usec to send a packet
-	//throttled_est_cost = throttledRate * 20;  // MUST estimate the cost per ppk
 	act_sleep_time = sleepTime - adj_latency;
 	if (act_sleep_time <= 0)
 	    act_sleep_time = sleepTime;  
@@ -1067,7 +1048,7 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
 	            difftime = wfa_itime_diff(&after, &before);
                  }
 
-		 // burn the rest to absort latency
+			  // burn the rest to absort latency
 	         if(difftime >0)
 	             buzz_time(difftime);
 
@@ -1127,7 +1108,6 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
          * lower back to an original level if the process is raised previously
          * It is optional.
          */
-        //wfaSetProcPriority(30); 
     }
     else /* invalid parameters */
     {
@@ -1179,7 +1159,6 @@ int wfaSendShortFile(int mySockfd, int streamid, BYTE *sendBuf, int pksize, BYTE
    {
       /* stop */ 
       gtgTransac = 0;
-      //gtimeOut = 0; 
       gtgRecv = 0;
       gtgSend = 0;
       printf("stop short traffic\n");
@@ -1225,15 +1204,13 @@ int wfaSendShortFile(int mySockfd, int streamid, BYTE *sendBuf, int pksize, BYTE
 
    if(gtgRecv && gtgTransac)
    {
-//      printf("mySock %i sipaddr %s sport %i\n", mySockfd, theProf->sipaddr, theProf->sport); 
-      toAddr.sin_addr.s_addr = inet_addr(theProf->sipaddr);
-      toAddr.sin_port = htons(theProf->sport); 
+	    toAddr.sin_addr.s_addr = inet_addr(theProf->sipaddr);
+        toAddr.sin_port = htons(theProf->sport); 
    }
    else if(gtgSend && gtgTransac)
    {
-//      printf("mySock %i dipaddr %s dport %i\n", mySockfd, theProf->dipaddr, theProf->dport); 
-      toAddr.sin_addr.s_addr = inet_addr(theProf->dipaddr);
-      toAddr.sin_port = htons(theProf->dport); 
+		toAddr.sin_addr.s_addr = inet_addr(theProf->dipaddr);
+		toAddr.sin_port = htons(theProf->dport); 
    }
 
    int2BuffBigEndian(myStream->stats.txFrames, &((tgHeader_t *)packBuf)->hdr[8]);
@@ -1259,7 +1236,6 @@ int wfaSendShortFile(int mySockfd, int streamid, BYTE *sendBuf, int pksize, BYTE
 	  break;
 	  default:
               ;;
-             //perror("sendto: ");
       }
    }
 

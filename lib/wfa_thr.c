@@ -53,7 +53,6 @@ extern int wfaSetProcPriority(int);
 tgStream_t gStreams[WFA_MAX_TRAFFIC_STREAMS];
 int tgSockfds[WFA_MAX_TRAFFIC_STREAMS] = {-1, -1, -1, -1, -1, -1, -1, -1};
 
-//extern tgStream_t *gStreams;
 extern unsigned short wfa_defined_debug;
 extern unsigned int recvThr;
 extern int tgWMMTestEnable;
@@ -358,11 +357,8 @@ int sender(char psave,int sleep_period, int userPriority)
    PRINTF("\nsender::sleeping for %d userPriority=%d psSockFd=%d",sleep_period, userPriority, psSockfd);
    wfaSetDUTPwrMgmt(psave);
    wUSLEEP(sleep_period);
-   //PRINTF("\nAfter create sending UP %d\n",userPriority);
    create_apts_msg(APTS_DEFAULT, psTxMsg,wmmps_info.my_sta_id);
    wfaTGSetPrio(psSockfd, userPriority);
-   //PRINTF("\nAfter create");
-   //PRINTF("\nlock met");
    r = wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
    return r;
 }
@@ -375,7 +371,6 @@ int sender(char psave,int sleep_period, int userPriority)
  */
 int WfaStaSndHello(char psave,int sleep_period,int *state)
 {
-//   int ret = 0;
    tgWMM_t *my_wmm = &wmm_thr[wmmps_info.ps_thread];
 
    usleep(sleep_period);
@@ -585,7 +580,6 @@ int WfaStaWaitStop(char psave,int sleep_period,int *state)
           psSockfd = -1;
        }
        wSIGNAL(SIGALRM, SIG_IGN);
-       //wfaSetDUTPwrMgmt(PS_OFF);
    }
 
    return 0;
@@ -712,7 +706,6 @@ void * wfa_wmm_thread(void *thr_param)
               sentTranPkts = 0;
 
 #if 0
-              //gtimeOut = MINISECONDS/theProfile->rate;  /* in msec */
               gettimeofday(&nxtime, NULL);
               nxtime.tv_usec += 20000;   /* fixed 20 min sec timeout */
               if(nxtime.tv_usec >= 1000000)
@@ -855,7 +848,6 @@ void * wfa_wmm_thread(void *thr_param)
            {		
 #ifdef WFA_WMM_PS_EXT /* legacy code not used now  */
                 wmmps_info.sta_test = B_D;
-                //wmmps_info.sta_test = WMMAC_525_T07t10;
                 wmmps_info.ps_thread = myId;
                 wmmps_info.rcv_state = 0;
                 wmmps_info.tdata = tdata;
@@ -917,7 +909,6 @@ void * wfa_wmm_thread(void *thr_param)
 #ifdef WFA_VOICE_EXT
            /* only for receive stream needs to create a stats storage */
            tgE2EStats_t *e2esp = NULL;
-           //int totalE2Cnt = myProfile->duration * WFA_G_CODEC_RATE;
            int totalE2Cnt = 220 * WFA_G_CODEC_RATE;
            printf("init E2Cnt %i\n", totalE2Cnt);
            if(myProfile->profile == PROF_IPTV)

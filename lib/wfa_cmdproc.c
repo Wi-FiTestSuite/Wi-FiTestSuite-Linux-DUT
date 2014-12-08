@@ -1192,12 +1192,13 @@ int  xcCmdProcStaSetEncryption(char *pcmdStr, BYTE *aBuf, int *aLen)
 int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     int ret = WFA_SUCCESS;
+	
+#ifndef WFA_PC_CONSOLE  
     dutCommand_t *cmd = (dutCommand_t *) (aBuf+sizeof(wfaTLV));
     caStaSetSecurity_t *ssec = &cmd->cmdsu.setsec;
     char *str;
     int secType = 0;
-
-#ifndef WFA_PC_CONSOLE    
+  
 	if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1286,11 +1287,11 @@ int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen)
 
 int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
-    caStaSetPSK_t *setencryp = (caStaSetPSK_t *) (aBuf+sizeof(wfaTLV));
+	caStaSetPSK_t *setencryp = (caStaSetPSK_t *) (aBuf+sizeof(wfaTLV));
+#ifndef WFA_PC_CONSOLE
     char *str;
     caStaSetPSK_t defparams = {"", "", "", "", 0, WFA_DISABLED};
 
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1376,11 +1377,11 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
 
 int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
-    caStaSetEapTLS_t *setsec = (caStaSetEapTLS_t *) (aBuf+sizeof(wfaTLV));
+	caStaSetEapTLS_t *setsec = (caStaSetEapTLS_t *) (aBuf+sizeof(wfaTLV));
+#ifndef WFA_PC_CONSOLE
     char *str;
     caStaSetEapTLS_t defparams = {"", "", "", "", "", ""};
    
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1452,10 +1453,10 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
 int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapTTLS_t *setsec = (caStaSetEapTTLS_t *) (aBuf+sizeof(wfaTLV));
+#ifndef WFA_PC_CONSOLE
     caStaSetEapTTLS_t defparams = {"", "", "", "", "", "", "", ""};
     char *str;
    
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1551,10 +1552,10 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
 int xcCmdProcStaSetEapSIM(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapSIM_t *setsec = (caStaSetEapSIM_t *) (aBuf+sizeof(wfaTLV));
+#ifndef WFA_PC_CONSOLE
     char *str;
     caStaSetEapSIM_t defparams = {"", "", "", "", "", "", 0, {"", "", ""}};
    
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -1643,10 +1644,10 @@ int xcCmdProcStaSetEapSIM(char *pcmdStr, BYTE *aBuf, int *aLen)
 int xcCmdProcStaSetPEAP(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapPEAP_t *setsec = (caStaSetEapPEAP_t *) (aBuf+sizeof(wfaTLV));
+#ifndef WFA_PC_CONSOLE
     char *str;
     caStaSetEapPEAP_t defparams = {"", "", "", "", "", "", "", "", 0};
    
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -3606,9 +3607,10 @@ int xcCmdProcStaSetWMM(char *pcmdStr, BYTE *aBuf, int *aLen)
 int xcCmdProcStaSetEapFAST(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapFAST_t *setsec = (caStaSetEapFAST_t *) (aBuf+sizeof(wfaTLV));
+#ifndef WFA_PC_CONSOLE 
     caStaSetEapFAST_t defparams = {"", "", "", "", "", "", "", "", 0, ""};
     char *str;
-#ifndef WFA_PC_CONSOLE   
+  
     if(aBuf == NULL)
        return WFA_FAILURE;
    
@@ -3704,10 +3706,10 @@ int xcCmdProcStaSetEapFAST(char *pcmdStr, BYTE *aBuf, int *aLen)
 int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetEapAKA_t *setsec = (caStaSetEapAKA_t *) (aBuf+sizeof(wfaTLV));
+#ifndef WFA_PC_CONSOLE
     char *str;
     caStaSetEapAKA_t defparams = {"", "", "", "", "", "", 0, {"", "", ""}};
    
-#ifndef WFA_PC_CONSOLE
     if(aBuf == NULL)
         return WFA_FAILURE;
    
@@ -4568,15 +4570,11 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     char *tstr1,*tstr2;
 
-    //caStaPresetParameters_t initParams = { "0", 0, 0, 0x00, 0x0000, 0x00, 0x0000, 0x00, 0, 0x00, 0, 0xFF};
-
     if(aBuf == NULL)
         return WFA_FAILURE;
 
     memset(aBuf, 0, *aLen);
     memset(presetTestParams, 0, sizeof(caStaPresetParameters_t));
-
-    //memcpy(presetTestParams, &initParams, sizeof(caStaPresetParameters_t));
 
     for(;;)
     {
@@ -4935,22 +4933,11 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
            {
               presetTestParams->wfdInVideo= eUnprotected;
            }
-         //  else if(strcasecmp(str, "ProtectedAudio") == 0)
-         //  {
-         //     presetTestParams->wfdInVideo= eProtectedAudio;
-         //  }
            else if(strcasecmp(str, "ProtectedVideoOnly") == 0)
            {
               presetTestParams->wfdInVideo= eProtectedVideoOnly;
            }
-         //  else if(strcasecmp(str, "UnprotectedAudio") == 0)
-         //  {
-         //     presetTestParams->wfdInVideo= eUnProtectedAudio;
-         //  }
-
         }
-
-
         else if(strcasecmp(str, "videoformat") == 0)
         {
            int temp1;

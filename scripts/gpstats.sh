@@ -21,8 +21,6 @@ file=$1
 tx=`cat "$file" | grep transmitted | cut -f1 -d' '`
 rx=`cat "$file" | grep transmitted | cut -f2 -d, | cut -f2 -d' '`
 
-#echo "$file" | grep transmitted | cut -f1 -d' '
-#echo "$file" | grep transmitted | cut -f2 -d, | cut -f2 -d' '
 echo $tx > /tmp/stpsta.txt
 echo $rx >> /tmp/stpsta.txt
 

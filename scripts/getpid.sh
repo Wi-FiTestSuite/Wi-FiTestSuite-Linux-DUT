@@ -18,5 +18,4 @@
 #
 file=$1
 pid_no=`cat "$file" | grep PID | cut -f2 -d'='`
-#echo "$file" | grep PID | cut -f2 -d'='
 echo PID=$pid_no >> $2

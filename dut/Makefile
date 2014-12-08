@@ -17,7 +17,6 @@
 include ../Makefile.inc
 
 PROGS = wfa_dut wfa_dut_init.o
-#PROGS = wfa_dut
 
 all: ${PROGS}
 

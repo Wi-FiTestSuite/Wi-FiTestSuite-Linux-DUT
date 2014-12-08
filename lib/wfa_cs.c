@@ -78,7 +78,7 @@ void create_apts_msg(int msg, unsigned int txbuf[],int id);
 int sret = 0;
 
 extern char e2eResults[];
-//extern char *e2eResults;
+
 FILE *e2efp = NULL;
 int chk_ret_status()
 {
@@ -935,11 +935,10 @@ int wfaStaSetEapTLS(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
  */
 int wfaStaSetPSK(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 { /*Incompleted function*/
-   caStaSetPSK_t *setPSK = (caStaSetPSK_t *)caCmdBuf;
    dutCmdResponse_t *setPskResp = &gGenericResp;
 
 #ifndef WFA_PC_CONSOLE
-
+   caStaSetPSK_t *setPSK = (caStaSetPSK_t *)caCmdBuf;
 #ifdef WFA_NEW_CLI_FORMAT
    sprintf(gCmdStr, "wfa_set_psk %s %s %s", setPSK->intf, setPSK->ssid, setPSK->passphrase); 
    sret = system(gCmdStr);
@@ -1102,9 +1101,6 @@ int wfaStaSetEapTTLS(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
    sprintf(gCmdStr, "wpa_cli -i %s set_network 0 proto WPA", ifname);
    sret = system(gCmdStr);
 
-//   sprintf(gCmdStr, "wpa_cli -i %s set_network 0 anonymous_identity '\"anonymous\"'", ifname);
-//   sret = system(gCmdStr);
-
    sprintf(gCmdStr, "wpa_cli -i %s set_network 0 phase2 '\"auth=MSCHAPV2\"'", ifname);
    sret = system(gCmdStr);
 
@@ -1242,10 +1238,6 @@ int wfaStaSetPEAP(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
    sprintf(gCmdStr, "wpa_cli -i %s set_network 0 ca_cert '\"%s/%s\"'", ifname, CERTIFICATES_PATH, setPEAP->trustedRootCA);
    sret = system(gCmdStr);
-
-   /* if this not set, default to set support all */
-   //sprintf(gCmdStr, "wpa_cli -i %s set_network 0 pairwise '\"%s\"'", ifname, setPEAP->encrptype);
-   //sret = system(gCmdStr);
 
    if(strcasecmp(setPEAP->keyMgmtType, "wpa2-sha256") == 0)
    {
@@ -1793,7 +1785,6 @@ int wfaStaSetWMM(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     caStaSetWMM_t *setwmm = (caStaSetWMM_t *)caCmdBuf;
     char *ifname = setwmm->intf;
     dutCmdResponse_t *setwmmResp = &gGenericResp;
-    //IEEEtypes_WMM_TSPEC_t tspec;
 
     switch(setwmm->group)
     {
@@ -1846,7 +1837,6 @@ int wfaStaSetWMM(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 	} 
 	else if (setwmm->action == WMMAC_ADDTS)
         {
-	    //wmmtspec_t* pCmdTspec = &(setwmm->actions.addts.tspec);
             printf("ADDTS AC PARAMS: dialog id: %d, TID: %d, "
 	           "DIRECTION: %d, PSB: %d, UP: %d, INFOACK: %d BURST SIZE DEF: %d"
 		   "Fixed %d, MSDU Size: %d, Max MSDU Size %d, "
@@ -1880,7 +1870,7 @@ int wfaStaSetWMM(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 		   setwmm->actions.addts.tspec.medium_time,
 		   setwmm->actions.addts.accesscat);
 
-            // you should set your tspec here.
+            //tspec should be set here.
 
             sret = system(gCmdStr);
         }
@@ -1924,7 +1914,6 @@ int wfaStaSetWMM(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
 int wfaStaSendNeigReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
-   //dutCommand_t *sendNeigReq = (dutCommand_t *)caCmdBuf;
    dutCmdResponse_t *sendNeigReqResp = &gGenericResp;
 
    /*
@@ -2107,8 +2096,6 @@ int wfaStaPresetParams(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
    dutCmdResponse_t *PresetParamsResp = &gGenericResp;
    caStaPresetParameters_t *presetParams = (caStaPresetParameters_t *)caCmdBuf;
-   //int ret;
-   //char *intfname = presetParams->intf;
    BYTE presetDone = 1;
    int st = 0;
 
@@ -2935,15 +2922,8 @@ int wfaStaStartAutoGo(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 int wfaStaP2pStartGrpFormation(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
    dutCmdResponse_t infoResp;
-   //caStaP2pStartGrpForm_t *getStaP2pStartGrpForm = (caStaP2pStartGrpForm_t *)caCmdBuf;
 
    printf("\n Entry wfaStaP2pStartGrpFormation... ");
-
-   // Fetch the device mode and put in 	infoResp->cmdru.p2presult 
-   //strcpy(infoResp->cmdru.p2presult, "GO");
-
-   // Fetch the device grp id and put in 	infoResp->cmdru.grpid 
-   //strcpy(infoResp->cmdru.grpid, "AA:BB:CC:DD:EE:FF_DIRECT-SSID");
 
    strcpy(infoResp.cmdru.grpFormInfo.result, "CLIENT");
    strcpy(infoResp.cmdru.grpFormInfo.grpId, "AA:BB:CC:DD:EE:FF_DIRECT-SSID");
@@ -2963,7 +2943,6 @@ int wfaStaP2pStartGrpFormation(int len, BYTE *caCmdBuf, int *respLen, BYTE *resp
 int wfaStaP2pDissolve(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
    dutCmdResponse_t infoResp;
-   //caStaP2pDissolve_t *getStap2pDissolve= (caStaP2pDissolve_t *)caCmdBuf;
 
    printf("\n Entry wfaStaP2pDissolve... ");
 
@@ -3143,7 +3122,6 @@ int wfaStaGetPsk(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
 
    // Fetch the device PP and SSID  and put in 	infoResp->cmdru.pskInfo 
-   //strcpy(infoResp->cmdru.wpsPin, "12345678");
    strcpy(&infoResp.cmdru.pskInfo.passPhrase[0], "1234456");
    strcpy(&infoResp.cmdru.pskInfo.ssid[0], "WIFI_DIRECT");	
 
@@ -3187,9 +3165,6 @@ int wfaStaGetP2pIpConfig(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
    printf("\n Entry wfaStaGetP2pIpConfig... ");
 
-
-   // Fetch the device IP config  and put in 	infoResp->cmdru 
-   //strcpy(infoResp->cmdru.wpsPin, "12345678");
    ifinfo->isDhcp =0;
    strcpy(&(ifinfo->ipaddr[0]), "192.165.100.111");
    strcpy(&(ifinfo->mask[0]), "255.255.255.0");
@@ -3232,11 +3207,6 @@ int wfaStaSendServiceDiscoveryReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *r
 int wfaStaSendP2pPresenceReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
    dutCmdResponse_t infoResp;
-   //caStaSendP2pPresenceReq_t *staSendP2pPresenceReq= (caStaSendP2pPresenceReq_t *)caCmdBuf;
-   
-   //printf("\n Entry wfaStaSendP2pPresenceReq... ");
-   //printf("\n The long long Duration: %lld... ",staSendP2pPresenceReq->duration);
-   //printf("\n The long long interval : %lld.. ",staSendP2pPresenceReq->interval);
 
    infoResp.status = STATUS_COMPLETE;
    wfaEncodeTLV(WFA_STA_P2P_SEND_PRESENCE_REQ_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);   
@@ -3270,7 +3240,6 @@ int wfaStaSetSleepReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 int wfaStaSetOpportunisticPsReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
    dutCmdResponse_t infoResp;
-   /* caStaSetOpprPs_t *staSetOpperPsReq= (caStaSetOpprPs_t *)caCmdBuf; uncomment and use it */
    
    printf("\n Entry wfaStaSetOpportunisticPsReq... ");
    // Implement the function and this does not return any thing back.
@@ -3290,9 +3259,6 @@ int wfaStaSetOpportunisticPsReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *res
 int wfaStaPresetParams(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
    dutCmdResponse_t infoResp;
-
-   //caStaPresetParameters_t *presetParams = (caStaPresetParameters_t *)caCmdBuf;
-
 
    DPRINT_INFO(WFA_OUT, "Inside wfaStaPresetParameters function ...\n");
 
@@ -3321,7 +3287,6 @@ int wfaStaSet11n(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     if(v11nParams->addba_reject != 0xFF && v11nParams->addba_reject < 2)
     {
        // implement the funciton
-       //st = wfaExecuteCLI(gCmdStr); 
        if(st != 0)
        {
             v11nParamsResp->status = STATUS_ERROR;
@@ -3335,7 +3300,6 @@ int wfaStaSet11n(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     if(v11nParams->ampdu != 0xFF && v11nParams->ampdu < 2)
     {
     // implement the funciton
-    //st = wfaExecuteCLI(gCmdStr); 
 
         if(st != 0)
         {
@@ -3349,8 +3313,7 @@ int wfaStaSet11n(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
     if(v11nParams->amsdu != 0xFF && v11nParams->amsdu < 2)
     {
-    // implement the funciton
-    //st = wfaExecuteCLI(gCmdStr); 
+    // implement the funciton 
         if(st != 0)
         {
             v11nParamsResp->status = STATUS_ERROR;
@@ -3364,7 +3327,6 @@ int wfaStaSet11n(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     if(v11nParams->greenfield != 0xFF && v11nParams->greenfield < 2)
     {
         // implement the funciton
-       //st = wfaExecuteCLI(gCmdStr); 
        if(st != 0)
        {
             v11nParamsResp->status = STATUS_ERROR;

@@ -62,7 +62,7 @@ extern int gtgWmmPS;
 /*  function declaration */
 extern int wfaTGSetPrio(int sockfd, int tgClass);
 void wmmps_wait_state_proc();
-int wfa_wmmps_send_thread(void* input);
+void* wfa_wmmps_send_thread(void* input);
 
 /* APTS messages*/
 struct apts_msg apts_msgs[] ={
@@ -854,9 +854,9 @@ int timeout_recvfrom(int sock,char* data,int length,int flags,struct sockaddr* s
     FD_ZERO(&socks);
     FD_SET(sock,&socks);
     t.tv_sec=timeout;
-    if(ret = select(sock+1,&socks,NULL,NULL,&t) != -1)
+    if((ret = select(sock+1,&socks,NULL,NULL,&t)) != -1)
     {
-        bytes=recvfrom(sock,data,length,0,sockfrom,fromlen);
+        bytes=recvfrom(sock,data,length,0,sockfrom,(socklen_t *)fromlen);
         return bytes;
     }
     else
@@ -894,7 +894,7 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
     StationRecvProcStatetbl_t *rcvstatarray;
     StationRecvProcStatetbl_t func;
     pthread_t   sendThreadHandle = 0;
-    int   sendThreadId = 0;
+    //int   sendThreadId = 0;
     len=sizeof(from);
    
 
@@ -934,7 +934,7 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
                 {
                     memset( psRxMsg, 0, WMMPS_MSG_BUF_SIZE);
                     rbytes = 0;
-                    rbytes=recvfrom(psSockfd,(char*)psRxMsg,WMMPS_MSG_BUF_SIZE-4,0,&from,&len);
+                    rbytes=recvfrom(psSockfd,(char*)psRxMsg,WMMPS_MSG_BUF_SIZE-4,0,&from,(socklen_t *)&len);
                 }
 
                 if(rbytes>0) /*  only when we really get data from PC_Endpoint */
@@ -1006,7 +1006,7 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
     return NULL;
 }/* wfa_wmmps_thread */
 
- int wfa_wmmps_send_thread(void* input)
+void* wfa_wmmps_send_thread(void* input)
 {
     StationProcStatetbl_t *sendstate,curr_state;
     tgProfile_t *pTGProfile = findTGProfile(wmmps_info.streamid);
@@ -1016,7 +1016,7 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
     if ( pTGProfile == NULL)
     {
         DPRINT_INFO(WFA_OUT, "wfa_wmmps_send_thread: ERR TG frofile is NULL, exit\n");
-        return 0;
+        return NULL;
     }
     if (psSockfd > 0)
     {
@@ -1038,9 +1038,9 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
         DPRINT_INFO(WFA_OUT, "wfaCreateUDPSock: WMMPS profile create UDP RCV socket failed\n");
     }
 
-    if (getsockopt(psSockfd, SOL_SOCKET, SO_SNDBUF, (char*)&iOptVal, &iOptLen) == 0) 
+    if (getsockopt(psSockfd, SOL_SOCKET, SO_SNDBUF, (char*)&iOptVal, (socklen_t *)&iOptLen) == 0) 
     {
-        DPRINT_INFO(WFA_OUT, "wfa_wmmps_send_thread:: get SO_SNDBUF Value=%ld\n", iOptVal);
+        DPRINT_INFO(WFA_OUT, "wfa_wmmps_send_thread:: get SO_SNDBUF Value=%d\n", iOptVal);
     }
 
     wSLEEP(1);
@@ -1092,7 +1092,7 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
     //wfaCloseUDPSockWmmpsSend();
     wSLEEP(1);
     DPRINT_INFO(WFA_OUT,"wfa_wmmps_send_thread end\n");
-    return 0;
+    return NULL;
 }
 
 #endif /* WFA_WMM_PS_EXT */

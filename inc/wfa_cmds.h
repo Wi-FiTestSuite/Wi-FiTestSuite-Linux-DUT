@@ -496,12 +496,7 @@ enum {
 enum {
     eProtected = 1,
     eUnprotected,
-    //eProtectedAudio,
-    eProtectedVideoOnly,
-    //eUnProtectedAudio,    
-    //eFirstVideo60fps,
-    //eSecondVideo60fps,
-    //eSecondVideo30fps,    
+    eProtectedVideoOnly,  
 };
 
 
@@ -914,7 +909,6 @@ typedef struct ca_sta_preset_parameters
    BYTE ftoa;
    BYTE ftds;
    BYTE activescan;
-//   BYTE ignChSwitchProh;
    BYTE tdls;
    BYTE tdlsMode;
 

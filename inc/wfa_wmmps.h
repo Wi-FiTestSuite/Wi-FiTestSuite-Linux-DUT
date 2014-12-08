@@ -103,8 +103,6 @@
 /* wmm defs */
 #define TOS_VO7     0xE0                // 111 0  0000 (7)  AC_VO tos/dscp values
 #define TOS_VO      0xD0                // 110 0  0000 (6)  AC_VO tos/dscp values
-//Atheros Madwifi use 0x88 for UPSD/Voice
-//#define TOS_VO      0x88               // 110 0  0000 (6)  AC_VO tos/dscp values
 
 #define TOS_VI      0xA0                // 101 0  0000 (5)  AC_VI
 #define TOS_VI4     0x80                // 100 0  0000 (4)  AC_VI
@@ -134,7 +132,7 @@ extern unsigned short wfa_defined_debug;
 /*
  * * internal table
  * */
-struct apts_msg {                       //
+struct apts_msg {                    
     char *name;                     // name of test
     int cmd;                        // msg num
     int param0;                     // number of packet exchanges
@@ -196,7 +194,6 @@ int WfaStaSndVI(char,int,int *state);
 int WfaStaSndBE(char,int,int *state);
 int WfaStaSndBK(char,int,int *state);
 int WfaStaSndVIE(char,int,int *state);
-//int WfaStaSndVO(char,int,int *state);
 int WfaStaSndBEE(char,int,int *state);
 int WfaStaSnd2VOE(char,int,int *state);
 void create_apts_msg(int msg, unsigned int txbuf[],int id);

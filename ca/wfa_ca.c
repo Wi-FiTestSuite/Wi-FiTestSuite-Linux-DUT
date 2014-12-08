@@ -333,7 +333,6 @@ int main(int argc, char *argv[])
             }
 
             DPRINT_INFO(WFA_OUT, "sent to DUT\n");
-            //sleep(1);
         } /* done with gCaSockfd */
 
         if(gSock > 0 && FD_ISSET(gSock, &sockSet))

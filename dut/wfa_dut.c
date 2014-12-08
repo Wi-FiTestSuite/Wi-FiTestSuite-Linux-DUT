@@ -225,7 +225,7 @@ main(int argc, char **argv)
 	{
 		DPRINT_INFO(WFA_OUT, "WMMPS pthread_cond_init faile\n");
 	}
-    wmmps_mutex_info.thr_id=pthread_create(&wmmps_mutex_info.thr,NULL /*&ptAttr*/,wfa_wmmps_thread,(void*)&wmmps_mutex_info.thr_id);// calls up the wmmps-thread here
+    wmmps_mutex_info.thr_id=pthread_create(&wmmps_mutex_info.thr,NULL /*&ptAttr*/,wfa_wmmps_thread,(void*)&wmmps_mutex_info.thr_id);// calls up the wmmps-thread
 #endif
 
     maxfdn1 = gagtSockfd + 1;

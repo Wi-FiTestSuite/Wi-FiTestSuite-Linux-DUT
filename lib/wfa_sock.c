@@ -71,7 +71,6 @@ int wfaCreateTCPServSock(unsigned short port)
     wMEMSET(&servAddr, 0, sizeof(servAddr));
     wfaGetifAddr(gnetIf, &servAddr);
     servAddr.sin_family = AF_INET;        /* Internet address family */
-    //servAddr.sin_addr.s_addr = htonl(INADDR_ANY); /* Any incoming interface */
     servAddr.sin_port = htons(port);              /* Local port */
 
     wSETSOCKOPT(sock, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on));
@@ -112,7 +111,6 @@ int wfaCreateUDPSock(char *ipaddr, unsigned short port)
 
     wBZERO(&servAddr, sizeof(servAddr));
     servAddr.sin_family      = AF_INET;
-    //inet_aton(ipaddr, &servAddr.sin_addr);
     servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     servAddr.sin_port        = htons(port);
 
@@ -306,8 +304,7 @@ int wfaTrafficSendTo(int sock, char *buf, int bufLen, struct sockaddr *to)
 int wfaTrafficRecv(int sock, char *buf, struct sockaddr *from)
 {
    int bytesRecvd =0;
-//   socklen_t  addrLen;
- 
+
 #if 0
    /* get current flags setting */
    int ioflags = wFCNTL(sock, F_GETFL, 0);
@@ -316,8 +313,6 @@ int wfaTrafficRecv(int sock, char *buf, struct sockaddr *from)
    wFCNTL(sock, F_SETFL, ioflags | O_NONBLOCK);
 #endif
 
-//   bytesRecvd = wRECVFROM(sock, buf, MAX_UDP_LEN, 0, from, &addrLen); 
-//   bytesRecvd = recv(sock, buf, MAX_UDP_LEN, 0); 
    bytesRecvd = recv(sock, buf, MAX_RCV_BUF_LEN, 0); 
 
    return bytesRecvd;
