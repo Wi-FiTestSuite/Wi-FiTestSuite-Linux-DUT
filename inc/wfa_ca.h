@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -84,23 +84,23 @@ extern int wfaStaResetDefault(int, BYTE *, int *, BYTE *);
 extern int wfaStaSendNeigReq(int, BYTE *, int *, BYTE *);
 extern int wfaStaTestBedCmd(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
-extern int  wfaStaGetP2pDevAddress(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf); 	
-extern int wfaStaSetP2p(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);			
-extern int wfaStaP2pConnect(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
-extern int wfaStaStartAutoGo(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
-extern int wfaStaP2pStartGrpFormation(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
+extern int  wfaStaGetP2pDevAddress(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaSetP2p(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaP2pConnect(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaStartAutoGo(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaP2pStartGrpFormation(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 
-extern int wfaStaP2pDissolve(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);			
-extern int wfaStaSendP2pInvReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
-extern int wfaStaAcceptP2pInvReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
-extern int wfaStaSendP2pProvDisReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);		
+extern int wfaStaP2pDissolve(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaSendP2pInvReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaAcceptP2pInvReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaSendP2pProvDisReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetWpsPbc(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 
-extern int wfaStaWpsReadPin(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);						
-extern int wfaStaWpsEnterPin(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);			 
-extern int wfaStaGetPsk(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);			 
+extern int wfaStaWpsReadPin(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaWpsEnterPin(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaGetPsk(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaP2pReset(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
-extern int wfaStaWpsReadLabel(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);						
+extern int wfaStaWpsReadLabel(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaGetP2pIpConfig(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSendServiceDiscoveryReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSendP2pPresenceReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
@@ -119,8 +119,5 @@ extern int wfaStaConnectGoStartWfd(int len, BYTE *caCmdBuf, int *respLen, BYTE *
 extern int wfaStaGenerateEvent(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaReinvokeWfdSession(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaGetParameter(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
-
-
-
 
 #endif

@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -30,13 +30,13 @@
 #include <pthread.h>
 #include "wfa_con.h"
 unsigned int rmsg[512];         // rx msg buffer
-unsigned int txmsg[512];	    // tx msg buffer
+unsigned int txmsg[512];        // tx msg buffer
 
 struct itimerval waitval_state = { 40,0};
 #define PORT    12345           // port for sending/receiving
 #define MAXRETRY    3           // port for sending/receiving
-#define SLEEP_PERIOD 10		    //time to exit itself
-#define INTERSTEP_PERIOD 5	    //time allowed within steps
+#define SLEEP_PERIOD 10         //time to exit itself
+#define INTERSTEP_PERIOD 5      //time allowed within steps
 int port         = PORT;
 int reset        = 0;
 int tout         = 0;
@@ -47,40 +47,41 @@ int timeron=SLEEP_PERIOD;
 int exitflag=0;
 pthread_t time_thr;
 
-struct apts_msg apts_msgs[] ={
-	{0, -1},
-	{"B.D", B_D},	
-	{"B.H", B_H},
+struct apts_msg apts_msgs[] =
+{
+    {0, -1},
+    {"B.D", B_D},
+    {"B.H", B_H},
     {"B.B", B_B},
-	{"B.M", B_M},	
-	{"M.D", M_D},	
-	{"B.Z", B_Z},	
-	{"M.Y", M_Y},	
-	{"L.1", L_1},	
-	{"A.Y", A_Y},	
-	{"B.W", B_W},	
-	{"A.J", A_J},	
-	{"M.V", M_V},	
-	{"M.U", M_U},	
-    {"A.U", A_U},	
-	{"M.L", M_L},	
-	{"B.K", B_K},	
-	{"M.B", M_B},	
-	{"M.K", M_K},	
-	{"M.W", M_W},	
-	{"APTS TX         ", APTS_DEFAULT },
-	{"APTS Hello      ", APTS_HELLO },
-	{"APTS Broadcast  ", APTS_BCST },
-	{"APTS Confirm    ", APTS_CONFIRM},
-	{"APTS STOP       ", APTS_STOP},
-	{"APTS CK BE      ", APTS_CK_BE },
-	{"APTS CK BK      ", APTS_CK_BK },
-	{"APTS CK VI      ", APTS_CK_VI },
-	{"APTS CK VO      ", APTS_CK_VO },
-	{"APTS RESET      ", APTS_RESET },
-	{"APTS RESET RESP ", APTS_RESET_RESP },
-	{"APTS RESET STOP ", APTS_RESET_STOP },
-	{0, 0 }		// APTS_LAST
+    {"B.M", B_M},
+    {"M.D", M_D},
+    {"B.Z", B_Z},
+    {"M.Y", M_Y},
+    {"L.1", L_1},
+    {"A.Y", A_Y},
+    {"B.W", B_W},
+    {"A.J", A_J},
+    {"M.V", M_V},
+    {"M.U", M_U},
+    {"A.U", A_U},
+    {"M.L", M_L},
+    {"B.K", B_K},
+    {"M.B", M_B},
+    {"M.K", M_K},
+    {"M.W", M_W},
+    {"APTS TX         ", APTS_DEFAULT },
+    {"APTS Hello      ", APTS_HELLO },
+    {"APTS Broadcast  ", APTS_BCST },
+    {"APTS Confirm    ", APTS_CONFIRM},
+    {"APTS STOP       ", APTS_STOP},
+    {"APTS CK BE      ", APTS_CK_BE },
+    {"APTS CK BK      ", APTS_CK_BK },
+    {"APTS CK VI      ", APTS_CK_VI },
+    {"APTS CK VO      ", APTS_CK_VO },
+    {"APTS RESET      ", APTS_RESET },
+    {"APTS RESET RESP ", APTS_RESET_RESP },
+    {"APTS RESET STOP ", APTS_RESET_STOP },
+    {0, 0 }     // APTS_LAST
 };
 struct station;
 int WfaConRcvHello(struct station *,unsigned int *,int );
@@ -115,133 +116,137 @@ int WfaConRcvVOSndVOE(struct station *,unsigned int *,int );
 int WfaConRcvVOSndVO(struct station *,unsigned int *,int );
 int WfaConRcvBESndE(struct station *,unsigned int *,int );
 
-char traceflag=1;	// enable debug packet tracing
+char traceflag=1;   // enable debug packet tracing
 
-consoleProcStatetbl_t consoleProcStatetbl[LAST_TEST+1][10] = {
-/* Ini*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVOSnd,WfaConWaitStop,0,0,0,0,0,0},
-/* B.D*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVOSnd,WfaConRcvVOE,WfaConWaitStop,WfaConWaitStop ,0,0,0,0},
-/* B.H*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVOSnd2VO,WfaConRcvVOE,WfaConWaitStop      ,WfaConWaitStop      ,0,0,0,0},
-/* B.B*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVO   ,WfaConRcvVI               ,WfaConRcvBE         ,WfaConRcvBKE        ,WfaConWaitStop,0,0,0},
-/* B.M*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVIE   ,WfaConWaitStop            ,0,0,0,0,0,0},
+consoleProcStatetbl_t consoleProcStatetbl[LAST_TEST+1][10] =
+{
+    /* Ini*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVOSnd,WfaConWaitStop,0,0,0,0,0,0},
+    /* B.D*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVOSnd,WfaConRcvVOE,WfaConWaitStop,WfaConWaitStop ,0,0,0,0},
+    /* B.H*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVOSnd2VO,WfaConRcvVOE,WfaConWaitStop      ,WfaConWaitStop      ,0,0,0,0},
+    /* B.B*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVO   ,WfaConRcvVI               ,WfaConRcvBE         ,WfaConRcvBKE        ,WfaConWaitStop,0,0,0},
+    /* B.M*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVIE   ,WfaConWaitStop            ,0,0,0,0,0,0},
 
-/* M.D */
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISndBE    ,WfaConRcvVISndBK ,WfaConRcvVISnd      ,WfaConRcvVISndVOE    ,WfaConWaitStop      ,0,0,0},
-/* B.Z*/
-{WfaConRcvHello,WfaConRcvConfSndVI,WfaConRcvVOSndBcastE,WfaConWaitStop      ,0,0,0,0},
-/* M.Y*/{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd,WfaConRcvVO,WfaConRcvBESnd,WfaConRcvBESndBcastE,WfaConWaitStop,0,0,0},
-/* L.1*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVOSndCyclic, WfaConWaitStop      ,0,0,0,0,0,0},
-/* A.Y*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvVO                 ,WfaConRcvBESnd        ,WfaConRcvBE         ,WfaConRcvBESndBcastE,WfaConWaitStop,0,0},
-/* B.W*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISndBcast ,WfaConRcvVISndBcast       ,WfaConRcvVIE,WfaConWaitStop      ,0,0,0,0},
-/* A.J*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVO ,WfaConRcvVOSndAllE    ,WfaConWaitStop      ,0,0,0,0,0},
+    /* M.D */
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVISndBE    ,WfaConRcvVISndBK ,WfaConRcvVISnd      ,WfaConRcvVISndVOE    ,WfaConWaitStop      ,0,0,0},
+    /* B.Z*/
+    {WfaConRcvHello,WfaConRcvConfSndVI,WfaConRcvVOSndBcastE,WfaConWaitStop      ,0,0,0,0},
+    /* M.Y*/{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd,WfaConRcvVO,WfaConRcvBESnd,WfaConRcvBESndBcastE,WfaConWaitStop,0,0,0},
+    /* L.1*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVOSndCyclic, WfaConWaitStop      ,0,0,0,0,0,0},
+    /* A.Y*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvVO                 ,WfaConRcvBESnd        ,WfaConRcvBE         ,WfaConRcvBESndBcastE,WfaConWaitStop,0,0},
+    /* B.W*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVISndBcast ,WfaConRcvVISndBcast       ,WfaConRcvVIE,WfaConWaitStop      ,0,0,0,0},
+    /* A.J*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVO ,WfaConRcvVOSndAllE    ,WfaConWaitStop      ,0,0,0,0,0},
 
-/* M.V*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBESnd  ,WfaConRcvVISndE   ,WfaConWaitStop      ,0,0,0,0},
-/* M.U*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBESnd  ,WfaConRcvVOSnd    ,WfaConRcvVOSndE   ,WfaConWaitStop      ,0,0,0},
-/* A.U*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBE    ,WfaConRcvBESnd    ,WfaConRcvBE         ,WfaConRcvVOSnd    ,WfaConRcvVOE,WfaConWaitStop,0},
-/* M.L*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvBESndE   ,WfaConWaitStop ,0,0,0,0,0,0},
+    /* M.V*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBESnd  ,WfaConRcvVISndE   ,WfaConWaitStop      ,0,0,0,0},
+    /* M.U*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBESnd  ,WfaConRcvVOSnd    ,WfaConRcvVOSndE   ,WfaConWaitStop      ,0,0,0},
+    /* A.U*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBE    ,WfaConRcvBESnd    ,WfaConRcvBE         ,WfaConRcvVOSnd    ,WfaConRcvVOE,WfaConWaitStop,0},
+    /* M.L*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvBESndE   ,WfaConWaitStop ,0,0,0,0,0,0},
 
-/* B.K*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBESnd   ,WfaConRcvVIE    ,WfaConWaitStop      ,0,0,0,0},
-/* M.B*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVO       ,WfaConRcvVI     ,WfaConRcvBE         ,WfaConRcvBKE        ,WfaConWaitStop      ,0,0,0},
-/* M.K*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBESnd ,WfaConRcvVIE   ,WfaConWaitStop      ,0,0,0,0},
-/* M.W*/
-{WfaConRcvHello,WfaConRcvConf,WfaConRcvVISndBcast ,WfaConRcvBESndBcast,WfaConRcvVIE,WfaConWaitStop      ,0,0,0,0}
+    /* B.K*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBESnd   ,WfaConRcvVIE    ,WfaConWaitStop      ,0,0,0,0},
+    /* M.B*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVO       ,WfaConRcvVI     ,WfaConRcvBE         ,WfaConRcvBKE        ,WfaConWaitStop      ,0,0,0},
+    /* M.K*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVISnd    ,WfaConRcvBESnd ,WfaConRcvVIE   ,WfaConWaitStop      ,0,0,0,0},
+    /* M.W*/
+    {WfaConRcvHello,WfaConRcvConf,WfaConRcvVISndBcast ,WfaConRcvBESndBcast,WfaConRcvVIE,WfaConWaitStop      ,0,0,0,0}
 };
 
-unsigned int fromlen;		    // sizeof socket struct
-unsigned char dscp, ldscp;		// new/last dscp output values
+unsigned int fromlen;           // sizeof socket struct
+unsigned char dscp, ldscp;      // new/last dscp output values
 struct sockaddr dst;            // sock declarations
 struct sockaddr_in target;
 struct sockaddr_in from;
 struct sockaddr_in local;
-int sockflags;			        // socket call flag
+int sockflags;                  // socket call flag
 
 int nsta=0;                     // Number of stations
 struct station stations[NSTA];
 char *procname;                 // dst system name or ip address
-int sd,rd;				        // socket descriptor
+int sd,rd;                      // socket descriptor
 void WfaConResetAll();
 
 void IAmDead()
 {
-  printf("Time to Die...\n");
-  exit(-10);
+    printf("Time to Die...\n");
+    exit(-10);
 }
 void WfaConResetAll()
 {
-  int r;
-  reset=1;
-  printf("\nEntering WfaConResetAll:: ");
-  alarm(0);
-  num_retry++;
-  if(num_retry > MAXRETRY)
-      IAmDead();
-  if(reset_recd)
-  {
-    reset_recd = 0;
-    set_dscp(tos_be);
-    //txmsg[0] = ++(sta->msgno);
-    create_apts_msg(APTS_RESET_RESP, txmsg,0);
-    txmsg[1] = tos_be;
-    r = sendto(sd, txmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
-    if (traceflag) mpx("CMD send\n", txmsg, 64);
-    printf("\nsent RESET RESP\n");
-  }
-  else
-  {
+    int r;
+    reset=1;
+    printf("\nEntering WfaConResetAll:: ");
+    alarm(0);
+    num_retry++;
+    if(num_retry > MAXRETRY)
+        IAmDead();
+    if(reset_recd)
+    {
+        reset_recd = 0;
+        set_dscp(tos_be);
+        create_apts_msg(APTS_RESET_RESP, txmsg,0);
+        txmsg[1] = tos_be;
+        r = sendto(sd, txmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
+        if (traceflag) mpx("CMD send\n", txmsg, 64);
+        printf("\nsent RESET RESP\n");
+    }
+    else
+    {
 
-      int resp_recd=0;
-      create_apts_msg(APTS_RESET, txmsg,0);
-      txmsg[1] = tos_be;
-      r = sendto(sd, txmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
-      if (traceflag) mpx("CMD send\n", txmsg, 64);
-      printf("\nsent RESET \n");
-      while(!resp_recd)
-      {
-        r = recvfrom(sd, rmsg, sizeof(rmsg), 0, (struct sockaddr *)&from, &fromlen);
-        if (r<0) 
+        int resp_recd=0;
+        create_apts_msg(APTS_RESET, txmsg,0);
+        txmsg[1] = tos_be;
+        r = sendto(sd, txmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
+        if (traceflag) mpx("CMD send\n", txmsg, 64);
+        printf("\nsent RESET \n");
+        while(!resp_recd)
         {
-              perror("rcv error:");
-              exit(1);
+            r = recvfrom(sd, rmsg, sizeof(rmsg), 0, (struct sockaddr *)&from, &fromlen);
+            if (r<0)
+            {
+                perror("rcv error:");
+                exit(1);
+            }
+            if(rmsg[10] != APTS_RESET_RESP)
+                continue;
+            if (traceflag) mpx("CMD recd\n", rmsg, 64);
+            alarm(0);
+            resp_recd=1;
+        }/* while  */
+    }
+}
+
+void resettimer(int period)
+{
+    timeron=period;
+}
+
+void* timerthread(void* period)
+{
+    int* per=(int*)period;
+    exitflag=1;
+    while(1)
+    {
+        sleep(1);
+        timeron--;
+        if(!timeron && exitflag)
+        {
+            printf("time out\n");
+            exit(1);
         }
-        if(rmsg[10] != APTS_RESET_RESP)
-          continue;
-        if (traceflag) mpx("CMD recd\n", rmsg, 64);
-        alarm(0);
-        resp_recd=1;
-      }/* while  */
-  }
-}
-
-void resettimer(int period){
-	timeron=period;
-}
-
-void* timerthread(void* period){
-	int* per=(int*)period;
-	exitflag=1;
-	while(1){
-		sleep(1);
-		timeron--;
-		if(!timeron && exitflag){
-			printf("time out\n");
-			exit(1);
-		}
-	}	
+    }
 }
 main(int argc, char **argv)
 {
@@ -252,31 +257,37 @@ main(int argc, char **argv)
     char *str,*endptr;
     FILE *tmpfile;
     consoleProcStatetbl_t func;
-    
-    for(i=1; i<argc; i++) {
-		if(argv[i][0]=='-'){
-			if(argv[i][1]=='t'){
-				i++;
-				timeron=atoi(argv[i]);
-				pthread_create(&time_thr,NULL,timerthread,NULL);
-			}else{
-				printf("Unrecognized options\n");
-				exit(1);
-			}
-		}
-        else{
-       		procname = argv[i];	// gather non-option args here
-            if( (strncmp(procname,"L.1AP", 4) == 0 ))
+
+    for(i=1; i<argc; i++)
+    {
+        if(argv[i][0]=='-')
+        {
+            if(argv[i][1]=='t')
             {
-                 procname[3] = '\0';
-                 bKeepFrom = 1;
-                 
+                i++;
+                timeron=atoi(argv[i]);
+                pthread_create(&time_thr,NULL,timerthread,NULL);
             }
             else
             {
-                 bKeepFrom = 0;
-            }  
-	}
+                printf("Unrecognized options\n");
+                exit(1);
+            }
+        }
+        else
+        {
+            procname = argv[i]; // gather non-option args here
+            if( (strncmp(procname,"L.1AP", 4) == 0 ))
+            {
+                procname[3] = '\0';
+                bKeepFrom = 1;
+
+            }
+            else
+            {
+                bKeepFrom = 0;
+            }
+        }
     }
     setup_socket();
     testcase = (struct apts_msg *) apts_lookup(procname);
@@ -288,95 +299,97 @@ main(int argc, char **argv)
     tmpfile = fopen("tos.txt","r+");
     if(tmpfile == NULL)
     {
-	    printf("Can not find the tos file,proceeding with default values\n");
+        printf("Can not find the tos file,proceeding with default values\n");
     }
     else
     {
         while(fgets(string,128,tmpfile) != NULL)
-	    {
-			if(strstr(string,"#"))
-				continue;
-			if(strstr(string,"0x")){
-				base = 16;
-                        }
-			str = strtok(string,",");
-			tos_vo = strtol(str,&endptr,base);
-			str = strtok(NULL,",");
-			tos_vi = strtol(str,&endptr,base);
-			str = strtok(NULL,",");
-			tos_be = strtol(str,&endptr,base);
-			str = strtok(NULL,",");
-			tos_bk = strtol(str,&endptr,base);
-	    }
-    } 
+        {
+            if(strstr(string,"#"))
+                continue;
+            if(strstr(string,"0x"))
+            {
+                base = 16;
+            }
+            str = strtok(string,",");
+            tos_vo = strtol(str,&endptr,base);
+            str = strtok(NULL,",");
+            tos_vi = strtol(str,&endptr,base);
+            str = strtok(NULL,",");
+            tos_be = strtol(str,&endptr,base);
+            str = strtok(NULL,",");
+            tos_bk = strtol(str,&endptr,base);
+        }
+    }
     printf("Using TOS: VO=0x%x,VI=0x%x,BE=0x%x,BK=0x%x\n",
-                 tos_vo,tos_vi,tos_be,tos_bk);
+           tos_vo,tos_vi,tos_be,tos_bk);
 
     traceflag=1;
-    while (1) 
+    while (1)
     {
-          if(nsta){
-               printf("\nWaiting in state %d\n",sta->state);
-          } 
-          if (( sta== NULL) || (bKeepFrom == 1))
-              r = recvfrom(sd, rmsg, sizeof(rmsg), flags, (struct sockaddr *)&from, &fromlen);
-          else
-              r = recv(sd, rmsg, sizeof(rmsg), flags);
+        if(nsta)
+        {
+            printf("\nWaiting in state %d\n",sta->state);
+        }
+        if (( sta== NULL) || (bKeepFrom == 1))
+            r = recvfrom(sd, rmsg, sizeof(rmsg), flags, (struct sockaddr *)&from, &fromlen);
+        else
+            r = recv(sd, rmsg, sizeof(rmsg), flags);
 
-          resettimer(INTERSTEP_PERIOD*10);
-          if (r<0) 
-          {
-		     perror("rcv error:");
-		     exit(1);
-          }
-          alarm(0);
-          tout=0;
+        resettimer(INTERSTEP_PERIOD*10);
+        if (r<0)
+        {
+            perror("rcv error:");
+            exit(1);
+        }
+        alarm(0);
+        tout=0;
 
         /* check some cases  */
-		if (traceflag && strcmp(procname,"L.1")) 
-		{
-			printf( "APTS Received #    length:%d\n",  r );
-			mpx("APTS RX", rmsg, 64);
-		}
-		// Do not process unless from remote
-		if (from.sin_addr.s_addr==0 || from.sin_addr.s_addr==local.sin_addr.s_addr) 
-		{
-			printf( "Received 0 / local\n" );
-			continue;
-		}
-		if (from.sin_addr.s_addr==target.sin_addr.s_addr) 
-		{
-			printf( "Received BROADCAST\n" );
-			continue;
-		}
-		if (rmsg[10]==APTS_BCST) 
-		{
-			printf( "Received BROADCAST, skipping\n" );
-			continue;
-		}
+        if (traceflag && strcmp(procname,"L.1"))
+        {
+            printf( "APTS Received #    length:%d\n",  r );
+            mpx("APTS RX", rmsg, 64);
+        }
+        // Do not process unless from remote
+        if (from.sin_addr.s_addr==0 || from.sin_addr.s_addr==local.sin_addr.s_addr)
+        {
+            printf( "Received 0 / local\n" );
+            continue;
+        }
+        if (from.sin_addr.s_addr==target.sin_addr.s_addr)
+        {
+            printf( "Received BROADCAST\n" );
+            continue;
+        }
+        if (rmsg[10]==APTS_BCST)
+        {
+            printf( "Received BROADCAST, skipping\n" );
+            continue;
+        }
         /* check some cases  */
 
         printf("\r\n cmd is %d",rmsg[11]);
 
-        if (rmsg[10]==APTS_HELLO) 
+        if (rmsg[10]==APTS_HELLO)
         {
 
             if((id = get_sta_id(from.sin_addr.s_addr))>=0)
             {
-              if(!reset)
-                continue;
-              printf("\n HELLO after reset");
-            
+                if(!reset)
+                    continue;
+                printf("\n HELLO after reset");
+
             }
             else if((id = assign_sta_id(from.sin_addr.s_addr))<0)
             {
-	            printf( "Can not assign id,sta list full");
+                printf( "Can not assign id,sta list full");
                 continue;
             }
-          
+
             sta = &stations[id];
             bzero(sta->ipaddress, 20);
-	        inet_ntop(AF_INET, &(from.sin_addr), IP, INET_ADDRSTRLEN);    
+            inet_ntop(AF_INET, &(from.sin_addr), IP, INET_ADDRSTRLEN);
             printf("ip is %s\n",IP);
             strcpy( &(sta->ipaddress[0]), IP);
             sta->cmd =  testcase->cmd;
@@ -398,35 +411,35 @@ main(int argc, char **argv)
         }/*  if (rmsg[10]==APTS_HELLO)  */
         else
         {
-           if(reset)
-               continue;
-           if((id = get_sta_id(from.sin_addr.s_addr))<0)
-           {
-               inet_ntop(AF_INET, &(from.sin_addr), IP, INET_ADDRSTRLEN);  
-               printf("\r\n Unexpected message rcd from ip s_addr=%s sta id=%d", IP, id);
-               continue;
-           }
-           sta = &stations[id];
+            if(reset)
+                continue;
+            if((id = get_sta_id(from.sin_addr.s_addr))<0)
+            {
+                inet_ntop(AF_INET, &(from.sin_addr), IP, INET_ADDRSTRLEN);
+                printf("\r\n Unexpected message rcd from ip s_addr=%s sta id=%d", IP, id);
+                continue;
+            }
+            sta = &stations[id];
         }/* else  */
 
         if(rmsg[10] == APTS_RESET)
         {
-	        reset_recd = 1;
+            reset_recd = 1;
             printf("\nRcv RESET from STA, sent RESET back to STA, exit\n");
             WfaConResetAll();
             exit(0);
         }
         if(rmsg[10] == APTS_RESET_STOP)
         {
-		    printf("\r\n Recd Kill from Sta\n");
-		    exit(0);
+            printf("\r\n Recd Kill from Sta\n");
+            exit(0);
         }
 
         func = (sta->statefunc)[sta->state];
-        if(!sta->alreadyCleared) 
+        if(!sta->alreadyCleared)
         {
             func.statefunc(sta,rmsg,r);
-        } 
+        }
 
     }/* while loop  */
 }/*  main */

@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -52,7 +52,7 @@ dutCommandRespFuncPtr wfaCmdRespProcFuncTbl[WFA_STA_RESPONSE_END+1] =
     wfaTrafficAgentPingStopResp,         /* WFA_TRAFFIC_STOP_PING_RESP_TLV - WFA_STA_COMMANDS_END            (3) */
     wfaTrafficAgentConfigResp,           /* WFA_TRAFFIC_AGENT_CONFIG_RESP_TLV - WFA_STA_COMMANDS_END         (4) */
     wfaTrafficAgentSendResp,             /* WFA_TRAFFIC_AGENT_SEND_RESP_TLV - WFA_STA_COMMANDS_END           (5) */
-    wfaStaGenericResp,                   /* WFA_TRAFFIC_AGENT_RECV_START_RESP_TLV - WFA_STA_COMMANDS_END     (6) */ 
+    wfaStaGenericResp,                   /* WFA_TRAFFIC_AGENT_RECV_START_RESP_TLV - WFA_STA_COMMANDS_END     (6) */
     wfaTrafficAgentRecvStopResp,         /* WFA_TRAFFIC_AGENT_RECV_STOP_RESP_TLV - WFA_STA_COMMANDS_END      (7) */
     wfaStaGenericResp,                   /* WFA_TRAFFIC_AGENT_RESET_RESP_TLV - WFA_STA_COMMANDS_END          (8) */
     caCmdNotDefinedYet,                  /* WFA_TRAFFIC_AGENT_STATUS_RESP_TLV - WFA_STA_COMMANDS_END         (9) */
@@ -97,43 +97,43 @@ dutCommandRespFuncPtr wfaCmdRespProcFuncTbl[WFA_STA_RESPONSE_END+1] =
     wfaStaGenericResp,                   /* (47)*/
     wfaStaGenericResp,                   /* (48)*/
     wfaStaGenericResp,                   /* (49)*/
-    
-	/* P2P */
-	wfaStaGetP2pDevAddressResp,  		/* (WFA_STA_DISCONNECT_RESP_TLV - 524 */          
-	wfaStaGenericResp,	 		/* (WFA_STA_GET_P2P_DEV_ADDRESS_RESP_TLV -  */ 		
-	wfaStaGenericResp, 		/* (WFA_STA_SET_P2P_RESP_TLV -  */ 
-	wfaStaStartAutoGO,       		/* (WFA_STA_P2P_CONNECT_RESP_TLV -  */       
-	wfaStaP2pStartGrpFormResp, 		/* (WFA_STA_P2P_START_AUTO_GO_RESP_TLV -  */          
 
-	wfaStaGenericResp,  		/* (WFA_STA_P2P_START_GRP_FORM_RESP_TLV -  */            
-	wfaStaGenericResp, 		/* (WFA_STA_P2P_DISSOLVE_RESP_TLV -  */ 		
-	wfaStaGenericResp, 		/* (WFA_STA_SEND_P2P_INV_REQ_RESP_TLV -  */ 		
-	wfaStaGenericResp, 		/* (WFA_STA_ACCEPT_P2P_REQ_RESP_TLV -  */      
-	wfaStaGenericResp,  		/* (WFA_STA_SEND_P2P_PROV_DIS_REQ_RESP_TLV -  */ 
-	
-	wfaStaWpsReadPinResp,    		/* (WFA_STA_SET_WPS_PBC_RESP_TLV -  */    
-	wfaStaGenericResp,	 		/* (WFA_STA_WPS_READ_PIN_RESP_TLV -  */ 	
-	wfaStaGetPskResp,    		/* (WFA_STA_WPS_ENTER_PIN_RESP_TLV -  */ 
-	wfaStaGenericResp,    		/* (WFA_STA_GET_PSK_RESP_TLV -  */ 
-	wfaStaWpsReadLabelResp, 		/* (WFA_STA_P2P_RESET_RESP_TLV -  */ 
-	wfaStaGetP2pIpConfigResp, 		/* (WFA_STA_WPS_READ_LABEL_RESP_TLV -  */ 
-	wfaStaGenericResp, 		/* (WFA_STA_GET_P2P_IP_CONFIG_RESP_TLV -  */ 
-	wfaStaGenericResp,	 		/* (WFA_STA_SEND_SERVICE_DISCOVERY_REQ_RESP_TLV -  */ 
-	wfaStaGenericResp,	 		/* (WFA_STA_SEND_P2P_PRESENCE_REQ_RESP_TLV -  */ 
-	wfaStaGenericResp,	 		/* (WFA_STA_SET_SLEEP_REQ_RESP_TLV -  */ 
+    /* P2P */
+    wfaStaGetP2pDevAddressResp,  		/* (WFA_STA_DISCONNECT_RESP_TLV - 524 */
+    wfaStaGenericResp,	 		/* (WFA_STA_GET_P2P_DEV_ADDRESS_RESP_TLV -  */
+    wfaStaGenericResp, 		/* (WFA_STA_SET_P2P_RESP_TLV -  */
+    wfaStaStartAutoGO,       		/* (WFA_STA_P2P_CONNECT_RESP_TLV -  */
+    wfaStaP2pStartGrpFormResp, 		/* (WFA_STA_P2P_START_AUTO_GO_RESP_TLV -  */
+
+    wfaStaGenericResp,  		/* (WFA_STA_P2P_START_GRP_FORM_RESP_TLV -  */
+    wfaStaGenericResp, 		/* (WFA_STA_P2P_DISSOLVE_RESP_TLV -  */
+    wfaStaGenericResp, 		/* (WFA_STA_SEND_P2P_INV_REQ_RESP_TLV -  */
+    wfaStaGenericResp, 		/* (WFA_STA_ACCEPT_P2P_REQ_RESP_TLV -  */
+    wfaStaGenericResp,  		/* (WFA_STA_SEND_P2P_PROV_DIS_REQ_RESP_TLV -  */
+
+    wfaStaWpsReadPinResp,    		/* (WFA_STA_SET_WPS_PBC_RESP_TLV -  */
+    wfaStaGenericResp,	 		/* (WFA_STA_WPS_READ_PIN_RESP_TLV -  */
+    wfaStaGetPskResp,    		/* (WFA_STA_WPS_ENTER_PIN_RESP_TLV -  */
+    wfaStaGenericResp,    		/* (WFA_STA_GET_PSK_RESP_TLV -  */
+    wfaStaWpsReadLabelResp, 		/* (WFA_STA_P2P_RESET_RESP_TLV -  */
+    wfaStaGetP2pIpConfigResp, 		/* (WFA_STA_WPS_READ_LABEL_RESP_TLV -  */
+    wfaStaGenericResp, 		/* (WFA_STA_GET_P2P_IP_CONFIG_RESP_TLV -  */
+    wfaStaGenericResp,	 		/* (WFA_STA_SEND_SERVICE_DISCOVERY_REQ_RESP_TLV -  */
+    wfaStaGenericResp,	 		/* (WFA_STA_SEND_P2P_PRESENCE_REQ_RESP_TLV -  */
+    wfaStaGenericResp,	 		/* (WFA_STA_SET_SLEEP_REQ_RESP_TLV -  */
 
 
-	wfaStaGenericResp, 		/* (WFA_STA_DISCONNECT_RESP_TLV  */ 
-	wfaStaGenericResp,		/* (WFA_STA_ADD_ARP_TABLE_ENTRY_RESP_TLV - 545 */ 
-	/* P2P */
-    wfaStaGenericResp,                  
-    wfaStaGenericResp,                   
-	wfaStaStartWfdConnectionResp,
-	wfaStaCliCmdResp,  /* 75 */
-	wfaStaConnectGoStartWfdResp,  /* 76 */
-	wfaStaGenericResp,  /* 77 */
-	wfaStaGenericResp,	/* 78 */
-	wfaStaGetParameterResp,	/* 79 */
+    wfaStaGenericResp, 		/* (WFA_STA_DISCONNECT_RESP_TLV  */
+    wfaStaGenericResp,		/* (WFA_STA_ADD_ARP_TABLE_ENTRY_RESP_TLV - 545 */
+    /* P2P */
+    wfaStaGenericResp,
+    wfaStaGenericResp,
+    wfaStaStartWfdConnectionResp,
+    wfaStaCliCmdResp,  /* 75 */
+    wfaStaConnectGoStartWfdResp,  /* 76 */
+    wfaStaGenericResp,  /* 77 */
+    wfaStaGenericResp,	/* 78 */
+    wfaStaGetParameterResp,	/* 79 */
 
 };
 
@@ -160,21 +160,21 @@ int wfaStaVerifyIpConnectResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaVerifyIpConnectResp\n");
     switch(verifyResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaVerifyConnect running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,connected,%i\r\n", verifyResp->cmdru.connected);
         DPRINT_INFO(WFA_OUT, "%s", gRespStr);
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         DPRINT_INFO(WFA_OUT, "%s", gRespStr);
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
     }
     wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
@@ -190,19 +190,19 @@ int wfaStaIsConnectedResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaIsConnectedResp ...\n");
     switch(connectedResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaIsConnectd running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,connected,%i\r\n", connectedResp->cmdru.connected);
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         break;
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
@@ -218,29 +218,29 @@ int wfaStaGetIpConfigResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetIpConfigResp ...\n");
     switch(getIpConfigResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetIpConfig running ...\n");
         done = 1;
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         if(strlen(getIpConfigResp->cmdru.getIfconfig.dns[0]) == 0)
-                *getIpConfigResp->cmdru.getIfconfig.dns[0] = '\0';
+            *getIpConfigResp->cmdru.getIfconfig.dns[0] = '\0';
         if(strlen(getIpConfigResp->cmdru.getIfconfig.dns[1]) == 0)
-                *getIpConfigResp->cmdru.getIfconfig.dns[1] = '\0';
+            *getIpConfigResp->cmdru.getIfconfig.dns[1] = '\0';
 
         sprintf(gRespStr, "status,COMPLETE,dhcp,%i,ip,%s,mask,%s,primary-dns,%s,secondary-dns,%s\r\n", getIpConfigResp->cmdru.getIfconfig.isDhcp,
-                      getIpConfigResp->cmdru.getIfconfig.ipaddr,
-                      getIpConfigResp->cmdru.getIfconfig.mask,
-                      getIpConfigResp->cmdru.getIfconfig.dns[0],
-                      getIpConfigResp->cmdru.getIfconfig.dns[1]);
+                getIpConfigResp->cmdru.getIfconfig.ipaddr,
+                getIpConfigResp->cmdru.getIfconfig.mask,
+                getIpConfigResp->cmdru.getIfconfig.dns[0],
+                getIpConfigResp->cmdru.getIfconfig.dns[1]);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
@@ -255,15 +255,15 @@ int wfaGetVersionResp(BYTE *cmdBuf)
 
     switch(getverResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaGetVersion running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,version,%s\r\n", getverResp->cmdru.version);
         break;
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
@@ -278,17 +278,17 @@ int wfaStaGetInfoResp(BYTE *cmdBuf)
 
     switch(infoResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetInfo running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,%s\r\n", infoResp->cmdru.info);
         DPRINT_INFO(WFA_OUT, "info: %s\n", infoResp->cmdru.info);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
@@ -305,14 +305,14 @@ int wfaTrafficAgentConfigResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaTrafficAgentConfigResp ...\n");
     switch(agtConfigResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaTrafficAgentConfig running ...\n");
         done = 1;
         break;
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,streamID,%i\r\n", agtConfigResp->streamId);
         break;
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
@@ -334,64 +334,64 @@ int wfaTrafficAgentSendResp(BYTE *cmdBuf)
 
     numStreams = (len/sizeof(dutCmdResponse_t));
     printf("total %i streams\n", numStreams);
-    for(i=0; i<numStreams; i++) 
+    for(i=0; i<numStreams; i++)
     {
-   	if(statResp->status != STATUS_COMPLETE) 
+        if(statResp->status != STATUS_COMPLETE)
         {
-   	    errorStatus = 1;
+            errorStatus = 1;
         }
     }
 
-    if(errorStatus) 
+    if(errorStatus)
     {
-   	sprintf(gRespStr, "status,ERROR");
-    } 
-    else 
+        sprintf(gRespStr, "status,ERROR");
+    }
+    else
     {
-   	sprintf(gRespStr, "status,COMPLETE,streamID,");
-   	for(i=0; i<numStreams; i++) 
+        sprintf(gRespStr, "status,COMPLETE,streamID,");
+        for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %i", statResp[i].streamId);
-     	    strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
-   	}
+            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+        }
 
         printf("streamids %s\n", gRespStr);
 
-   	strncat(gRespStr, ",txFrames,", 10);
-   	for(i=0; i<numStreams; i++) 
+        strncat(gRespStr, ",txFrames,", 10);
+        for(i=0; i<numStreams; i++)
         {
-   	    sprintf(copyBuf, "%i ", statResp[i].cmdru.stats.txFrames);
-   	    strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
-   	}
+            sprintf(copyBuf, "%i ", statResp[i].cmdru.stats.txFrames);
+            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+        }
 
-      	strncat(gRespStr, ",rxFrames,", 10);
-       	for(i=0; i<numStreams; i++) 
+        strncat(gRespStr, ",rxFrames,", 10);
+        for(i=0; i<numStreams; i++)
         {
-       	    sprintf(copyBuf, "%i ", statResp[i].cmdru.stats.rxFrames);
-       	    strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
-       	}
+            sprintf(copyBuf, "%i ", statResp[i].cmdru.stats.rxFrames);
+            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+        }
 
-       	strncat(gRespStr, ",txPayloadBytes,", 16);
-       	for(i=0; i<numStreams; i++) 
+        strncat(gRespStr, ",txPayloadBytes,", 16);
+        for(i=0; i<numStreams; i++)
         {
-       	    sprintf(copyBuf, "%llu ", statResp[i].cmdru.stats.txPayloadBytes);
-       	    strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            sprintf(copyBuf, "%llu ", statResp[i].cmdru.stats.txPayloadBytes);
+            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
         }
 
         strncat(gRespStr, ",rxPayloadBytes,", 16);
-        for(i=0; i<numStreams; i++) 
+        for(i=0; i<numStreams; i++)
         {
-       	    sprintf(copyBuf, " %llu ", statResp[i].cmdru.stats.rxPayloadBytes);
+            sprintf(copyBuf, " %llu ", statResp[i].cmdru.stats.rxPayloadBytes);
             strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
         }
         strncat(gRespStr, ",outOfSequenceFrames,", 20);
-        for(i=0; i<numStreams; i++) 
+        for(i=0; i<numStreams; i++)
         {
-       	    sprintf(copyBuf, "%i ", statResp[i].cmdru.stats.outOfSequenceFrames);
-	    strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            sprintf(copyBuf, "%i ", statResp[i].cmdru.stats.outOfSequenceFrames);
+            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
         }
 
-	printf("jitter %lu\n", statResp[i].cmdru.stats.jitter);
+        printf("jitter %lu\n", statResp[i].cmdru.stats.jitter);
         strncat(gRespStr, "\r\n", 4);
     }
 
@@ -406,7 +406,7 @@ int wfaTrafficAgentRecvStopResp(BYTE *cmdBuf)
     int errorStatus = 0;
     char copyBuf[64];
     BYTE *dutRsp = cmdBuf+4;
-    BYTE *startRsp = dutRsp; 
+    BYTE *startRsp = dutRsp;
     wfaTLV *ptlv = (wfaTLV *)cmdBuf;
     int len = ptlv->len;
     int numStreams = len/sizeof(dutCmdResponse_t);
@@ -414,61 +414,61 @@ int wfaTrafficAgentRecvStopResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaTrafficAgentRecvStopResp ...\n");
 
     dutCmdResponse_t statResp[WFA_MAX_TRAFFIC_STREAMS];
-    for(i=0; i<numStreams; i++) 
+    for(i=0; i<numStreams; i++)
     {
         dutRsp = startRsp + i * sizeof(dutCmdResponse_t);
         memcpy(&statResp[i], dutRsp, sizeof(dutCmdResponse_t));
     }
-    for(i=0; i<numStreams; i++) 
+    for(i=0; i<numStreams; i++)
     {
         if(statResp[i].status != STATUS_COMPLETE)
             errorStatus = 1;
     }
-    if(errorStatus) 
+    if(errorStatus)
     {
         sprintf(gRespStr, "status,ERROR");
-    } 
-    else 
+    }
+    else
     {
         sprintf(gRespStr, "status,COMPLETE,streamID,");
-        for(i=0; i<numStreams; i++) 
+        for(i=0; i<numStreams; i++)
         {
-            sprintf(copyBuf, " %d", statResp[i].streamId);	
+            sprintf(copyBuf, " %d", statResp[i].streamId);
             strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
         }
         strncat(gRespStr, ",txFrames,", 10);
-        for(i=0; i<numStreams; i++) 
+        for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %u", statResp[i].cmdru.stats.txFrames);
             strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
         }
         strncat(gRespStr, ",rxFrames,", 10);
-        for(i=0; i<numStreams; i++) 
+        for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %u", statResp[i].cmdru.stats.rxFrames);
             strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
         }
-	    strncat(gRespStr, ",txPayloadBytes,", 16);
-	    for(i=0; i<numStreams; i++) 
+        strncat(gRespStr, ",txPayloadBytes,", 16);
+        for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %llu", statResp[i].cmdru.stats.txPayloadBytes);
             strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
         }
         strncat(gRespStr, ",rxPayloadBytes,", 16);
-        for(i=0; i<numStreams; i++) 
+        for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %llu", statResp[i].cmdru.stats.rxPayloadBytes);
             strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
         }
         strncat(gRespStr, ",outOfSequenceFrames,", 20);
-        for(i=0; i<numStreams; i++) 
+        for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %d", statResp[i].cmdru.stats.outOfSequenceFrames);
             strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
         }
         strncat(gRespStr, "\r\n", 4);
     }
-		
+
     wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     printf("gRespStr = %s", gRespStr);
     return done;
@@ -483,16 +483,16 @@ int wfaTrafficAgentPingStartResp(BYTE *cmdBuf)
 
     switch(staPingResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaTrafficAgentPingStart running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,streamID,%i\r\n", staPingResp->streamId);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
@@ -509,21 +509,21 @@ int wfaTrafficAgentPingStopResp(BYTE *cmdBuf)
 
     switch(stpResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaTrafficAgentPingStop running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
-        {
-            sprintf(gRespStr, "status,COMPLETE,sent,%d,replies,%d\r\n",
-                 stpResp->cmdru.pingStp.sendCnt,
-                 stpResp->cmdru.pingStp.repliedCnt);
-                 DPRINT_INFO(WFA_OUT, "%s\n", gRespStr);
-            break;
-        }
+    case STATUS_COMPLETE:
+    {
+        sprintf(gRespStr, "status,COMPLETE,sent,%d,replies,%d\r\n",
+                stpResp->cmdru.pingStp.sendCnt,
+                stpResp->cmdru.pingStp.repliedCnt);
+        DPRINT_INFO(WFA_OUT, "%s\n", gRespStr);
+        break;
+    }
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -540,22 +540,22 @@ int wfaStaGetMacAddressResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetMacAddressResp ...\n");
     switch(getmacResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetMacAddress running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,mac,%s\r\n", getmacResp->cmdru.mac);
         printf("status,COMPLETE,mac,%s\r\n", getmacResp->cmdru.mac);
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         printf("status,ERROR\n");
         sprintf(gRespStr, "status,COMPLETE,mac,00:00:00:00:00:00\r\n");
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,COMPLETE,mac,00:00:00:00:00:00\r\n");
         printf("unknown status\n");
     }
@@ -573,20 +573,20 @@ int wfaStaGetBSSIDResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetMacAddressResp ...\n");
     switch(getBssidResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetBSSID running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,bssid,%s\r\n", getBssidResp->cmdru.bssid);
         printf("status,COMPLETE,bssid,%s\r\n", getBssidResp->cmdru.bssid);
         break;
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         printf("status,ERROR\n");
         sprintf(gRespStr, "status,COMPLETE,mac,00:00:00:00:00:00\r\n");
         break;
-        default:
+    default:
         sprintf(gRespStr, "status,COMPLETE,mac,00:00:00:00:00:00\r\n");
         printf("unknown status\n");
     }
@@ -603,23 +603,23 @@ int wfaStaSetEncryptionResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetBSSIDResp ...\n");
     switch(getBssidResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaSetEncryption running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,bssid,%s\r\n", getBssidResp->cmdru.bssid);
         printf("status,COMPLETE,bssid,%s\r\n", getBssidResp->cmdru.bssid);
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         printf("status,ERROR\r\n");
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -638,17 +638,17 @@ int wfaStaReAssociateResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaReAssociateResp ...\n");
     switch(assocResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaReAssociate running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -670,22 +670,22 @@ int wfaStaGetStatsResp(BYTE *cmdBuf)
 
     switch(getStatsResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetStats running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,txFrames,%i,rxFrames,%i,txMulticast,%i,rxMulticast,%i,fcsErrors,%i,txRetries,%i\r\n",
-           stats->txFrames, stats->rxFrames, stats->txMulticast, stats->rxMulticast, stats->fcsErrors, stats->txRetries);
+                stats->txFrames, stats->rxFrames, stats->txMulticast, stats->rxMulticast, stats->fcsErrors, stats->txRetries);
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -703,21 +703,21 @@ int wfaDeviceGetInfoResp(BYTE *cmdBuf)
 
     switch(devInfoResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaDeviceGetInfo running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
-	if(dinfo->firmware[0] != '\0' || dinfo->firmware[0] != '\n')
-           sprintf(gRespStr, "status,COMPLETE,firmware,%s\r\n", dinfo->firmware);
-	else
-           sprintf(gRespStr, "status,COMPLETE,vendor,%s,model,%s,version,%s\r\n",
-               dinfo->vendor, dinfo->model, dinfo->version);
+    case STATUS_COMPLETE:
+        if(dinfo->firmware[0] != '\0' || dinfo->firmware[0] != '\n')
+            sprintf(gRespStr, "status,COMPLETE,firmware,%s\r\n", dinfo->firmware);
+        else
+            sprintf(gRespStr, "status,COMPLETE,vendor,%s,model,%s,version,%s\r\n",
+                    dinfo->vendor, dinfo->model, dinfo->version);
         DPRINT_INFO(WFA_OUT, "%s\n", gRespStr);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -735,37 +735,37 @@ int wfaDeviceListIFResp(BYTE *cmdBuf)
 
     switch(devListIfResp->status)
     {
-       case STATUS_RUNNING:
-       DPRINT_INFO(WFA_OUT, "wfaDeviceListIF running ...\n");
-       done = 1;
-       break;
+    case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaDeviceListIF running ...\n");
+        done = 1;
+        break;
 
-       case STATUS_COMPLETE:
-       if(ifResp->iftype == IF_80211)
-       {
-          sprintf(gRespStr, "status,COMPLETE,interfaceType,802.11,interfaceID");
-          DPRINT_INFO(WFA_OUT, "%s\n", gRespStr);
-          DPRINT_INFO(WFA_OUT, "%s\n", ifResp->ifs[0]);
-       }
-       else if(ifResp->iftype == IF_ETH)
-          sprintf(gRespStr, "status,COMPLETE,interfaceType,Ethernet,interfaceID");
+    case STATUS_COMPLETE:
+        if(ifResp->iftype == IF_80211)
+        {
+            sprintf(gRespStr, "status,COMPLETE,interfaceType,802.11,interfaceID");
+            DPRINT_INFO(WFA_OUT, "%s\n", gRespStr);
+            DPRINT_INFO(WFA_OUT, "%s\n", ifResp->ifs[0]);
+        }
+        else if(ifResp->iftype == IF_ETH)
+            sprintf(gRespStr, "status,COMPLETE,interfaceType,Ethernet,interfaceID");
 
-       for(i=0; i<1; i++)
-       {
-         if(ifResp->ifs[i][0] != '\0')
-         {
-            strncat(gRespStr,",", 4);
-            strncat(gRespStr, ifResp->ifs[i], sizeof(ifResp->ifs[i]));
-            strncat(gRespStr, "\r\n", 4);
-         }
-       }
+        for(i=0; i<1; i++)
+        {
+            if(ifResp->ifs[i][0] != '\0')
+            {
+                strncat(gRespStr,",", 4);
+                strncat(gRespStr, ifResp->ifs[i], sizeof(ifResp->ifs[i]));
+                strncat(gRespStr, "\r\n", 4);
+            }
+        }
 
-       DPRINT_INFO(WFA_OUT, "%s\n", gRespStr);
-       break;
+        DPRINT_INFO(WFA_OUT, "%s\n", gRespStr);
+        break;
 
-       default:
-       sprintf(gRespStr, "status,INVALID\r\n");
-       DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
     wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
@@ -781,18 +781,18 @@ int wfaStaUploadResp(BYTE *cmdBuf)
 
     switch(uploadResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaUpload running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
-        sprintf(gRespStr, "status,COMPLETE,code,%i,%s\r\n", 
-                 upld->seqnum, upld->bytes);
+    case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,code,%i,%s\r\n",
+                upld->seqnum, upld->bytes);
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         printf("status,COMPLETE\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
@@ -811,25 +811,25 @@ int wfaStaGetP2pDevAddressResp(BYTE *cmdBuf)
 
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetP2pDevAddressResp ...\n");
 
-   printf("Inside response function...");
-   printf("Inside response function...");
-   printf("Inside response function...");
-   printf("Inside response function...");
-   printf("Inside response function...");
+    printf("Inside response function...");
+    printf("Inside response function...");
+    printf("Inside response function...");
+    printf("Inside response function...");
+    printf("Inside response function...");
 
     switch(p2pDevAddResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetP2pDevAddressResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,devid,%s\r\n", p2pDevAddResp->cmdru.devid);
         printf("status,COMPLETE,devid,%s\r\n", p2pDevAddResp->cmdru.devid);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -846,18 +846,18 @@ int wfaStaStartAutoGO(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaStartAutoGO ...\n");
     switch(p2pResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaStartAutoGO running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
-		sprintf(gRespStr, "status,COMPLETE,groupid,%s\r\n", p2pResp->cmdru.grpid);
-		printf("status,COMPLETE,groupid,%s\r\n", p2pResp->cmdru.grpid);
-        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);		
+    case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,groupid,%s\r\n", p2pResp->cmdru.grpid);
+        printf("status,COMPLETE,groupid,%s\r\n", p2pResp->cmdru.grpid);
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -870,22 +870,22 @@ int wfaStaP2pStartGrpFormResp(BYTE *cmdBuf)
 {
     int done=0;
     dutCmdResponse_t *p2pResp = (dutCmdResponse_t *) (cmdBuf + 4);
-	caP2pStartGrpFormResp_t *grpInfo= &p2pResp->cmdru.grpFormInfo;
+    caP2pStartGrpFormResp_t *grpInfo= &p2pResp->cmdru.grpFormInfo;
 
     DPRINT_INFO(WFA_OUT, "Entering wfaStaP2pStartGrpFormResp ...\n");
     switch(p2pResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaP2pStartGrpFormResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,result,%s,groupid,%s\r\n", grpInfo->result,grpInfo->grpId);
         printf("status,COMPLETE,result,%s,groupid,%s\r\n", grpInfo->result,grpInfo->grpId);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -903,17 +903,17 @@ int wfaStaWpsReadPinResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaWpsReadPinResp ...\n");
     switch(p2pResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaWpsReadPinResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,pin,%s\r\n", p2pResp->cmdru.wpsPin);
         printf("status,COMPLETE,pin,%s\r\n", p2pResp->cmdru.wpsPin);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -926,22 +926,22 @@ int wfaStaGetPskResp(BYTE *cmdBuf)
 {
     int done=0;
     dutCmdResponse_t *p2pResp = (dutCmdResponse_t *) (cmdBuf + 4);
-	caP2pStaGetPskResp_t *pskInfo= &p2pResp->cmdru.pskInfo;
+    caP2pStaGetPskResp_t *pskInfo= &p2pResp->cmdru.pskInfo;
 
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetPskResp ...\n");
     switch(p2pResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetPskResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,passphrase,%s,ssid,%s\r\n", pskInfo->passPhrase,pskInfo->ssid);
         printf("status,COMPLETE,passphrase,%s,ssid,%s\r\n", pskInfo->passPhrase,pskInfo->ssid);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -958,17 +958,17 @@ int wfaStaWpsReadLabelResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaWpsReadLabelResp ...\n");
     switch(p2pResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaWpsReadLabelResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,label,%s\r\n", p2pResp->cmdru.wpsPin);
         printf("status,COMPLETE,label,%s\r\n", p2pResp->cmdru.wpsPin);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -981,35 +981,35 @@ int wfaStaGetP2pIpConfigResp(BYTE *cmdBuf)
 {
     int done=0;
     dutCmdResponse_t *getIpConfigResp = (dutCmdResponse_t *) (cmdBuf + 4);
-	
+
 
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetP2pIpConfigResp ...\n");
     switch(getIpConfigResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetP2pIpConfigResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         if(strlen(getIpConfigResp->cmdru.getIfconfig.dns[0]) == 0)
-                *getIpConfigResp->cmdru.getIfconfig.dns[0] = '\0';
+            *getIpConfigResp->cmdru.getIfconfig.dns[0] = '\0';
         if(strlen(getIpConfigResp->cmdru.getIfconfig.dns[1]) == 0)
-                *getIpConfigResp->cmdru.getIfconfig.dns[1] = '\0';
+            *getIpConfigResp->cmdru.getIfconfig.dns[1] = '\0';
 
         sprintf(gRespStr, "status,COMPLETE,dhcp,%i,ip,%s,mask,%s,primary-dns,%s,p2pinterfaceaddress,%s\r\n", getIpConfigResp->cmdru.getIfconfig.isDhcp,
-                      getIpConfigResp->cmdru.getIfconfig.ipaddr,
-                      getIpConfigResp->cmdru.getIfconfig.mask,
-                      getIpConfigResp->cmdru.getIfconfig.dns[0],
-					  getIpConfigResp->cmdru.getIfconfig.mac);
+                getIpConfigResp->cmdru.getIfconfig.ipaddr,
+                getIpConfigResp->cmdru.getIfconfig.mask,
+                getIpConfigResp->cmdru.getIfconfig.dns[0],
+                getIpConfigResp->cmdru.getIfconfig.mac);
 
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
 
     }
@@ -1025,23 +1025,23 @@ int wfaStaGenericResp(BYTE *cmdBuf)
 
     switch(setwmmResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE\r\n");
         printf("status,COMPLETE\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         printf("status,COMPLETE\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -1055,22 +1055,22 @@ int wfaStaStartWfdConnectionResp(BYTE *cmdBuf)
 {
     int done=0;
     dutCmdResponse_t *wfdResp = (dutCmdResponse_t *) (cmdBuf + 4);
-	caStaStartWfdConnResp_t *wfdConnInfo= &wfdResp->cmdru.wfdConnInfo;
+    caStaStartWfdConnResp_t *wfdConnInfo= &wfdResp->cmdru.wfdConnInfo;
 
     DPRINT_INFO(WFA_OUT, "Entering wfaStaStartWfdConnectionResp ...\n");
     switch(wfdResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaStartWfdConnectionResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,result,%s,groupid,%s,wfdsessionid,%s\r\n", wfdConnInfo->result,wfdConnInfo->p2pGrpId,wfdConnInfo->wfdSessionId);
         printf("status,COMPLETE,result,%s,groupid,%s,wfdsessionid,%s\r\n", wfdConnInfo->result,wfdConnInfo->p2pGrpId,wfdConnInfo->wfdSessionId);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -1089,33 +1089,33 @@ int wfaStaCliCmdResp(BYTE *cmdBuf)
     DPRINT_INFO(WFA_OUT, "Entering wfaStaCliCmdResp ...\n");
     switch(staCliCmdResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaCliCmdResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
-		if(staCliCmdResp->resFlag == 1)
-		{
-			sprintf(gRespStr, "status,COMPLETE,%s\r\n", staCliCmdResp->result);
-			printf("\nstatus,COMPLETE,%s****\r\n", staCliCmdResp->result);
-		}
-		else
-		{
-			sprintf(gRespStr, "status,COMPLETE\r\n");
-			printf("status,COMPLETE\r\n");
-		}
+    case STATUS_COMPLETE:
+        if(staCliCmdResp->resFlag == 1)
+        {
+            sprintf(gRespStr, "status,COMPLETE,%s\r\n", staCliCmdResp->result);
+            printf("\nstatus,COMPLETE,%s****\r\n", staCliCmdResp->result);
+        }
+        else
+        {
+            sprintf(gRespStr, "status,COMPLETE\r\n");
+            printf("status,COMPLETE\r\n");
+        }
 
         break;
 
-        case STATUS_ERROR:
+    case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         printf("status,ERROR\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
         break;
 
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -1129,22 +1129,22 @@ int wfaStaConnectGoStartWfdResp(BYTE *cmdBuf)
 {
     int done=0;
     dutCmdResponse_t *wfdResp = (dutCmdResponse_t *) (cmdBuf + 4);
-	caStaStartWfdConnResp_t *wfdConnInfo= &wfdResp->cmdru.wfdConnInfo;
+    caStaStartWfdConnResp_t *wfdConnInfo= &wfdResp->cmdru.wfdConnInfo;
 
     DPRINT_INFO(WFA_OUT, "Entering wfaStaConnectGoStartWfdResp ...\n");
     switch(wfdResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaConnectGoStartWfdResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
+    case STATUS_COMPLETE:
         sprintf(gRespStr, "status,COMPLETE,wfdsessionid,%s\r\n",wfdConnInfo->wfdSessionId);
         printf("status,COMPLETE,wfdsessionid,%s\r\n", wfdConnInfo->wfdSessionId);
         break;
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
@@ -1160,31 +1160,31 @@ int wfaStaGetParameterResp(BYTE *cmdBuf)
 {
     int done=0;
     dutCmdResponse_t *wfdResp = (dutCmdResponse_t *) (cmdBuf + 4);
-	caStaGetParameterResp_t *getParamInfo= &wfdResp->cmdru.getParamValue;
+    caStaGetParameterResp_t *getParamInfo= &wfdResp->cmdru.getParamValue;
 
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetParameterResp ...\n");
     switch(wfdResp->status)
     {
-        case STATUS_RUNNING:
+    case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetParameterResp running ...\n");
         done = 1;
         break;
 
-        case STATUS_COMPLETE:
-		if(getParamInfo->getParamType == eDiscoveredDevList)
-		{
-	        sprintf(gRespStr, "status,COMPLETE,DeviceList,%s\r\n",getParamInfo->devList);
-	        printf("status,COMPLETE,DeviceList,%s\r\n", getParamInfo->devList);
-	        break;		
-		}
-		else
-		{
-	        sprintf(gRespStr, "status,COMPLETE,UnkownGetParmResp\r\n");
-	        printf("status,COMPLETE,UnkownGetParmResp\r\n");
-	        break;		
-		}
+    case STATUS_COMPLETE:
+        if(getParamInfo->getParamType == eDiscoveredDevList)
+        {
+            sprintf(gRespStr, "status,COMPLETE,DeviceList,%s\r\n",getParamInfo->devList);
+            printf("status,COMPLETE,DeviceList,%s\r\n", getParamInfo->devList);
+            break;
+        }
+        else
+        {
+            sprintf(gRespStr, "status,COMPLETE,UnkownGetParmResp\r\n");
+            printf("status,COMPLETE,UnkownGetParmResp\r\n");
+            break;
+        }
 
-        default:
+    default:
         sprintf(gRespStr, "status,INVALID\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }

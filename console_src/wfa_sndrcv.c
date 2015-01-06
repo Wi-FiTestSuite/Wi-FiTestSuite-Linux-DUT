@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -70,8 +70,8 @@ int WfaConRcvConf(struct station *sta,unsigned int *rmsg,int length)
     }
     else
     {
-		sta->state++;
-		printf("\r\nRcv Confirm\n");
+        sta->state++;
+        printf("\r\nRcv Confirm\n");
     }
 }
 int WfaConRcvConfSndVI(struct station *sta,unsigned int *rmsg,int length)
@@ -123,9 +123,9 @@ int WfaConRcvVOSndCyclic(struct station *sta,unsigned int *rmsg,int length)
         else
         {
             count = 0;
-            for(id=0; id<NSTA; id++) 
+            for(id=0; id<NSTA; id++)
             {
-                if (stations[id].s_addr == 0) 
+                if (stations[id].s_addr == 0)
                 {
                     break;
                 }
@@ -143,8 +143,8 @@ int WfaConRcvVOSndCyclic(struct station *sta,unsigned int *rmsg,int length)
             txmsg[1] = tos_be;
             if(can_quit)
             {
-                if(!sta->alreadyCleared) 
-                {	
+                if(!sta->alreadyCleared)
+                {
                     strcpy((char *)&txmsg[11], "APTSL1 STOP");
                     r = sendto(sd, txmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
                     if (traceflag) mpx("CMD send\n", txmsg, 64);
@@ -176,9 +176,9 @@ int WfaConRcvVOSndCyclic(struct station *sta,unsigned int *rmsg,int length)
         printf("sent dscp VO, return dscp=0x%x\n", dscpLocal);
         if ( count >= 3000)
         {
-            //No state change for L.1::sta->state++;  
+            //No state change for L.1::sta->state++;
             //count = 0;
-        } 
+        }
     }
 }
 int WfaConRcvVOSndE(struct station *sta,unsigned int *rmsg,int length)
@@ -219,36 +219,36 @@ int WfaConRcvVOSndAllE(struct station *sta,unsigned int *rmsg,int length)
         r = sendto(sd, rmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
         if (traceflag) mpx("CMD send\n", rmsg, 64);
         printf("Rcv VO sent VO\n");
-        
-		rmsg[0] = ++(sta->msgno);
+
+        rmsg[0] = ++(sta->msgno);
         set_dscp(tos_vi);
         r = sendto(sd, rmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
         if (traceflag) mpx("CMD send\n", rmsg, 64);
         printf("sent VI\n");
-		
+
         rmsg[0] = ++(sta->msgno);
         set_dscp(tos_be);
         r = sendto(sd, rmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
         if (traceflag) mpx("CMD send\n", rmsg, 64);
         printf("sent BE\n");
-        
-		rmsg[0] = ++(sta->msgno);
+
+        rmsg[0] = ++(sta->msgno);
         set_dscp(tos_bk);
         r = sendto(sd, rmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
         if(r < 0)
         {
-			printf("\nhere u go:dead\n");
-		}
+            printf("\nhere u go:dead\n");
+        }
         if (traceflag) mpx("CMD send(BK)\n", rmsg, 64);
-		{
-			printf("sent BK\n");
-		}
-        
-		txmsg[0] = ++(sta->msgno);
+        {
+            printf("sent BK\n");
+        }
+
+        txmsg[0] = ++(sta->msgno);
         set_dscp(tos_bk);
         create_apts_msg(APTS_STOP, txmsg,sta->myid);
-        
-		txmsg[1] = tos_bk;
+
+        txmsg[1] = tos_bk;
         r = sendto(sd, txmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
         if (traceflag) mpx("CMD send STOP(RcvVOSndAllE)\n", txmsg, 64);
         sta->state++;
@@ -462,8 +462,8 @@ int WfaConRcvVISndE(struct station *sta,unsigned int *rmsg,int length)
         r = sendto(sd, rmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
         if (traceflag) mpx("CMD send\n", rmsg, 64);
         printf("rcv VI sent VI\n");
-        
-		txmsg[0] = ++(sta->msgno);
+
+        txmsg[0] = ++(sta->msgno);
         create_apts_msg(APTS_STOP, txmsg,sta->myid);
         set_dscp(tos_be);
         r = sendto(sd, txmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
@@ -485,8 +485,8 @@ int WfaConRcvVISndVOE(struct station *sta,unsigned int *rmsg,int length)
         r = sendto(sd, rmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
         if (traceflag) mpx("CMD send\n", rmsg, 64);
         printf("rcv VI sent VO\n");
-        
-		txmsg[0] = ++(sta->msgno);
+
+        txmsg[0] = ++(sta->msgno);
         create_apts_msg(APTS_STOP, txmsg,sta->myid);
         set_dscp(tos_be);
         r = sendto(sd, txmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
@@ -504,10 +504,10 @@ int WfaConRcvVOE(struct station *sta,unsigned int *rmsg,int length)
     else
     {
         printf("rcv VO\n");
-		usleep(1000000);
+        usleep(1000000);
         create_apts_msg(APTS_STOP, txmsg,sta->myid);
-        
-		txmsg[0] = ++(sta->msgno);
+
+        txmsg[0] = ++(sta->msgno);
         set_dscp(tos_be);
         r = sendto(sd, txmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
         sta->state++;
@@ -541,8 +541,8 @@ int WfaConRcvVOSnd2VO(struct station *sta,unsigned int *rmsg,int length)
         set_dscp(tos_vo);
         rmsg[0] = ++(sta->msgno);
         r = sendto(sd, rmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
-        
-		rmsg[0] = ++(sta->msgno);
+
+        rmsg[0] = ++(sta->msgno);
         if (traceflag) mpx("CMD send\n", rmsg, 64);
         r = sendto(sd, rmsg, 190, sockflags, (struct sockaddr *)&from, sizeof(from));
         sta->state++;

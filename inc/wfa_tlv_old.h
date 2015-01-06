@@ -1,30 +1,30 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
 *
 *****************************************************************************/
- 
+
 
 /*
  * File: wfa_tlv.h
- *  definitions for each of command types. 
+ *  definitions for each of command types.
  *  format:
  *  ---------------------------------------------------
- *  |  tag   | length |   value   
- *  --------------------------------------------------- 
- *   2 bytes   2bytes    defined by length 
+ *  |  tag   | length |   value
+ *  ---------------------------------------------------
+ *   2 bytes   2bytes    defined by length
  */
 #ifndef _WFA_TLV_H
 #define _WFA_TLV_H
@@ -35,7 +35,7 @@
 #define INTEGER_2 0x0002            /* word */
 #define OCTET_STRING 0x0003         /* string */
 
-typedef struct _wfatlvHdr 
+typedef struct _wfatlvHdr
 {
     WORD tag;   /* tag/type */
     WORD len;   /* value length */
@@ -60,11 +60,11 @@ typedef struct _wfatlvHdr
 #define WFA_STA_GET_IP_CONFIG_TLV        (WFA_TRAFFIC_AGENT_STATUS_TLV + 0x01)         /* 10 */
 #define WFA_STA_SET_IP_CONFIG_TLV        (WFA_STA_GET_IP_CONFIG_TLV + 0x01)            /* 11 */
 #define WFA_STA_GET_MAC_ADDRESS_TLV      (WFA_STA_SET_IP_CONFIG_TLV + 0x01)            /* 12 */
-#define WFA_STA_SET_MAC_ADDRESS_TLV      (WFA_STA_GET_MAC_ADDRESS_TLV + 0x01)          /* 13 */ 
+#define WFA_STA_SET_MAC_ADDRESS_TLV      (WFA_STA_GET_MAC_ADDRESS_TLV + 0x01)          /* 13 */
 #define WFA_STA_IS_CONNECTED_TLV         (WFA_STA_SET_MAC_ADDRESS_TLV + 0x01)          /* 14 */
 #define WFA_STA_VERIFY_IP_CONNECTION_TLV (WFA_STA_IS_CONNECTED_TLV + 0x01)             /* 15 */
 #define WFA_STA_GET_BSSID_TLV            (WFA_STA_VERIFY_IP_CONNECTION_TLV + 0x01)     /* 16 */
-#define WFA_STA_GET_STATS_TLV            (WFA_STA_GET_BSSID_TLV + 0x01)                /* 17 */ 
+#define WFA_STA_GET_STATS_TLV            (WFA_STA_GET_BSSID_TLV + 0x01)                /* 17 */
 #define WFA_STA_SET_ENCRYPTION_TLV       (WFA_STA_GET_STATS_TLV + 0x01)                /* 18 */
 #define WFA_STA_SET_PSK_TLV              (WFA_STA_SET_ENCRYPTION_TLV + 0x01)           /* 19 */
 #define WFA_STA_SET_EAPTLS_TLV           (WFA_STA_SET_PSK_TLV + 0x01)                  /* 20 */
@@ -93,7 +93,7 @@ typedef struct _wfatlvHdr
 #define WFA_GET_VERSION_RESP_TLV         (WFA_STA_COMMANDS_END +       0x01)           /* 38 */
 
 /* Generic Traffic Generator Responses */
-#define WFA_TRAFFIC_SEND_PING_RESP_TLV   (WFA_GET_VERSION_RESP_TLV +  0x01)            /* 39 */ 
+#define WFA_TRAFFIC_SEND_PING_RESP_TLV   (WFA_GET_VERSION_RESP_TLV +  0x01)            /* 39 */
 #define WFA_TRAFFIC_STOP_PING_RESP_TLV   (WFA_TRAFFIC_SEND_PING_RESP_TLV + 0x01)       /* 40 */
 #define WFA_TRAFFIC_AGENT_CONFIG_RESP_TLV (WFA_TRAFFIC_STOP_PING_RESP_TLV + 0x01)      /* 41 */
 #define WFA_TRAFFIC_AGENT_SEND_RESP_TLV  (WFA_TRAFFIC_AGENT_CONFIG_RESP_TLV + 0x01)    /* 42 */
@@ -103,10 +103,10 @@ typedef struct _wfatlvHdr
 #define WFA_TRAFFIC_AGENT_STATUS_RESP_TLV (WFA_TRAFFIC_AGENT_RESET_RESP_TLV + 0x01)    /* 46 */
 
 /* STATION/DUT Responses */
-#define WFA_STA_GET_IP_CONFIG_RESP_TLV (WFA_TRAFFIC_AGENT_STATUS_RESP_TLV + 0x01)      /* 47 */ 
+#define WFA_STA_GET_IP_CONFIG_RESP_TLV (WFA_TRAFFIC_AGENT_STATUS_RESP_TLV + 0x01)      /* 47 */
 #define WFA_STA_SET_IP_CONFIG_RESP_TLV (WFA_STA_GET_IP_CONFIG_RESP_TLV + 0x01)         /* 48 */
 #define WFA_STA_GET_MAC_ADDRESS_RESP_TLV (WFA_STA_SET_IP_CONFIG_RESP_TLV + 0x01)       /* 49 */
-#define WFA_STA_SET_MAC_ADDRESS_RESP_TLV (WFA_STA_GET_MAC_ADDRESS_RESP_TLV + 0x01)     /* 50 */ 
+#define WFA_STA_SET_MAC_ADDRESS_RESP_TLV (WFA_STA_GET_MAC_ADDRESS_RESP_TLV + 0x01)     /* 50 */
 #define WFA_STA_IS_CONNECTED_RESP_TLV (WFA_STA_SET_MAC_ADDRESS_RESP_TLV + 0x01)        /* 51 */
 #define WFA_STA_VERIFY_IP_CONNECTION_RESP_TLV  (WFA_STA_IS_CONNECTED_RESP_TLV + 0x01)  /* 52 */
 #define WFA_STA_GET_BSSID_RESP_TLV (WFA_STA_VERIFY_IP_CONNECTION_RESP_TLV + 0x01)      /* 53 */
@@ -122,7 +122,7 @@ typedef struct _wfatlvHdr
 #define WFA_STA_SET_IBSS_RESP_TLV         (WFA_STA_SET_PEAP_RESP_TLV + 0x01)
 #define WFA_STA_GET_INFO_RESP_TLV      (WFA_STA_SET_IBSS_RESP_TLV + 0x01)              /* 64 */
 #define WFA_DEVICE_GET_INFO_RESP_TLV  (WFA_STA_GET_INFO_RESP_TLV + 0x01)
-#define WFA_DEVICE_LIST_IF_RESP_TLV (WFA_DEVICE_GET_INFO_RESP_TLV + 0x01)              /* 66 */ 
+#define WFA_DEVICE_LIST_IF_RESP_TLV (WFA_DEVICE_GET_INFO_RESP_TLV + 0x01)              /* 66 */
 
 #define WFA_STA_DEBUG_SET_RESP_TLV  (WFA_DEVICE_LIST_IF_RESP_TLV + 0x01)               /* 67 */
 #define WFA_STA_SET_MODE_RESP_TLV   (WFA_STA_DEBUG_SET_RESP_TLV + 0x01)                /* 68 */
@@ -134,7 +134,7 @@ typedef struct _wfatlvHdr
 
 #define WFA_STA_RESPONSE_END (WFA_STA_SEND_NEIGREQ_RESP_TLV + 0x01)                    /* 74 */
 
-#define WFA_TLV_END WFA_STA_RESPONSE_END 
+#define WFA_TLV_END WFA_STA_RESPONSE_END
 // New STA/DUT commands
 
 #define WFA_STA_NEW_COMMANDS_START		0x100                                  /* 256 */

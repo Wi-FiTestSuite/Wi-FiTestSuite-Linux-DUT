@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -20,9 +20,9 @@
  * File: wfa_dut.c - The main program for DUT agent.
  *       This is the top level of traffic control. It initializes a local TCP
  *       socket for command and control link and waits for a connect request
- *       from a Control Agent. Once the the connection is established, it 
+ *       from a Control Agent. Once the the connection is established, it
  *       will process the commands from the Control Agent. For details, please
- *       reference the architecture documents.   
+ *       reference the architecture documents.
  *
  */
 
@@ -67,7 +67,7 @@ char       gnetIf[WFA_BUFF_32];        /* specify the interface to use */
 extern BYTE   *trafficBuf, *respBuf;
 
 /* stream table */
-extern tgStream_t gStreams[];         /* streams' buffers             */ 
+extern tgStream_t gStreams[];         /* streams' buffers             */
 
 /* the agent local Socket, Agent Control socket and baseline test socket*/
 int   gagtSockfd = -1;
@@ -121,9 +121,9 @@ main(int argc, char **argv)
     int i = 0;
     pthread_attr_t ptAttr;
     int ptPolicy;
-    
+
     struct sched_param ptSchedParam;
-   
+
     if (argc < 3)              /* Test for correct number of arguments */
     {
         DPRINT_ERR(WFA_ERR, "Usage:  %s <command interface> <Local Control Port> \n", argv[0]);
@@ -185,8 +185,8 @@ main(int argc, char **argv)
     gagtSockfd = wfaCreateTCPServSock(locPortNo);
     if(gagtSockfd == -1)
     {
-       DPRINT_ERR(WFA_ERR, "Failed to open socket\n");
-       exit(1);
+        DPRINT_ERR(WFA_ERR, "Failed to open socket\n");
+        exit(1);
     }
 
     pthread_attr_init(&ptAttr);
@@ -205,59 +205,59 @@ main(int argc, char **argv)
         tdata[i].tid = i;
         pthread_mutex_init(&wmm_thr[i].thr_flag_mutex, NULL);
         pthread_cond_init(&wmm_thr[i].thr_flag_cond, NULL);
-        wmm_thr[i].thr_id = pthread_create(&wmm_thr[i].thr, 
-                       &ptAttr, wfa_wmm_thread, &tdata[i]);
+        wmm_thr[i].thr_id = pthread_create(&wmm_thr[i].thr,
+                                           &ptAttr, wfa_wmm_thread, &tdata[i]);
     }
 
     for(i = 0; i < WFA_MAX_TRAFFIC_STREAMS; i++)
-       tgSockfds[i] = -1;
+        tgSockfds[i] = -1;
 
 #ifdef WFA_WMM_PS_EXT
-    /* WMMPS thread   */  
-	int ret = 0;
+    /* WMMPS thread   */
+    int ret = 0;
     ret = pthread_mutex_init(&wmmps_mutex_info.thr_flag_mutex,NULL);
-	if ( ret !=0)
-	{
-		DPRINT_INFO(WFA_OUT, "WMMPS pthread_mutex_init faile\n");
-	}
+    if ( ret !=0)
+    {
+        DPRINT_INFO(WFA_OUT, "WMMPS pthread_mutex_init faile\n");
+    }
     ret = pthread_cond_init(&wmmps_mutex_info.thr_flag_cond,NULL);
-	if (ret != 0)
-	{
-		DPRINT_INFO(WFA_OUT, "WMMPS pthread_cond_init faile\n");
-	}
+    if (ret != 0)
+    {
+        DPRINT_INFO(WFA_OUT, "WMMPS pthread_cond_init faile\n");
+    }
     wmmps_mutex_info.thr_id=pthread_create(&wmmps_mutex_info.thr,NULL /*&ptAttr*/,wfa_wmmps_thread,(void*)&wmmps_mutex_info.thr_id);// calls up the wmmps-thread
 #endif
 
     maxfdn1 = gagtSockfd + 1;
-    while (isExit) 
+    while (isExit)
     {
         fds.agtfd = &gagtSockfd;
         fds.cafd = &gxcSockfd;
-        fds.tgfd = &btSockfd; 
-        fds.wmmfds = tgSockfds; 
+        fds.tgfd = &btSockfd;
+        fds.wmmfds = tgSockfds;
 #ifdef WFA_WMM_PS_EXT
         fds.psfd = &psSockfd;
 #endif
 
         wfaSetSockFiDesc(&sockSet, &maxfdn1, &fds);
 
-        /* 
+        /*
          * The timer will be set for transaction traffic if no echo is back
          * The timeout from the select call force to send a new packet
          */
         tovalp = NULL;
         if(gtimeOut != 0)
         {
-          /* timeout is set to usec */
-          tovalp = wfaSetTimer(0, gtimeOut*1000, toutvalp);
+            /* timeout is set to usec */
+            tovalp = wfaSetTimer(0, gtimeOut*1000, toutvalp);
         }
 
         nfds = 0;
-        if ( (nfds = select(maxfdn1, &sockSet, NULL, NULL, tovalp)) < 0) 
+        if ( (nfds = select(maxfdn1, &sockSet, NULL, NULL, tovalp)) < 0)
         {
             if (errno == EINTR)
                 continue;           /* back to for() */
-	    else
+            else
                 DPRINT_WARNING(WFA_WNG, "Warning: select()-%i", errno);
         }
 
@@ -282,19 +282,19 @@ main(int argc, char **argv)
 #endif /* WFA_WMM_PS_EXT */
         }
 
-        if (FD_ISSET(gagtSockfd, &sockSet)) 
+        if (FD_ISSET(gagtSockfd, &sockSet))
         {
             /* Incoming connection request */
             gxcSockfd = wfaAcceptTCPConn(gagtSockfd);
             if(gxcSockfd == -1)
             {
-               DPRINT_ERR(WFA_ERR, "Failed to open control link socket\n");
-               exit(1);
+                DPRINT_ERR(WFA_ERR, "Failed to open control link socket\n");
+                exit(1);
             }
         }
 
         /* Control Link port event*/
-        if(gxcSockfd >= 0 && FD_ISSET(gxcSockfd, &sockSet)) 
+        if(gxcSockfd >= 0 && FD_ISSET(gxcSockfd, &sockSet))
         {
             memset(xcCmdBuf, 0, WFA_BUFF_1K);  /* reset the buffer */
             nbytes = wfaCtrlRecv(gxcSockfd, xcCmdBuf);
@@ -308,32 +308,33 @@ main(int argc, char **argv)
             }
             else
             {
-               /* command received */
-               wfaDecodeTLV(xcCmdBuf, nbytes, &xcCmdTag, &cmdLen, parmsVal);    
-               memset(respBuf, 0, WFA_RESP_BUF_SZ); 
-               respLen = 0;
+                /* command received */
+                wfaDecodeTLV(xcCmdBuf, nbytes, &xcCmdTag, &cmdLen, parmsVal);
+                memset(respBuf, 0, WFA_RESP_BUF_SZ);
+                respLen = 0;
 
-               /* reset two commond storages used by control functions */
-               memset(gCmdStr, 0, WFA_CMD_STR_SZ);
-               memset(&gGenericResp, 0, sizeof(dutCmdResponse_t));
+                /* reset two commond storages used by control functions */
+                memset(gCmdStr, 0, WFA_CMD_STR_SZ);
+                memset(&gGenericResp, 0, sizeof(dutCmdResponse_t));
 
-               /* command process function defined in wfa_ca.c and wfa_tg.c */
-               if(xcCmdTag != 0 && gWfaCmdFuncTbl[xcCmdTag] != NULL)
-               {
-	           /* since the new commands are expanded to new block */
-		           gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
-               }
-               else
-               {       // no command defined
-		          gWfaCmdFuncTbl[0](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
-               }
+                /* command process function defined in wfa_ca.c and wfa_tg.c */
+                if(xcCmdTag != 0 && gWfaCmdFuncTbl[xcCmdTag] != NULL)
+                {
+                    /* since the new commands are expanded to new block */
+                    gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
+                }
+                else
+                {
+                    // no command defined
+                    gWfaCmdFuncTbl[0](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
+                }
 
-               // gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
-               if(gxcSockfd != -1)
-               if(wfaCtrlSend(gxcSockfd, (BYTE *)respBuf, respLen) != respLen)
-               {
-                   DPRINT_WARNING(WFA_WNG, "wfa-wfaCtrlSend Error\n");
-               }
+                // gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
+                if(gxcSockfd != -1)
+                    if(wfaCtrlSend(gxcSockfd, (BYTE *)respBuf, respLen) != respLen)
+                    {
+                        DPRINT_WARNING(WFA_WNG, "wfa-wfaCtrlSend Error\n");
+                    }
             }
 
         }
@@ -360,18 +361,18 @@ main(int argc, char **argv)
     wFREE(xcCmdBuf);
     wFREE(parmsVal);
 
-     /* Close sockets */
+    /* Close sockets */
     wCLOSE(gagtSockfd);
     wCLOSE(gxcSockfd);
     wCLOSE(btSockfd);
 
     for(i= 0; i< WFA_MAX_TRAFFIC_STREAMS; i++)
     {
-       if(tgSockfds[i] != -1)
-       {
-         wCLOSE(tgSockfds[i]); 
-         tgSockfds[i] = -1;
-       }
+        if(tgSockfds[i] != -1)
+        {
+            wCLOSE(tgSockfds[i]);
+            tgSockfds[i] = -1;
+        }
     }
 
     return 0;

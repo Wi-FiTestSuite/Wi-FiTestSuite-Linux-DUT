@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -72,11 +72,12 @@ int setup_addr(char *name, struct sockaddr *dst)
     printf( "setup_addr: entering\n" );
     printf("Automatically discover IP Address of eth0 interface, since no broadcast IP address has been specified by you.\n");
     /* tells ioctl which interface to query */
-    strcpy(interface.ifr_name, "eth0");  
+    strcpy(interface.ifr_name, "eth0");
     /* need a socket to use ioctl */
     fd = socket(AF_INET, SOCK_DGRAM, 0);
     /* get interface ip address */
-    if (ioctl(fd, SIOCGIFADDR, &interface) < 0) {
+    if (ioctl(fd, SIOCGIFADDR, &interface) < 0)
+    {
         perror("ERROR (ioctl (SIOCGIFADDR)), no IP address for eth0");
         exit(1);
     }
@@ -86,10 +87,10 @@ int setup_addr(char *name, struct sockaddr *dst)
     addr_ptr = (struct sockaddr_in *) &interface.ifr_addr;
 
     /* INET protocol family */
-    addr_ptr->sin_family = AF_INET;      
+    addr_ptr->sin_family = AF_INET;
 
     /* copy ip address */
-    inet_ntop(AF_INET, &addr_ptr->sin_addr, IP, INET_ADDRSTRLEN);   
+    inet_ntop(AF_INET, &addr_ptr->sin_addr, IP, INET_ADDRSTRLEN);
 
     char class= getipclass((unsigned long)addr_ptr->sin_addr.s_addr);
     if(class < 'A' || class >'C')
@@ -97,19 +98,20 @@ int setup_addr(char *name, struct sockaddr *dst)
         printf("Bad IP Class %c addr %d for %s\n",class,addr_ptr->sin_addr.s_addr,IP);
         exit(-6);
     }
-    printf("IP of eth0: %s\n", IP); 
+    printf("IP of eth0: %s\n", IP);
 
     ioctl(fd,SIOCGIFNETMASK,&interface);
-    /* inet_ntoa::These functions are deprecated because they don't handle IPv6! 
+    /* inet_ntoa::These functions are deprecated because they don't handle IPv6!
     Use inet_ntop() or inet_pton() instead!   */
-    inet_ntop(AF_INET, &( ((struct sockaddr_in*)&interface.ifr_addr)->sin_addr), Mask, INET_ADDRSTRLEN); 
+    inet_ntop(AF_INET, &( ((struct sockaddr_in*)&interface.ifr_addr)->sin_addr), Mask, INET_ADDRSTRLEN);
     printf("setup_addr::Mask=%s  \n", Mask);
     char* temp;
     int ss=0;
     temp=strtok(Mask,". ");
     if ( temp != NULL)
     {
-        while(!strncmp(temp,"255",3) && ss<5){
+        while(!strncmp(temp,"255",3) && ss<5)
+        {
             ss++;
             temp=strtok(NULL,". ");
             if (temp == NULL)
@@ -121,7 +123,7 @@ int setup_addr(char *name, struct sockaddr *dst)
     }
     else
     {
-       printf("setup_addr::Mask=%s, temp is NULL \n", Mask);
+        printf("setup_addr::Mask=%s, temp is NULL \n", Mask);
     }
 
     printf(" This is a Class %c IP Address \n",class);
@@ -138,12 +140,12 @@ int setup_addr(char *name, struct sockaddr *dst)
             count ++;
         index++;
     }
-    for(j=0;j<num_of_255;j++)
+    for(j=0; j<num_of_255; j++)
     {
         ip[index++] = '2';
         ip[index++] = '5';
-        ip[index++] = '5';	  
-        ip[index++] = '.';	  
+        ip[index++] = '5';
+        ip[index++] = '.';
     }
     ip[index - 1] = '\0';
 
@@ -151,24 +153,25 @@ int setup_addr(char *name, struct sockaddr *dst)
     printf("BROADCAST dst %s\n", name);
 #endif
 
-    if (is_ipdotformat(name)) 
-    {                 // check for dot format addr
+    if (is_ipdotformat(name))
+    {
+        // check for dot format addr
         strvec_sep(name, array, 5, ".");
-        for(d=0; d<4; d++) 
+        for(d=0; d<4; d++)
         {
             b = atoi(array[d]);
             in |= (b<<(d*8));
         }
         target.sin_addr.s_addr = in;
-    } 
-    else 
+    }
+    else
     {
         h = gethostbyname(name);                // try name lookup
-        if (h) 
+        if (h)
         {
             memcpy((caddr_t)&target.sin_addr.s_addr, h->h_addr, h->h_length);
-        } 
-        else 
+        }
+        else
         {
             fprintf(stderr, "name lookup failed for (%s)\n", name);
             exit(-1);
@@ -179,9 +182,9 @@ int setup_addr(char *name, struct sockaddr *dst)
     target.sin_port =htons( port);
     memcpy((caddr_t)dst, (caddr_t)&target, sizeof(target));
     r = setsockopt(rd, SOL_SOCKET, SO_BROADCAST, &one, sizeof(one));
-    if ( r<0 ) 
-    { 
-        perror("multicast mode socket setup 1"); 
+    if ( r<0 )
+    {
+        perror("multicast mode socket setup 1");
     }
     printf("multicast mode r %d\n", r);
     from.sin_family = AF_INET;
@@ -189,7 +192,7 @@ int setup_addr(char *name, struct sockaddr *dst)
     from.sin_addr.s_addr = htonl(INADDR_ANY);
     local.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     r = bind(sd, (struct sockaddr *)&from, sizeof(from));
-    if (r<0) 
+    if (r<0)
     {
         perror("bind call failed");
         exit(-1);
@@ -205,29 +208,29 @@ void setup_socket()
     int r;
 
     dscp = tos_be;
-    if ((sd=socket(AF_INET, stype, sproto)) < 0) 
+    if ((sd=socket(AF_INET, stype, sproto)) < 0)
     {
         perror("socket");
         exit(-1);
     }
-    if ((rd=socket(AF_INET, stype, sproto)) < 0) 
+    if ((rd=socket(AF_INET, stype, sproto)) < 0)
     {
         perror("socket");
         exit(-1);
     }
     set_dscp(dscp);
     /* Setup broadcast*/
-    if ((r=setup_addr(name, &dst))<0) 
+    if ((r=setup_addr(name, &dst))<0)
     {
         fprintf(stderr, "can't map address (%s)\n", name);
         exit(-1);
     }
 }
-int set_dscp(int new_dscp) 
+int set_dscp(int new_dscp)
 {
     int r;
 
-    if ((r=setsockopt(sd, SOL_IP, IP_TOS, &new_dscp, sizeof(dscp)))<0) 
+    if ((r=setsockopt(sd, SOL_IP, IP_TOS, &new_dscp, sizeof(dscp)))<0)
     {
         perror("can't set dscp/tos field");
         printf("can't set dscp/tos field 0x%x", new_dscp);
@@ -238,11 +241,11 @@ int set_dscp(int new_dscp)
     usleep(100000);
     return(new_dscp);
 }
-int set_dscp0(int new_dscp) 
+int set_dscp0(int new_dscp)
 {
     int r;
 
-    if ((r=setsockopt(sd, SOL_IP, IP_TOS, &new_dscp, sizeof(dscp)))<0) 
+    if ((r=setsockopt(sd, SOL_IP, IP_TOS, &new_dscp, sizeof(dscp)))<0)
     {
         perror("can't set dscp/tos field");
         printf("can't set dscp/tos field 0x%x", new_dscp);
@@ -256,18 +259,18 @@ struct apts_msg * apts_lookup(char *s)
 {
     struct apts_msg *t;
 
-    for (t=&apts_msgs[1]; s && t->cmd; t++) 
+    for (t=&apts_msgs[1]; s && t->cmd; t++)
     {
-        if (t->name && strcmp(t->name, s)==0) 
+        if (t->name && strcmp(t->name, s)==0)
         {
             return(t);
         }
     }
     fprintf(stderr, "APTS Test(%s) unknown\n", s);
     fprintf(stderr, "available tests are:\n");
-    for (t=&apts_msgs[LAST_TEST]; t->cmd; t++) 
+    for (t=&apts_msgs[LAST_TEST]; t->cmd; t++)
     {
-        if (t->name) 
+        if (t->name)
         {
             fprintf(stderr, "\t%s\n", t->name);
         }
@@ -283,12 +286,12 @@ void create_apts_msg(int msg, unsigned int txbuf[],int id)
     txbuf[ 2] = 0;
     txbuf[ 3] = 0;
     txbuf[ 4] = 0;
-    txbuf[ 5] = 0; 
-    txbuf[ 6] = t->param0; 
-    txbuf[ 7] = t->param1; 
-    txbuf[ 8] = t->param2; 
+    txbuf[ 5] = 0;
+    txbuf[ 6] = t->param0;
+    txbuf[ 7] = t->param1;
+    txbuf[ 8] = t->param2;
     txbuf[ 9] = id;
-    txbuf[ 10] = t->cmd; 
+    txbuf[ 10] = t->cmd;
     strcpy((char *)&txbuf[11], t->name);
     if (traceflag) printf("create_apts_msg (%s)\n", t->name);
 }
@@ -309,13 +312,13 @@ int expectedmsgrcd(unsigned int *rmsg,unsigned long type,int tos)
         if ( rmsg[1] ==TOS_VO7 || rmsg[1]==TOS_VO || rmsg[1]==TOS_VO6  || rmsg[1] ==TOS_VO2)
         {
             tos_ok = 1;
-        } 
+        }
         break;
     case TOS_VI:
     case TOS_VI4:
     case TOS_VI5:
         if ( rmsg[1] ==TOS_VI || rmsg[1]==TOS_VI4 || rmsg[1]==TOS_VI5)
-        { 
+        {
             tos_ok = 1;
         }
         break;
@@ -324,20 +327,21 @@ int expectedmsgrcd(unsigned int *rmsg,unsigned long type,int tos)
         if ( rmsg[1] ==TOS_BE || rmsg[1]==TOS_EE )
         {
             tos_ok = 1;
-        } 
-        break;  
+        }
+        break;
     case TOS_BK:
     case TOS_LE:
         if ( rmsg[1] ==TOS_BK || rmsg[1]==TOS_LE )
         {
             tos_ok = 1;
         }
-        break;  
+        break;
     default:
         printf("\nexpectedmsgrcd not know tos=0x%x\n", tos);
-    } 
+    }
     if ( tos_ok == 0)
-    {/* check what we got  */
+    {
+        /* check what we got  */
         switch ( rmsg[1])
         {
         case TOS_VO7:
@@ -349,27 +353,27 @@ int expectedmsgrcd(unsigned int *rmsg,unsigned long type,int tos)
         case TOS_VI:
         case TOS_VI4:
         case TOS_VI5:
-            strcat(acBuf, "VI"); 
+            strcat(acBuf, "VI");
             break;
         case TOS_BE:
         case TOS_EE:
-            strcat(acBuf, "BE");           
-            break;  
+            strcat(acBuf, "BE");
+            break;
         case TOS_BK:
         case TOS_LE:
-            strcat(acBuf, "BK"); 
-            break;  
+            strcat(acBuf, "BK");
+            break;
         default:
             printf("\nexpectedmsgrcd check unexpected TOS:not know rmsg[1]=0x%x\n", rmsg[1]);
-        } 
-    } 
+        }
+    }
     type_ok=((rmsg[10] == type)? 1:0);
 
     r = (type_ok && tos_ok);
     if(!r)
     {
         printf("\nexpectedmsgrcd no match: rmsg[10] %u expect type %lu rmsg[1] as tos 0x%x expect tos 0x%x\n",
-            rmsg[10], type,rmsg[1], tos);
+               rmsg[10], type,rmsg[1], tos);
         printf("expectedmsgrcd::rcv %s as repeate pkt for previous state\n",acBuf);
     }
 
@@ -386,8 +390,8 @@ int expectedmsgrcdl1(unsigned int *rmsg,unsigned long type,int tos)
 
     type_ok=((rmsg[10] == type)? 1:0);
 
-    if ( rmsg[1] ==TOS_VO7 || rmsg[1]==TOS_VO || rmsg[1]==TOS_VO6  || rmsg[1] ==TOS_VO2) 
-        tos_ok=1; 
+    if ( rmsg[1] ==TOS_VO7 || rmsg[1]==TOS_VO || rmsg[1]==TOS_VO6  || rmsg[1] ==TOS_VO2)
+        tos_ok=1;
     else if ( rmsg[1] ==TOS_BE || rmsg[1]==TOS_EE )
         tos_ok = 1;
 
@@ -401,9 +405,9 @@ int assign_sta_id(unsigned int addr)
 {
     printf("\nassign_sta_id for addr=0x%x\n", addr);
     int id;
-    for(id=0; id<NSTA; id++) 
+    for(id=0; id<NSTA; id++)
     {
-        if (stations[id].s_addr == 0) 
+        if (stations[id].s_addr == 0)
         {
             stations[id].s_addr = addr;
             printf("\nAssign station id=%d for addr=0x%x\n", id, addr);
@@ -426,9 +430,9 @@ int get_sta_id(unsigned int addr)
 {
     printf("\nget_sta_id for 0x%x\n", addr);
     int id;
-    for(id=0; id<NSTA; id++) 
+    for(id=0; id<NSTA; id++)
     {
-        if (stations[id].s_addr == addr) 
+        if (stations[id].s_addr == addr)
         {
             break;
         }
@@ -436,7 +440,7 @@ int get_sta_id(unsigned int addr)
     if(id == NSTA)
     {
         id = -1;
-        printf("get_sta_id: could not get sta id \n"); 
+        printf("get_sta_id: could not get sta id \n");
     }
     return(id);
 }
@@ -444,7 +448,7 @@ is_ipdotformat(char *s)
 {
     int d;
 
-    for(d=0; *s; s++) 
+    for(d=0; *s; s++)
     {
         if (*s=='.')
             d++;
@@ -452,8 +456,8 @@ is_ipdotformat(char *s)
     return(d==3);
 }
 int  strvec_sep(s, array, n, sep)
-   char *s, *array[], *sep;
-   int n;
+char *s, *array[], *sep;
+int n;
 {
     char *p;
     static char buf[2048];
@@ -463,10 +467,10 @@ int  strvec_sep(s, array, n, sep)
 
     p = strtok(buf, sep);
 
-    for (i=0; p && i<n; ) 
+    for (i=0; p && i<n; )
     {
         array[i++] = p;
-        if (i==n) 
+        if (i==n)
         {
             i--;
             break;

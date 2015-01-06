@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -65,149 +65,152 @@ void wmmps_wait_state_proc();
 void* wfa_wmmps_send_thread(void* input);
 
 /* APTS messages*/
-struct apts_msg apts_msgs[] ={
-	{0, -1},
-	{"B.D", B_D},	
-	{"B.H", B_H},
+struct apts_msg apts_msgs[] =
+{
+    {0, -1},
+    {"B.D", B_D},
+    {"B.H", B_H},
     {"B.B", B_B},
-	{"B.M", B_M},	
-	{"M.D", M_D},	
-	{"B.Z", B_Z},	
-	{"M.Y", M_Y},	
-	{"L.1", L_1},	
-	{"A.Y", A_Y},	
-	{"B.W", B_W},	
-	{"A.J", A_J},	
-	{"M.V", M_V},	
-	{"M.U", M_U},	
-    {"A.U", A_U},	
-	{"M.L", M_L},	
-	{"B.K", B_K},	
-	{"M.B", M_B},	
-	{"M.K", M_K},	
-	{"M.W", M_W},
+    {"B.M", B_M},
+    {"M.D", M_D},
+    {"B.Z", B_Z},
+    {"M.Y", M_Y},
+    {"L.1", L_1},
+    {"A.Y", A_Y},
+    {"B.W", B_W},
+    {"A.J", A_J},
+    {"M.V", M_V},
+    {"M.U", M_U},
+    {"A.U", A_U},
+    {"M.L", M_L},
+    {"B.K", B_K},
+    {"M.B", M_B},
+    {"M.K", M_K},
+    {"M.W", M_W},
 #ifdef WFA_WMM_AC
-        {"422.T02B", WMMAC_422_T02B},
-        {"422.T03A", WMMAC_422_T03A},
-        {"422.T04A", WMMAC_422_T04B},
-        {"422.T05B", WMMAC_422_T05B},
-        {"422.T06B", WMMAC_422_T06B},
-        {"422.T07B", WMMAC_422_T07B},
-        {"422.T08B", WMMAC_422_T08B},
-        {"423.T04",  WMMAC_423_T04},
-        {"424.T07",  WMMAC_424_T07t14},
-        {"425.T04",  WMMAC_425_T04t06},
-        {"521.T03", WMMAC_521_T03},
-        {"521.T05", WMMAC_521_T05},
-        {"522.T04", WMMAC_522_T04},
-        {"522.T06", WMMAC_522_T06},
-        {"522.T06o", WMMAC_522_T06o},
-        {"524.T03", WMMAC_524_T03},
-        {"524.T03i", WMMAC_524_T03i},
-        {"525.T07", WMMAC_525_T07t10},
+    {"422.T02B", WMMAC_422_T02B},
+    {"422.T03A", WMMAC_422_T03A},
+    {"422.T04A", WMMAC_422_T04B},
+    {"422.T05B", WMMAC_422_T05B},
+    {"422.T06B", WMMAC_422_T06B},
+    {"422.T07B", WMMAC_422_T07B},
+    {"422.T08B", WMMAC_422_T08B},
+    {"423.T04",  WMMAC_423_T04},
+    {"424.T07",  WMMAC_424_T07t14},
+    {"425.T04",  WMMAC_425_T04t06},
+    {"521.T03", WMMAC_521_T03},
+    {"521.T05", WMMAC_521_T05},
+    {"522.T04", WMMAC_522_T04},
+    {"522.T06", WMMAC_522_T06},
+    {"522.T06o", WMMAC_522_T06o},
+    {"524.T03", WMMAC_524_T03},
+    {"524.T03i", WMMAC_524_T03i},
+    {"525.T07", WMMAC_525_T07t10},
 #endif
-	{"APTS TX         ", APTS_DEFAULT },
-	{"APTS Hello      ", APTS_HELLO },
-	{"APTS Broadcast  ", APTS_BCST },
-	{"APTS Confirm    ", APTS_CONFIRM},
-	{"APTS STOP       ", APTS_STOP},
-	{"APTS CK BE      ", APTS_CK_BE },
-	{"APTS CK BK      ", APTS_CK_BK },
-	{"APTS CK VI      ", APTS_CK_VI },
-	{"APTS CK VO      ", APTS_CK_VO },
-	{"APTS RESET      ", APTS_RESET },
-	{"APTS RESET RESP ", APTS_RESET_RESP },
-	{"APTS RESET STOP ", APTS_RESET_STOP },
-	{0, 0 }		// APTS_LAST
+    {"APTS TX         ", APTS_DEFAULT },
+    {"APTS Hello      ", APTS_HELLO },
+    {"APTS Broadcast  ", APTS_BCST },
+    {"APTS Confirm    ", APTS_CONFIRM},
+    {"APTS STOP       ", APTS_STOP},
+    {"APTS CK BE      ", APTS_CK_BE },
+    {"APTS CK BK      ", APTS_CK_BK },
+    {"APTS CK VI      ", APTS_CK_VI },
+    {"APTS CK VO      ", APTS_CK_VO },
+    {"APTS RESET      ", APTS_RESET },
+    {"APTS RESET RESP ", APTS_RESET_RESP },
+    {"APTS RESET STOP ", APTS_RESET_STOP },
+    {0, 0 }		// APTS_LAST
 };
 
 #if 0 /* Since Passing criteria is handled by Sniffer check, checking order of receiving packets not important */
 /* The DUT recv table for each of the test cases*/
-StationRecvProcStatetbl_t stationRecvProcStatetbl[LAST_TEST+10][6] = {
-         {{WfaRcvStop},{0},{0},{0},{0},{0}},
- /*B.D*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvStop},{0},{0},{0}},
- /*B.H*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVO},{WfaRcvStop},{0},{0}},
- /*B.B*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
- /*B.M*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
- /*M.D*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvBK},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
- /*B.Z*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvStop},{0},{0}},
- /*M.Y*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvBE},{WfaRcvStop},{0}},
- /*L.1*/ {{WfaRcvProc},{WfaRcvVOCyclic},{0},{0},{0},{0}},
- /*A.Y*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvBE},{WfaRcvStop},{0}},
- /*B.W*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop}},
- /*A.J*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvBE},{WfaRcvBK},{WfaRcvStop}},
- /*M.V*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop},{0},{0}},
- /*M.U*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvVO},{WfaRcvVO},{WfaRcvStop}},
- /*A.U*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvVO},{WfaRcvStop},{0}},
- /*M.L*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvStop},{0},{0},{0}},
- /*B.K*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvStop},{0},{0}},
- /*M.B*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
- /*M.K*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop},{0},{0}},
- /*M.W*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvBE},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop}}
+StationRecvProcStatetbl_t stationRecvProcStatetbl[LAST_TEST+10][6] =
+{
+    {{WfaRcvStop},{0},{0},{0},{0},{0}},
+    /*B.D*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvStop},{0},{0},{0}},
+    /*B.H*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVO},{WfaRcvStop},{0},{0}},
+    /*B.B*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
+    /*B.M*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
+    /*M.D*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvBK},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
+    /*B.Z*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvStop},{0},{0}},
+    /*M.Y*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvBE},{WfaRcvStop},{0}},
+    /*L.1*/ {{WfaRcvProc},{WfaRcvVOCyclic},{0},{0},{0},{0}},
+    /*A.Y*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvBE},{WfaRcvStop},{0}},
+    /*B.W*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop}},
+    /*A.J*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvBE},{WfaRcvBK},{WfaRcvStop}},
+    /*M.V*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop},{0},{0}},
+    /*M.U*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvVO},{WfaRcvVO},{WfaRcvStop}},
+    /*A.U*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvVO},{WfaRcvStop},{0}},
+    /*M.L*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvStop},{0},{0},{0}},
+    /*B.K*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvStop},{0},{0}},
+    /*M.B*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
+    /*M.K*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop},{0},{0}},
+    /*M.W*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvBE},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop}}
 #ifdef WFA_WMM_AC
- /*422_T02B*/ ,{{WfaRcvProc},{WfaRcvVI},{WfaRcvVO},{WfaRcvVO},{WfaRcvBE},{WfaRcvStop}},
- /*422_T03B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvVI},{WfaRcvStop}},
- /*422_T04B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvBE},{WfaRcvBK},{WfaRcvStop}},
- /*422_T05B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvVI},{WfaRcvStop}},
- /*422_T06B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvBE},{WfaRcvBK},{WfaRcvStop}},
- /*422_T07B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvBE},{WfaRcvBK},{WfaRcvStop}},
- /*422_T08B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVO},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
- /*423_T04*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvStop}},
- /*424_T07t14*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
- /*425_T04t06*/{{WfaRcvProc},{WfaRcvStop}},
- /*521_T03*/{{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvStop}},
- /*521_T05*/{{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop}},
- /*522_T04*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop},{0},{0}},
- /*522_T06*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvBK},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
- /*522_T06o*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvBK},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
- /*524_T03*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVO},{WfaRcvStop}},
- /*524_T03i*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvVI},{WfaRcvStop},{0},{0}},
- /*525_T07t10*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvStop}},
+    /*422_T02B*/ ,{{WfaRcvProc},{WfaRcvVI},{WfaRcvVO},{WfaRcvVO},{WfaRcvBE},{WfaRcvStop}},
+    /*422_T03B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvVI},{WfaRcvStop}},
+    /*422_T04B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvBE},{WfaRcvBK},{WfaRcvStop}},
+    /*422_T05B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvVI},{WfaRcvStop}},
+    /*422_T06B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvBE},{WfaRcvBK},{WfaRcvStop}},
+    /*422_T07B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVI},{WfaRcvBE},{WfaRcvBK},{WfaRcvStop}},
+    /*422_T08B*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVO},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
+    /*423_T04*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvStop}},
+    /*424_T07t14*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
+    /*425_T04t06*/{{WfaRcvProc},{WfaRcvStop}},
+    /*521_T03*/{{WfaRcvProc},{WfaRcvVI},{WfaRcvBE},{WfaRcvStop}},
+    /*521_T05*/{{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop}},
+    /*522_T04*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvVI},{WfaRcvStop},{0},{0}},
+    /*522_T06*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvBK},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
+    /*522_T06o*/ {{WfaRcvProc},{WfaRcvBE},{WfaRcvBK},{WfaRcvVI},{WfaRcvVO},{WfaRcvStop}},
+    /*524_T03*/ {{WfaRcvProc},{WfaRcvVO},{WfaRcvVO},{WfaRcvStop}},
+    /*524_T03i*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvVI},{WfaRcvStop},{0},{0}},
+    /*525_T07t10*/ {{WfaRcvProc},{WfaRcvVI},{WfaRcvStop}},
 #endif
 };
 
 #endif
 
-StationRecvProcStatetbl_t stationRecvProcStatetbl[LAST_TEST+10][6] = {
-         {{WfaRcvStop},{0},{0},{0},{0},{0}},
- /*B.D*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvStop},{0},{0},{0}},
- /*B.H*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
- /*B.B*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
- /*B.M*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
- /*M.D*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*B.Z*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
- /*M.Y*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0}},
- /*L.1*/ {{WfaRcvProc},{WfaRcvVOCyclic},{0},{0},{0},{0}},
- /*A.Y*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0}},
- /*B.W*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*A.J*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*M.V*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
- /*M.U*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*A.U*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0}},
- /*M.L*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvStop},{0},{0},{0}},
- /*B.K*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
- /*M.B*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
- /*M.K*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
- /*M.W*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}}
+StationRecvProcStatetbl_t stationRecvProcStatetbl[LAST_TEST+10][6] =
+{
+    {{WfaRcvStop},{0},{0},{0},{0},{0}},
+    /*B.D*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvStop},{0},{0},{0}},
+    /*B.H*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
+    /*B.B*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
+    /*B.M*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
+    /*M.D*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*B.Z*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
+    /*M.Y*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0}},
+    /*L.1*/ {{WfaRcvProc},{WfaRcvVOCyclic},{0},{0},{0},{0}},
+    /*A.Y*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0}},
+    /*B.W*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*A.J*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*M.V*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
+    /*M.U*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*A.U*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0}},
+    /*M.L*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvStop},{0},{0},{0}},
+    /*B.K*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
+    /*M.B*/ {{WfaRcvProc},{WfaRcvStop},{0},{0},{0},{0}},
+    /*M.K*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
+    /*M.W*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}}
 #ifdef WFA_WMM_AC
- /*422_T02B*/ ,{{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*422_T03B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*422_T04B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*422_T05B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*422_T06B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*422_T07B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*422_T08B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*423_T04*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvStop}},
- /*424_T07t14*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*425_T04t06*/{{WfaRcvProc},{WfaRcvStop}},
- /*521_T03*/{{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*521_T05*/{{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*522_T04*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
- /*522_T06*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*522_T06o*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*524_T03*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
- /*524_T03i*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
- /*525_T07t10*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvStop}},
+    /*422_T02B*/ ,{{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*422_T03B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*422_T04B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*422_T05B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*422_T06B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*422_T07B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*422_T08B*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*423_T04*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvStop}},
+    /*424_T07t14*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*425_T04t06*/{{WfaRcvProc},{WfaRcvStop}},
+    /*521_T03*/{{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*521_T05*/{{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*522_T04*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
+    /*522_T06*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*522_T06o*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*524_T03*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop}},
+    /*524_T03i*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvNotCare},{WfaRcvStop},{0},{0}},
+    /*525_T07t10*/ {{WfaRcvProc},{WfaRcvNotCare},{WfaRcvStop}},
 #endif
 };
 
@@ -215,223 +218,246 @@ StationRecvProcStatetbl_t stationRecvProcStatetbl[LAST_TEST+10][6] = {
 
 
 /* The DUT send table for each of the test cases*/
-StationProcStatetbl_t stationProcStatetbl[LAST_TEST+1][11] = {
-/* Dummy*/{{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0}},
-/* B.D*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-  {WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}        ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+StationProcStatetbl_t stationProcStatetbl[LAST_TEST+1][11] =
+{
+    /* Dummy*/{{0},{0},{0},{0},{0},{0},{0},{0},{0},{0},{0}},
+    /* B.D*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}        ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* B.H*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}        ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* B.H*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}        ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* B.B*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVI,P_ON,LII / 2}        ,{WfaStaSndBE,P_ON,LII / 2}     ,{WfaStaSndBK,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0}},
+    /* B.B*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVI,P_ON,LII / 2}        ,{WfaStaSndBE,P_ON,LII / 2}     ,{WfaStaSndBK,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* B.M*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVI,P_ON,30000000},{WfaStaWaitStop,P_ON,LII / 2}     ,{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},	
+    /* B.M*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,30000000},{WfaStaWaitStop,P_ON,LII / 2}     ,{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* M.D*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndVI,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}     ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0}},
+    /* M.D*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndVI,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}     ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* B.Z*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-  {WfaStaSndVO,P_ON,LII / 2 }  ,{WfaStaWaitStop,P_ON,LII / 2}     ,{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* B.Z*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVO,P_ON,LII / 2 }  ,{WfaStaWaitStop,P_ON,LII / 2}     ,{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* M.Y*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-  {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}        ,{WfaStaSndBE,P_ON,LII / 2}     ,{WfaStaSndBE,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0}},
+    /* M.Y*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}        ,{WfaStaSndBE,P_ON,LII / 2}     ,{WfaStaSndBE,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* L.1*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-  {WfaStaSndVOCyclic,P_ON,20000},{WfaStaWaitStop,P_ON,LII / 2 }},
+    /* L.1*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVOCyclic,P_ON,20000},{WfaStaWaitStop,P_ON,LII / 2 }
+    },
 
-/* A.Y*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-  {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}        ,{WfaStaSndBE,P_ON,LII / 2}     ,{WfaStaSndBE,P_OFF,LII / 2}    ,{WfaStaSndBE,P_ON,LII / 2}   ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0}}, 
+    /* A.Y*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}        ,{WfaStaSndBE,P_ON,LII / 2}     ,{WfaStaSndBE,P_OFF,LII / 2}    ,{WfaStaSndBE,P_ON,LII / 2}   ,{WfaStaWaitStop,P_ON,LII / 2},{0,0,0},{0,0,0}
+    },
 
-/* B.W*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndVI,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* B.W*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndVI,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* A.J*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVO,P_OFF,LII / 2},{WfaStaWaitStop	,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* A.J*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVO,P_OFF,LII / 2},{WfaStaWaitStop	,P_ON,LII / 2},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* M.V*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop	,P_ON,LII / 2} ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* M.V*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop	,P_ON,LII / 2} ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* M.U*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-  {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSnd2VO,P_ON,LII / 2}   ,{WfaStaWaitStop	,P_ON,LII / 2} ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* M.U*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSnd2VO,P_ON,LII / 2}   ,{WfaStaWaitStop	,P_ON,LII / 2} ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* A.U*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVI,P_ON,LII / 2}  ,{WfaStaSndBE,P_OFF,LII / 2}      ,{WfaStaSndBE,P_ON,LII / 2}    ,{WfaStaSndBE,P_OFF,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVO,P_OFF,LII / 2} ,{WfaStaWaitStop ,P_ON,LII / 2},{0,0,0}},
+    /* A.U*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}  ,{WfaStaSndBE,P_OFF,LII / 2}      ,{WfaStaSndBE,P_ON,LII / 2}    ,{WfaStaSndBE,P_OFF,LII / 2}   ,{WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVO,P_OFF,LII / 2} ,{WfaStaWaitStop ,P_ON,LII / 2},{0,0,0}
+    },
 
-/* M.L*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndBE,P_ON,LII / 2}   ,{WfaStaWaitStop,P_ON,LII / 2}     ,{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* M.L*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndBE,P_ON,LII / 2}   ,{WfaStaWaitStop,P_ON,LII / 2}     ,{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* B.K*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* B.K*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* M.B*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVI,P_ON,LII / 2}        ,{WfaStaSndBE,P_ON,LII / 2}     ,{WfaStaSndBK,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2} ,{0,0,0},{0,0,0},{0,0,0}},
+    /* M.B*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVO,P_ON,LII / 2}   ,{WfaStaSndVI,P_ON,LII / 2}        ,{WfaStaSndBE,P_ON,LII / 2}     ,{WfaStaSndBK,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2} ,{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* M.K*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* M.K*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* M.W*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
-{WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}}
+    /* M.W*/  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2},
+        {WfaStaSndVI,P_ON,LII / 2}   ,{WfaStaSndBE,P_ON,LII / 2}        ,{WfaStaSndVI,P_ON,LII / 2}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    }
 #ifdef WFA_WMM_AC
-/* WMMAC_422_T02B */  ,{{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,1000000}, {WfaStaSndVO,P_ON,1000000}, {WfaStaSndVO,P_ON,1000000}, {WfaStaWaitStop,P_ON,LII / 2}, {0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* WMMAC_422_T02B */  ,{{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,1000000}, {WfaStaSndVO,P_ON,1000000}, {WfaStaSndVO,P_ON,1000000}, {WfaStaWaitStop,P_ON,LII / 2}, {0,0,0},{0,0,0},{0,0,0},{0,0,0}},
 
-/* WMMAC_422_T03B */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
+    /* WMMAC_422_T03B */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
 
-/* 422_T04B/ATC7 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
+    /* 422_T04B/ATC7 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
 
-/* 422_T05B/ATC8 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVO,P_ON,lis_int}   ,{WfaStaSndVI,P_ON,lis_int+2*becon_int} ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 422_T05B/ATC8 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVO,P_ON,lis_int}   ,{WfaStaSndVI,P_ON,lis_int+2*becon_int} ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
 
-/* 422_T06B/ATC9 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndBE,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndBE,P_ON,becon_int}  ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
+    /* 422_T06B/ATC9 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndBE,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndBE,P_ON,becon_int}  ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
 
-/* 422_T07B/ATC10 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndBE,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaSndBK,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
+    /* 422_T07B/ATC10 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndBE,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaSndBK,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
 
-/* 422_T08B/ATC11 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndBE,P_ON,becon_int}   ,{WfaStaSndVI,P_ON,lis_int}        ,{WfaStaSndBE,P_ON,becon_int}  ,{WfaStaSndVO,P_ON,lis_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
+    /* 422_T08B/ATC11 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndBE,P_ON,becon_int}   ,{WfaStaSndVI,P_ON,lis_int}        ,{WfaStaSndBE,P_ON,becon_int}  ,{WfaStaSndVO,P_ON,lis_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
 
-/* 423_T04 */  {{WfaStaSndHello,P_OFF, 1000000}, {WfaStaSndConfirm,P_ON, 1}
- ,{WfaStaSndVO,P_ON,1000000}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0}, {0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 423_T04 */  {{WfaStaSndHello,P_OFF, 1000000}, {WfaStaSndConfirm,P_ON, 1}
+        ,{WfaStaSndVO,P_ON,1000000}    ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0}, {0,0,0},{0,0,0},{0,0,0},{0,0,0}
+    },
 
-/* 424_T07t14 */ {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 424_T07t14 */ {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
 
-/* 425_T04t06 */ {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndBE,P_ON,becon_int}   ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0}, {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 425_T04t06 */ {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndBE,P_ON,becon_int}   ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0}, {0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
 
-/* 521_T03 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndBE,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 521_T03 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndBE,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
 
-/* 521_T05 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndBE,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 521_T05 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndBE,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
 
-/* 522_T04 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndBE,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 522_T04 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndBE,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
 
-/* 522_T06 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVI,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaSndVI,P_ON,lis_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
-/* 522_T06o */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVO,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaSndVO,P_ON,lis_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
+    /* 522_T06 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVI,P_ON,lis_int}        ,{WfaStaSndVI,P_ON,becon_int}  ,{WfaStaSndVI,P_ON,lis_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
+    /* 522_T06o */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVO,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,becon_int}  ,{WfaStaSndVO,P_ON,lis_int}  ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0}},
 
-/* 524_T03 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVO,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,lis_int} ,{WfaStaWaitStop,P_ON,LII / 2},  {0,0,0},{0,0,0},{0,0,0},{0,0,0}},
-/* 524_T03i */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVI,P_ON,lis_int}  ,{WfaStaSndVI,P_ON,lis_int}       ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 524_T03 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVO,P_ON,becon_int}   ,{WfaStaSndVO,P_ON,lis_int}        ,{WfaStaSndVO,P_ON,lis_int} ,{WfaStaWaitStop,P_ON,LII / 2},  {0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 524_T03i */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaSndVI,P_ON,lis_int}  ,{WfaStaSndVI,P_ON,lis_int}       ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
 
-/* 525_T07t10 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
+    /* 525_T07t10 */  {{WfaStaSndHello,P_OFF, 1000000},{WfaStaSndConfirm,P_ON, LII / 2}, {WfaStaSndVI,P_ON,becon_int}   ,{WfaStaWaitStop,P_ON,LII / 2}  ,{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0},{0,0,0}},
 
 #endif
 
 };
 
-int ac_seq[APTS_LAST][6] ={
-   {0,      0,      0,      0,      0},
-   {0},
-   {0},
-   {0},
-   {0},
-   {0},
-   {0},
-   {0},
-   {0},
-   {0},
-   {0}, // APTS_TESTS
-   {0}, // B.D
-   {0}, // B.2
-   {0}, // B.H
-   {0}, // B.4
-   {0}, // B_5
-   {0, 0, 0, 0, 0}, // B_6
-   {TG_WMM_AC_VO, TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_BK, 0}, // B.B B_B - 4 exchanges: 1 uplink, 0 downlink
-   {0}, // B.E
-   {0}, // B.G
-   {0}, // B.I
-   {0}, // M.D
-   {0}, // M.G
-   {0}, // M.I
-   {0}, // B.Z  1, 1, 1, 0},	// 1 special exchange for Broadcast testing
-   {TG_WMM_AC_VI, TG_WMM_AC_VO, TG_WMM_AC_BE, TG_WMM_AC_BE, 0}, //  M.Y  M_Y 2 special exchange for Broadcast testing
-   {0}, // L.1
-   {0}, // DLOAD
-   {0}, // ULOAD
-   {0}, // "APTS PASS"
-   {0}, // "APTS FAIL"
-   //{TOS_VI, TOS_VO, TOS_BE, TOS_BE, 0}, //  A.Y A_Y special exchange for Broadcast testing
-   {TG_WMM_AC_VI, TG_WMM_AC_VO, TG_WMM_AC_BE, TG_WMM_AC_BE, TG_WMM_AC_BE}, //  A.Y A_Y special exchange for Broadcast testing
-   {0}, //  B.W  2 special exchange for Broadcast testing
-   {0}, //  A.J
-   {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VI, TG_WMM_AC_VI, TG_WMM_AC_VI}, //  M.V M_V
-   {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VO, TG_WMM_AC_VO, TG_WMM_AC_VO}, //  M.U M_U
-   {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_BE, TG_WMM_AC_BE, TG_WMM_AC_VO, TG_WMM_AC_VO},  //  A.U A_U
-   {0}, //  M.L M_L
-   {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VI, TG_WMM_AC_VI, 0}, // B.K B_K
-   {TG_WMM_AC_VO, TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_BK, 0}, // M.B M_B - 4 exchanges: 1 uplink, 0 downlink
-   {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VI, TG_WMM_AC_VI, 0}, // M.K M_K
-   {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VI, TG_WMM_AC_VI, 0} //  M.W M_W   special exchange for Broadcast testing
+int ac_seq[APTS_LAST][6] =
+{
+    {0,      0,      0,      0,      0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0},
+    {0}, // APTS_TESTS
+    {0}, // B.D
+    {0}, // B.2
+    {0}, // B.H
+    {0}, // B.4
+    {0}, // B_5
+    {0, 0, 0, 0, 0}, // B_6
+    {TG_WMM_AC_VO, TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_BK, 0}, // B.B B_B - 4 exchanges: 1 uplink, 0 downlink
+    {0}, // B.E
+    {0}, // B.G
+    {0}, // B.I
+    {0}, // M.D
+    {0}, // M.G
+    {0}, // M.I
+    {0}, // B.Z  1, 1, 1, 0},	// 1 special exchange for Broadcast testing
+    {TG_WMM_AC_VI, TG_WMM_AC_VO, TG_WMM_AC_BE, TG_WMM_AC_BE, 0}, //  M.Y  M_Y 2 special exchange for Broadcast testing
+    {0}, // L.1
+    {0}, // DLOAD
+    {0}, // ULOAD
+    {0}, // "APTS PASS"
+    {0}, // "APTS FAIL"
+    //{TOS_VI, TOS_VO, TOS_BE, TOS_BE, 0}, //  A.Y A_Y special exchange for Broadcast testing
+    {TG_WMM_AC_VI, TG_WMM_AC_VO, TG_WMM_AC_BE, TG_WMM_AC_BE, TG_WMM_AC_BE}, //  A.Y A_Y special exchange for Broadcast testing
+    {0}, //  B.W  2 special exchange for Broadcast testing
+    {0}, //  A.J
+    {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VI, TG_WMM_AC_VI, TG_WMM_AC_VI}, //  M.V M_V
+    {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VO, TG_WMM_AC_VO, TG_WMM_AC_VO}, //  M.U M_U
+    {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_BE, TG_WMM_AC_BE, TG_WMM_AC_VO, TG_WMM_AC_VO},  //  A.U A_U
+    {0}, //  M.L M_L
+    {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VI, TG_WMM_AC_VI, 0}, // B.K B_K
+    {TG_WMM_AC_VO, TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_BK, 0}, // M.B M_B - 4 exchanges: 1 uplink, 0 downlink
+    {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VI, TG_WMM_AC_VI, 0}, // M.K M_K
+    {TG_WMM_AC_VI, TG_WMM_AC_BE, TG_WMM_AC_VI, TG_WMM_AC_VI, 0} //  M.W M_W   special exchange for Broadcast testing
 };
 /* Generic function to create a meassage, it also fills in the AC as part of
 ** the payload
 ** */
 void create_apts_msg(int msg, unsigned int txbuf[],int id)
 {
-   struct apts_msg *t;
+    struct apts_msg *t;
 
-   t = &apts_msgs[msg];
-   txbuf[ 0] = wmmps_info.my_cookie;
-   txbuf[ 1] = wmmps_info.dscp;
-   txbuf[ 2] = 0;
-   txbuf[ 3] = 0;
-   txbuf[ 4] = 0;
-   txbuf[ 5] = 0; 
-   //txbuf[ 6] = t->param0; 
-   //txbuf[ 7] = t->param1; 
-   //txbuf[ 8] = t->param2; 
-   txbuf[ 9] = id;
-   txbuf[ 10] = t->cmd; 
-   wSTRCPY((char *)&txbuf[11], t->name);
-   PRINTF("create_apts_msg (%s) %d\n", t->name,t->cmd);
+    t = &apts_msgs[msg];
+    txbuf[ 0] = wmmps_info.my_cookie;
+    txbuf[ 1] = wmmps_info.dscp;
+    txbuf[ 2] = 0;
+    txbuf[ 3] = 0;
+    txbuf[ 4] = 0;
+    txbuf[ 5] = 0;
+    //txbuf[ 6] = t->param0;
+    //txbuf[ 7] = t->param1;
+    //txbuf[ 8] = t->param2;
+    txbuf[ 9] = id;
+    txbuf[ 10] = t->cmd;
+    wSTRCPY((char *)&txbuf[11], t->name);
+    PRINTF("create_apts_msg (%s) %d\n", t->name,t->cmd);
 }
 
 void print_hex_string(char* buf, int len)
 {
-   int i;
+    int i;
 
-   if (len==0) 
-   { 
-      printf("<empty string>"); return; 
-   }
+    if (len==0)
+    {
+        printf("<empty string>");
+        return;
+    }
 
-   for (i = 0; i < len; i++) 
-   {
-      printf("%02x ", *((unsigned char *)buf + i));
-      if ((i&0xf)==15) 
-         printf("\n   ");
-   }
+    for (i = 0; i < len; i++)
+    {
+        printf("%02x ", *((unsigned char *)buf + i));
+        if ((i&0xf)==15)
+            printf("\n   ");
+    }
 
-   if ((i&0xf))
-      printf("\n");
+    if ((i&0xf))
+        printf("\n");
 }
 
 /* trace print*/
 void mpx(char *m, void *buf_v, int len)
 {
-   char *buf = buf_v;
+    char *buf = buf_v;
 
-   printf("%s   MSG: %s\n   ", m, &buf[44] );
-   print_hex_string(buf, len);
+    printf("%s   MSG: %s\n   ", m, &buf[44] );
+    print_hex_string(buf, len);
 }
 
 /* function to validate the AC of the payload recd to ensure the correct
 ** message sequence*/
 int receiver(unsigned int *rmsg,int length,int tos,unsigned int type)
 {
-   int r=1;
+    int r=1;
 #ifndef WFA_WMM_AC
-   int new_dscp=rmsg[1];
+    int new_dscp=rmsg[1];
 
-   if((new_dscp != tos)||(rmsg[10] != type))
-   {
-      PRINTF("\r\n dscp rcv is miss match:rcv new_dscp=0x%x expect tos=0x%x msg type=%d\n",new_dscp,tos, rmsg[10]);
-      r=-6;
-   }
+    if((new_dscp != tos)||(rmsg[10] != type))
+    {
+        PRINTF("\r\n dscp rcv is miss match:rcv new_dscp=0x%x expect tos=0x%x msg type=%d\n",new_dscp,tos, rmsg[10]);
+        r=-6;
+    }
 #else
-   if(rmsg[10] != type)
-   {
-      PRINTF("\r\n dscp recd is %d msg type is %d\n",new_dscp,rmsg[10]);
-      r=-6;
-   }
+    if(rmsg[10] != type)
+    {
+        PRINTF("\r\n dscp recd is %d msg type is %d\n",new_dscp,rmsg[10]);
+        r=-6;
+    }
 #endif
 
-   return r;
+    return r;
 }
 /* WfaRcvProc: This function receives the test case name
 ** after sending the initial hello packet, on receiving a
@@ -449,47 +475,47 @@ int WfaRcvProc(unsigned int *rmsg,int length,int *state)
 #if 0
     switch(rmsg[10])
     {
-       case APTS_DEFAULT:
-          printf("Recvd: APTS_DEFAULT\n");
-       break;
-       case APTS_HELLO:
-          printf("Recvd: APTS_HELLO\n");
-       break;
-       case APTS_BCST:
-          printf("Recvd: APTS_BCST\n");
-       break;
-       case APTS_CONFIRM:
-          printf("Recvd: APTS_CONFIRM\n");
-       break;
-       case APTS_STOP:
-          printf("Recvd: APTS_STOP\n");
-       break;
-       case APTS_CK_BE:
-          printf("Recvd: APTS_CK_BE\n");
-       break;
-       case APTS_CK_BK:
-          printf("Recvd: APTS_CK_BK\n");
-       break;
-       case APTS_CK_VI:
-          printf("Recvd: APTS_CK_VI\n");
-       break;
-       case APTS_CK_VO:
-          printf("Recvd: APTS_CK_VO\n");
-       break;
-       case APTS_RESET:
-          printf("Recvd: APTS_RESET\n");
-       break;
-       case APTS_RESET_RESP:
-          printf("Recvd: APTS_RESET_RESP\n");
-       break;
-       case APTS_RESET_STOP:
-          printf("Recvd: APTS_RESET_STOP\n");
-       break;
-     }
+    case APTS_DEFAULT:
+        printf("Recvd: APTS_DEFAULT\n");
+        break;
+    case APTS_HELLO:
+        printf("Recvd: APTS_HELLO\n");
+        break;
+    case APTS_BCST:
+        printf("Recvd: APTS_BCST\n");
+        break;
+    case APTS_CONFIRM:
+        printf("Recvd: APTS_CONFIRM\n");
+        break;
+    case APTS_STOP:
+        printf("Recvd: APTS_STOP\n");
+        break;
+    case APTS_CK_BE:
+        printf("Recvd: APTS_CK_BE\n");
+        break;
+    case APTS_CK_BK:
+        printf("Recvd: APTS_CK_BK\n");
+        break;
+    case APTS_CK_VI:
+        printf("Recvd: APTS_CK_VI\n");
+        break;
+    case APTS_CK_VO:
+        printf("Recvd: APTS_CK_VO\n");
+        break;
+    case APTS_RESET:
+        printf("Recvd: APTS_RESET\n");
+        break;
+    case APTS_RESET_RESP:
+        printf("Recvd: APTS_RESET_RESP\n");
+        break;
+    case APTS_RESET_STOP:
+        printf("Recvd: APTS_RESET_STOP\n");
+        break;
+    }
 #endif
     if(!((sta_test >=B_D)&&(sta_test <= LAST_TEST)))
     {
-	  return -1;
+        return -1;
     }
 
     wmmps_info.sta_test = rmsg[10];
@@ -516,7 +542,7 @@ void WfaStaResetAll()
         wSENDTO(psSockfd, psTxMsg, msgsize, 0, (struct sockaddr *)&wmmps_info.psToAddr, sizeof(struct sockaddr));
         mpx("STA msg",psTxMsg,64);
         printf("Too many retries\n");
-	//exit(-8);
+        //exit(-8);
     }
     if(!reset_recd)
     {
@@ -647,44 +673,44 @@ int WfaRcvVOCyclic(unsigned int *rmsg,int length,int *state)
 int WfaRcvStop(unsigned int *rmsg,int length,int *state)
 {
 
-   tgWMM_t *my_wmm = &wmm_thr[wmmps_info.ps_thread];
+    tgWMM_t *my_wmm = &wmm_thr[wmmps_info.ps_thread];
 
-   my_wmm->stop_flag = 0;
-   PRINTF("\r\nEnterring WfaRcvStop\n");
+    my_wmm->stop_flag = 0;
+    PRINTF("\r\nEnterring WfaRcvStop\n");
 
-   if(rmsg[10] != APTS_STOP)
-   {
-      PRINTF("\nBAD REC in rcvstop%d\n",r);
-      //WfaStaResetAll();
-   }
-   else
-   {
-      pthread_mutex_lock(&my_wmm->thr_stop_mutex);
-      while(!my_wmm->stop_flag)
-      {
-         pthread_cond_wait(&my_wmm->thr_stop_cond, &my_wmm->thr_stop_mutex);
-      }
-      num_stops=0;
-      pthread_mutex_unlock(&my_wmm->thr_stop_mutex);
-      my_wmm->stop_flag = 0;
-      gtgWmmPS = 0;
-      wCLOSE(psSockfd);
-      psSockfd = -1;
-      signal(SIGALRM, SIG_IGN);
-      //wfaSetDUTPwrMgmt(PS_OFF);
-      wSLEEP(1);
-   }
-   return 0;
+    if(rmsg[10] != APTS_STOP)
+    {
+        PRINTF("\nBAD REC in rcvstop%d\n",r);
+        //WfaStaResetAll();
+    }
+    else
+    {
+        pthread_mutex_lock(&my_wmm->thr_stop_mutex);
+        while(!my_wmm->stop_flag)
+        {
+            pthread_cond_wait(&my_wmm->thr_stop_cond, &my_wmm->thr_stop_mutex);
+        }
+        num_stops=0;
+        pthread_mutex_unlock(&my_wmm->thr_stop_mutex);
+        my_wmm->stop_flag = 0;
+        gtgWmmPS = 0;
+        wCLOSE(psSockfd);
+        psSockfd = -1;
+        signal(SIGALRM, SIG_IGN);
+        //wfaSetDUTPwrMgmt(PS_OFF);
+        wSLEEP(1);
+    }
+    return 0;
 }
 
 int WfaRcvNotCare(unsigned int *rmsg,int length,int *state)
 {
     int r;
 
-    if ((r=receiver(rmsg,length,TOS_VO,APTS_DEFAULT))>=0 || 
-          (r=receiver(rmsg,length,TOS_VI,APTS_DEFAULT))>=0 ||
-	  (r=receiver(rmsg,length,TOS_BE,APTS_DEFAULT))>=0 ||
-	  (r=receiver(rmsg,length,TOS_BK,APTS_DEFAULT))>=0 )
+    if ((r=receiver(rmsg,length,TOS_VO,APTS_DEFAULT))>=0 ||
+            (r=receiver(rmsg,length,TOS_VI,APTS_DEFAULT))>=0 ||
+            (r=receiver(rmsg,length,TOS_BE,APTS_DEFAULT))>=0 ||
+            (r=receiver(rmsg,length,TOS_BK,APTS_DEFAULT))>=0 )
     {
         (*state)++;
     }
@@ -700,45 +726,45 @@ int WfaRcvNotCare(unsigned int *rmsg,int length,int *state)
 
 
 void BUILD_APTS_MSG(int msg, unsigned long *txbuf)
-{   
-   struct apts_msg *t;
+{
+    struct apts_msg *t;
 
-   t = &apts_msgs[msg];
-   txbuf[0] = wmmps_info.msgno++;
-   txbuf[1] = 0;
-   txbuf[2] = 0;
-   txbuf[3] = 0;
-   txbuf[4] = 0;
-   txbuf[5] = 0;
-   txbuf[6] = t->param0;
-   txbuf[7] = t->param1;
-   txbuf[8] = t->param2;
-   txbuf[9] = t->param3;
-   txbuf[10] = t->cmd;
-   wSTRCPY((char *)&txbuf[11], t->name); 
+    t = &apts_msgs[msg];
+    txbuf[0] = wmmps_info.msgno++;
+    txbuf[1] = 0;
+    txbuf[2] = 0;
+    txbuf[3] = 0;
+    txbuf[4] = 0;
+    txbuf[5] = 0;
+    txbuf[6] = t->param0;
+    txbuf[7] = t->param1;
+    txbuf[8] = t->param2;
+    txbuf[9] = t->param3;
+    txbuf[10] = t->cmd;
+    wSTRCPY((char *)&txbuf[11], t->name);
 }
 
 void send_txmsg(int new_prio_class)
 {
-   int new_dscp = 0;
+    int new_dscp = 0;
 
-   if(new_prio_class > -1)
-      new_dscp = wfaTGSetPrio(psSockfd, new_prio_class);
+    if(new_prio_class > -1)
+        new_dscp = wfaTGSetPrio(psSockfd, new_prio_class);
 
-   psTxMsg[0] = wmmps_info.msgno++;
-   psTxMsg[1] = new_dscp;
-   psTxMsg[2] = wmmps_info.my_group_cookie;
-   psTxMsg[3] = wmmps_info.my_cookie;
-   psTxMsg[4] = wmmps_info.my_sta_id;
+    psTxMsg[0] = wmmps_info.msgno++;
+    psTxMsg[1] = new_dscp;
+    psTxMsg[2] = wmmps_info.my_group_cookie;
+    psTxMsg[3] = wmmps_info.my_cookie;
+    psTxMsg[4] = wmmps_info.my_sta_id;
 
-   if(psTxMsg[10] == APTS_DEFAULT)
-   {
-      psTxMsg[13] = (wmmps_info.msgno%10) + 0x20202030; 
-   }
+    if(psTxMsg[10] == APTS_DEFAULT)
+    {
+        psTxMsg[13] = (wmmps_info.msgno%10) + 0x20202030;
+    }
 
-   wfaTrafficSendTo(psSockfd, (char *)psTxMsg, 200+(wmmps_info.msgno%200), (struct sockaddr *) &wmmps_info.psToAddr);
+    wfaTrafficSendTo(psSockfd, (char *)psTxMsg, 200+(wmmps_info.msgno%200), (struct sockaddr *) &wmmps_info.psToAddr);
 
-   wmmps_info.nsent++;
+    wmmps_info.nsent++;
 }
 
 /*
@@ -746,108 +772,109 @@ void send_txmsg(int new_prio_class)
  */
 void wfaSetDUTPwrMgmt(int mode)
 {
-   static int curr_mode = -1;
-   char iface[32];
+    static int curr_mode = -1;
+    char iface[32];
 
-   wSTRNCPY(iface,WFA_STAUT_IF,31);
+    wSTRNCPY(iface,WFA_STAUT_IF,31);
 
-   if(curr_mode == mode)
-   {
-      return;
-   }
+    if(curr_mode == mode)
+    {
+        return;
+    }
 
-   if(mode == PS_OFF)
-   {
-      //sprintf(gCmdStr, "iwpriv %s set PSMode=CAM", iface);
-      sprintf(gCmdStr, "iwconfig %s power off", iface);
-      if( system(gCmdStr) < 0)
-      {
-         DPRINT_ERR(WFA_ERR, "Cant Set PS OFF\n");
-      }
-      else
-         printf("\r\n STA PS OFF \n");
-   }
-   else
-   {
-      //sprintf(gCmdStr, "iwpriv %s set PSMode=MAX_PSP", iface);
-      sprintf(gCmdStr, "iwconfig %s power on", iface);
-      if( system(gCmdStr) < 0)
-      {
-         DPRINT_ERR(WFA_ERR, "Cant Set PS ON\n");
-      }
-      else
-      {
-         printf("\r\n STA PS ON \n");
-      }
-   }
+    if(mode == PS_OFF)
+    {
+        //sprintf(gCmdStr, "iwpriv %s set PSMode=CAM", iface);
+        sprintf(gCmdStr, "iwconfig %s power off", iface);
+        if( system(gCmdStr) < 0)
+        {
+            DPRINT_ERR(WFA_ERR, "Cant Set PS OFF\n");
+        }
+        else
+            printf("\r\n STA PS OFF \n");
+    }
+    else
+    {
+        //sprintf(gCmdStr, "iwpriv %s set PSMode=MAX_PSP", iface);
+        sprintf(gCmdStr, "iwconfig %s power on", iface);
+        if( system(gCmdStr) < 0)
+        {
+            DPRINT_ERR(WFA_ERR, "Cant Set PS ON\n");
+        }
+        else
+        {
+            printf("\r\n STA PS ON \n");
+        }
+    }
 
-   curr_mode = mode;
+    curr_mode = mode;
 }
 
 int wfaWmmPowerSaveProcess(int sockfd)
 {
-   int rbytes = 0;
-   int sta_test;
-   struct sockaddr from;
-   int len;
-   StationRecvProcStatetbl_t  *rcvstatarray;
-   StationRecvProcStatetbl_t  func;
-   int *rcv_state;
-   len=sizeof(from);
+    int rbytes = 0;
+    int sta_test;
+    struct sockaddr from;
+    int len;
+    StationRecvProcStatetbl_t  *rcvstatarray;
+    StationRecvProcStatetbl_t  func;
+    int *rcv_state;
+    len=sizeof(from);
 
-   rbytes = recvfrom(sockfd, (char *)psRxMsg, MAX_UDP_LEN, 0, &from, (socklen_t *)&len);
-   if(rbytes < 0)
-   {
-      perror("receive error");
-      return rbytes;
-   }
+    rbytes = recvfrom(sockfd, (char *)psRxMsg, MAX_UDP_LEN, 0, &from, (socklen_t *)&len);
+    if(rbytes < 0)
+    {
+        perror("receive error");
+        return rbytes;
+    }
 
-   sta_test = wmmps_info.sta_test;
-   if(sta_test != L_1)
-   mpx("RX msg",psRxMsg,64);
-   if(psRxMsg[10] == APTS_STOP)
-      PRINTF("\r\n stop recd\n");
+    sta_test = wmmps_info.sta_test;
+    if(sta_test != L_1)
+        mpx("RX msg",psRxMsg,64);
+    if(psRxMsg[10] == APTS_STOP)
+        PRINTF("\r\n stop recd\n");
 
-   if(psRxMsg[10] == APTS_RESET)
-   {
-      reset_recd=1;
-      WfaStaResetAll();
-      return 0;
-   }
-   //If reset signal is there for the receiving thread and station has sent the
-   //reset message (i.e. !reset_recd) then ignore all the messages till an
-   //APTS_RESET_RESP has been received.
+    if(psRxMsg[10] == APTS_RESET)
+    {
+        reset_recd=1;
+        WfaStaResetAll();
+        return 0;
+    }
+    //If reset signal is there for the receiving thread and station has sent the
+    //reset message (i.e. !reset_recd) then ignore all the messages till an
+    //APTS_RESET_RESP has been received.
 
-   if(resetrcv)
-   {
-      wmmps_info.rcv_state = 0;
-      if((!reset_recd)&&(psRxMsg[10] != APTS_RESET_RESP))
-         return 0;
-      else
-      {
-         resetrcv = 0;
-         reset_recd = 0;
-      }
-   }
+    if(resetrcv)
+    {
+        wmmps_info.rcv_state = 0;
+        if((!reset_recd)&&(psRxMsg[10] != APTS_RESET_RESP))
+            return 0;
+        else
+        {
+            resetrcv = 0;
+            reset_recd = 0;
+        }
+    }
 
-   if(sta_test > LAST_TEST)
-   {
-      // unknown case
-      return 0;
-   }
+    if(sta_test > LAST_TEST)
+    {
+        // unknown case
+        return 0;
+    }
 
-   sta_test = wmmps_info.sta_test;
-   wmmps_info.my_cookie = psRxMsg[0];
-   rcv_state = &(wmmps_info.rcv_state);
-   rcvstatarray = stationRecvProcStatetbl[sta_test];
-   func = rcvstatarray[*(rcv_state)];
-   func.statefunc(psRxMsg,rbytes,rcv_state);
+    sta_test = wmmps_info.sta_test;
+    wmmps_info.my_cookie = psRxMsg[0];
+    rcv_state = &(wmmps_info.rcv_state);
+    rcvstatarray = stationRecvProcStatetbl[sta_test];
+    func = rcvstatarray[*(rcv_state)];
+    func.statefunc(psRxMsg,rbytes,rcv_state);
 
-   return WFA_SUCCESS;
+    return WFA_SUCCESS;
 }
 
 /* following routine replace wfaWmmPowerSaveProcess  */
-int timeout_recvfrom(int sock,char* data,int length,int flags,struct sockaddr* sockfrom,int* fromlen,int timeout){
+int timeout_recvfrom(int sock,char* data,int length,int flags,struct sockaddr* sockfrom,int* fromlen,int timeout)
+{
     fd_set socks;
     struct timeval t;
     int bytes=0, ret = 0;
@@ -886,7 +913,8 @@ void wfaWmmpsInitFlag(void)
     DPRINT_INFO(WFA_OUT,"wfaWmmpsInitFlag::reset all flags\n");
 }
 /* following routine replace wfaWmmPowerSaveProcess  */
-void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps process
+void* wfa_wmmps_thread(void* input) //Aaron's//The main thread runs the wmmps process
+{
     int rbytes=0;
     int sta_test=1;
     struct sockaddr from;
@@ -896,9 +924,10 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
     pthread_t   sendThreadHandle = 0;
     //int   sendThreadId = 0;
     len=sizeof(from);
-   
 
-    while(1){
+
+    while(1)
+    {
         if (sendThreadHandle != 0)
         {
             sendThreadHandle = 0;
@@ -910,8 +939,8 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
 
         if(pthread_create(&sendThreadHandle, NULL, wfa_wmmps_send_thread, &wmmps_info))
         {
-               DPRINT_INFO(WFA_OUT, "wfa_wmmps_thread::create sending thread failed\n");
-               return NULL;
+            DPRINT_INFO(WFA_OUT, "wfa_wmmps_thread::create sending thread failed\n");
+            return NULL;
         }
         //sendThreadHandle = CreateThread(NULL, 0, wfa_wmmps_send_thread, (PVOID)&wmmps_info, 0,&sendThreadId);
         wSLEEP(1);
@@ -964,7 +993,8 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
                         }
 
                     }
-                    if(psRxMsg[10]==APTS_RESET){
+                    if(psRxMsg[10]==APTS_RESET)
+                    {
                         reset_recd=1;
                         DPRINT_INFO(WFA_OUT, "\r\nwfa_wmmps_thread:: rcv RESET call WfaStaResetAll\n");
                         WfaStaResetAll();
@@ -975,7 +1005,8 @@ void* wfa_wmmps_thread(void* input){//Aaron's//The main thread runs the wmmps pr
 
                     rcvstatarray=stationRecvProcStatetbl[sta_test];//receive functions
                     func=rcvstatarray[(wmmps_info.rcv_state)];
-                    if (func.statefunc != NULL) {
+                    if (func.statefunc != NULL)
+                    {
                         DPRINT_INFO(WFA_OUT, "wfa_wmmps_thread:: call state func in state=%d\n",wmmps_info.rcv_state);
                         func.statefunc(psRxMsg,rbytes, &(wmmps_info.rcv_state));
                     }
@@ -1038,7 +1069,7 @@ void* wfa_wmmps_send_thread(void* input)
         DPRINT_INFO(WFA_OUT, "wfaCreateUDPSock: WMMPS profile create UDP RCV socket failed\n");
     }
 
-    if (getsockopt(psSockfd, SOL_SOCKET, SO_SNDBUF, (char*)&iOptVal, (socklen_t *)&iOptLen) == 0) 
+    if (getsockopt(psSockfd, SOL_SOCKET, SO_SNDBUF, (char*)&iOptVal, (socklen_t *)&iOptLen) == 0)
     {
         DPRINT_INFO(WFA_OUT, "wfa_wmmps_send_thread:: get SO_SNDBUF Value=%d\n", iOptVal);
     }
@@ -1048,16 +1079,17 @@ void* wfa_wmmps_send_thread(void* input)
     {
         if (wmmps_info.rcv_state > 0)/*  check state forwarded */
         {
-            DPRINT_INFO(WFA_OUT,"1-send state_num=%d sta_test=%d\n",state_num, wmmps_info.sta_test); 
+            DPRINT_INFO(WFA_OUT,"1-send state_num=%d sta_test=%d\n",state_num, wmmps_info.sta_test);
             sendstate =  stationProcStatetbl[wmmps_info.sta_test];
             curr_state = sendstate[state_num];
             if ( curr_state.statefunc != NULL)
             {
                 curr_state.statefunc(curr_state.pw_offon,curr_state.sleep_period,&(state_num));//send functions
-                //DPRINT_INFOL(WFA_OUT,"2-send state_num=%d sta_test=%d\n",state_num, wmmps_info.sta_test); 
+                //DPRINT_INFOL(WFA_OUT,"2-send state_num=%d sta_test=%d\n",state_num, wmmps_info.sta_test);
             }
             else
-            {// nothing to do.
+            {
+                // nothing to do.
 
                 DPRINT_INFO(WFA_OUT, "wfa_wmmps_send_thread, state Func is NULL, exit loop\n");
                 break;
@@ -1080,7 +1112,7 @@ void* wfa_wmmps_send_thread(void* input)
                 wmmps_info.wait_state = WFA_WAIT_STAUT_00;
                 wSLEEP(1);
             }
-            
+
         }
         if (wmmps_info.resetWMMPS == 1)
         {
@@ -1089,7 +1121,6 @@ void* wfa_wmmps_send_thread(void* input)
         }
     }/*  while(gtgWmmPS>0 && psSockfd>0)  */
 
-    //wfaCloseUDPSockWmmpsSend();
     wSLEEP(1);
     DPRINT_INFO(WFA_OUT,"wfa_wmmps_send_thread end\n");
     return NULL;

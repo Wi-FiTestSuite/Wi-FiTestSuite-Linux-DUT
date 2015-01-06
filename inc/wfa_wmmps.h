@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -21,24 +21,25 @@
  * * APTS messages/tests
  * */
 #define B_D		1
-#define	B_H	        2	
-#define B_B             3
-#define B_M             4
-#define M_D             5
-#define B_Z             6
-#define M_Y             7
+#define	B_H	    2
+#define B_B     3
+#define B_M     4
+#define M_D     5
+#define B_Z     6
+#define M_Y     7
 #define	L_1		8
 #define	A_Y		9		// active mode version of M_Y
 #define	B_W		10		// 
 #define	A_J		11		// Active test of sending 4 down
-#define M_V             12
-#define M_U             13
-#define A_U             14
-#define M_L             15
-#define B_K             16
-#define M_B             17
-#define M_K             18
-#define M_W             19
+#define M_V     12
+#define M_U     13
+#define A_U     14
+#define M_L     15
+#define B_K     16
+#define M_B     17
+#define M_K     18
+#define M_W     19
+
 #ifdef WFA_WMM_AC
 #define WMMAC_422_T02B            20
 #define WMMAC_422_T03A            21
@@ -62,7 +63,7 @@
 #define WMMAC_524_T03i            36
 #define WMMAC_525_T07t10          37
 
-#define LAST_TEST       WMMAC_525_T07t10 
+#define LAST_TEST       WMMAC_525_T07t10
 #else
 #define LAST_TEST       M_W
 #endif
@@ -132,7 +133,8 @@ extern unsigned short wfa_defined_debug;
 /*
  * * internal table
  * */
-struct apts_msg {                    
+struct apts_msg
+{
     char *name;                     // name of test
     int cmd;                        // msg num
     int param0;                     // number of packet exchanges
@@ -144,7 +146,8 @@ struct apts_msg {
 /*
  * * Wait/Timer states
  * */
-typedef enum {
+typedef enum
+{
     WFA_WAIT_NEXT_CODEC,
     WFA_WAIT_FOR_AP_RESPONSE,
     WFA_WAIT_STAUT_00,
@@ -180,7 +183,7 @@ typedef struct wfa_wmmps
     pthread_cond_t thr_flag_cond;
     pthread_mutex_t thr_flag_mutex;
 
-}wfaWmmPS_t;
+} wfaWmmPS_t;
 
 
 

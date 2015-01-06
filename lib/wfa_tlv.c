@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -32,7 +32,7 @@
 extern unsigned short wfa_defined_debug;
 
 /*
- * wfaEncodeTLV(): Encoding a packet to TLV format 
+ * wfaEncodeTLV(): Encoding a packet to TLV format
  * input: the_tag - packet type
  *        the_len - the value length
  *        the_value - the value buffer
@@ -41,14 +41,14 @@ extern unsigned short wfa_defined_debug;
  */
 BOOL wfaEncodeTLV(WORD the_tag, WORD the_len, BYTE *the_value, BYTE *tlv_data)
 {
-   void *data = tlv_data;
+    void *data = tlv_data;
 
-   ((wfaTLV *)data)->tag = the_tag;
-   ((wfaTLV *)data)->len = the_len;
-   if(the_value != NULL && the_len != 0)
-      wMEMCPY((data+4), (BYTE *)the_value, the_len);
+    ((wfaTLV *)data)->tag = the_tag;
+    ((wfaTLV *)data)->len = the_len;
+    if(the_value != NULL && the_len != 0)
+        wMEMCPY((data+4), (BYTE *)the_value, the_len);
 
-   return WFA_SUCCESS;
+    return WFA_SUCCESS;
 }
 
 /*
@@ -61,26 +61,26 @@ BOOL wfaEncodeTLV(WORD the_tag, WORD the_len, BYTE *the_value, BYTE *tlv_data)
  */
 
 BOOL wfaDecodeTLV(BYTE *tlv_data, int tlv_len, WORD *ptag, int *pval_len, BYTE *pvalue)
-{ 
-   wfaTLV *data = (wfaTLV *)tlv_data;
- 
-   if(pvalue == NULL)
-   {
-       DPRINT_ERR(WFA_ERR, "Parm buf invalid\n");
-       return WFA_FAILURE;
-   }
-   *ptag = data->tag; 
-   *pval_len = data->len;
+{
+    wfaTLV *data = (wfaTLV *)tlv_data;
 
-   if(tlv_len < *pval_len)
-       return WFA_FAILURE;
+    if(pvalue == NULL)
+    {
+        DPRINT_ERR(WFA_ERR, "Parm buf invalid\n");
+        return WFA_FAILURE;
+    }
+    *ptag = data->tag;
+    *pval_len = data->len;
 
-   if(*pval_len != 0 && *pval_len < MAX_PARMS_BUFF)
-   {
-      wMEMCPY(pvalue, tlv_data+4, *pval_len);
-   }
+    if(tlv_len < *pval_len)
+        return WFA_FAILURE;
 
-   return WFA_SUCCESS;
+    if(*pval_len != 0 && *pval_len < MAX_PARMS_BUFF)
+    {
+        wMEMCPY(pvalue, tlv_data+4, *pval_len);
+    }
+
+    return WFA_SUCCESS;
 }
 
 /*
@@ -91,12 +91,12 @@ BOOL wfaDecodeTLV(BYTE *tlv_data, int tlv_len, WORD *ptag, int *pval_len, BYTE *
 
 WORD wfaGetTLVTag(BYTE *tlv_data)
 {
-   wfaTLV *ptlv = (wfaTLV *)tlv_data;
+    wfaTLV *ptlv = (wfaTLV *)tlv_data;
 
-   if(ptlv != NULL)
-      return ptlv->tag;
-   
-   return WFA_SUCCESS;
+    if(ptlv != NULL)
+        return ptlv->tag;
+
+    return WFA_SUCCESS;
 }
 
 /*
@@ -107,14 +107,14 @@ WORD wfaGetTLVTag(BYTE *tlv_data)
 
 BOOL wfaSetTLVTag(WORD new_tag, BYTE *tlv_data)
 {
-   wfaTLV *ptlv = (wfaTLV *)tlv_data;
+    wfaTLV *ptlv = (wfaTLV *)tlv_data;
 
-   if(tlv_data == NULL)
-      return WFA_FAILURE;
+    if(tlv_data == NULL)
+        return WFA_FAILURE;
 
-   ptlv->tag = new_tag;
+    ptlv->tag = new_tag;
 
-   return WFA_SUCCESS;
+    return WFA_SUCCESS;
 }
 
 /*
@@ -125,12 +125,12 @@ BOOL wfaSetTLVTag(WORD new_tag, BYTE *tlv_data)
 
 WORD wfaGetTLVLen(BYTE *tlv_data)
 {
-   wfaTLV *ptlv = (wfaTLV *)tlv_data;
+    wfaTLV *ptlv = (wfaTLV *)tlv_data;
 
-   if(tlv_data == NULL)
-     return WFA_FAILURE;
+    if(tlv_data == NULL)
+        return WFA_FAILURE;
 
-   return ptlv->len;
+    return ptlv->len;
 }
 
 /*
@@ -143,7 +143,7 @@ WORD wfaGetTLVLen(BYTE *tlv_data)
 BOOL wfaGetTLVvalue(int value_len, BYTE *tlv_data, BYTE *pvalue)
 {
     if(tlv_data == NULL)
-      return WFA_FAILURE;
+        return WFA_FAILURE;
 
     wMEMCPY(pvalue, tlv_data+WFA_TLV_HEAD_LEN, value_len);
 

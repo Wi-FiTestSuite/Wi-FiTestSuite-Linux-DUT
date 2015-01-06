@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -17,10 +17,10 @@
 *****************************************************************************/
 
 /*
- * File: wfa_cmdtbl.c 
+ * File: wfa_cmdtbl.c
  *   The file contains a predefined function array. The command process and
- *   execution functions of a DUT traffic generator and control will be 
- *   registered in the array/table by the order of the defined commands TLV  
+ *   execution functions of a DUT traffic generator and control will be
+ *   registered in the array/table by the order of the defined commands TLV
  *   values.
  *
  *
@@ -53,7 +53,7 @@ xcCommandFuncPtr gWfaCmdFuncTbl[WFA_STA_COMMANDS_END] =
 {
     /* Traffic Agent Commands */
     NotDefinedYet,            /*    None                               (0) */
-    agtCmdProcGetVersion,     /*    WFA_GET_VERSION_TLV                (1) */ 
+    agtCmdProcGetVersion,     /*    WFA_GET_VERSION_TLV                (1) */
     wfaTGSendPing,            /*    WFA_TRAFFIC_SEND_PING_TLV          (2) */
     wfaTGStopPing,            /*    WFA_TRAFFIC_STOP_PING_TLV          (3) */
     wfaTGConfig,              /*    WFA_TRAFFIC_AGENT_CONFIG_TLV       (4) */
@@ -63,7 +63,7 @@ xcCommandFuncPtr gWfaCmdFuncTbl[WFA_STA_COMMANDS_END] =
     wfaTGReset,               /*    WFA_TRAFFIC_AGENT_RESET_TLV        (8) */
     NotDefinedYet,            /*    WFA_TRAFFIC_AGENT_STATUS_TLV       (9) */
 
-    /* Control and Configuration Commands */ 
+    /* Control and Configuration Commands */
     wfaStaGetIpConfig,        /*    WFA_STA_GET_IP_CONFIG_TLV          (10)*/
     wfaStaSetIpConfig,        /*    WFA_STA_SET_IP_CONFIG_TLV          (11)*/
     wfaStaGetMacAddress,      /*    WFA_STA_GET_MAC_ADDRESS_TLV        (12)*/
@@ -83,7 +83,7 @@ xcCommandFuncPtr gWfaCmdFuncTbl[WFA_STA_COMMANDS_END] =
     wfaStaSetIBSS,            /*    WFA_STA_SET_IBSS_TLV               (26)*/
     wfaStaGetInfo,            /*    WFA_STA_GET_INFO_TLV               (27)*/
     wfaDeviceGetInfo,         /*    WFA_DEVICE_GET_INFO_TLV            (28)*/
-    wfaDeviceListIF,          /*    WFA_DEVICE_LIST_IF_TLV]            (29)*/ 
+    wfaDeviceListIF,          /*    WFA_DEVICE_LIST_IF_TLV]            (29)*/
     wfaStaDebugSet,           /*    WFA_STA_DEBUG_SET                  (30)*/
     wfaStaSetMode,            /*    WFA_STA_SET_MODE                   (31)*/
     wfaStaUpload,             /*    WFA_STA_UPLOAD                     (32)*/
@@ -120,21 +120,21 @@ xcCommandFuncPtr gWfaCmdFuncTbl[WFA_STA_COMMANDS_END] =
     wfaStaDevSendFrame,          /*    WFA_STA_DEV_SEND_FRAME_TLV              (48)*/
     wfaStaSetSecurity,        /*    WFA_STA_SET_SECURITY_TLV           (49)*/
     wfaStaGetP2pDevAddress,   /*    WFA_STA_GET_P2P_DEV_ADDRESS_TLV    (50)*/
-    wfaStaSetP2p,	      /*    WFA_STA_SET_P2P_TLV	               (51)*/		
-    wfaStaP2pConnect,         /*    WFA_STA_P2P_CONNECT_TLV            (52)*/   
+    wfaStaSetP2p,	      /*    WFA_STA_SET_P2P_TLV	               (51)*/
+    wfaStaP2pConnect,         /*    WFA_STA_P2P_CONNECT_TLV            (52)*/
     wfaStaStartAutoGo, 	      /* WFA_STA_START_AUTO_GO                 (53)*/
     wfaStaP2pStartGrpFormation, /*    WFA_STA_P2P_START_GRP_FORMATION_TLV      (54)*/
 
     wfaStaP2pDissolve,          /*    WFA_STA_P2P_DISSOLVE_TLV                 (55)*/
-    wfaStaSendP2pInvReq,        /*    WFA_STA_SEND_P2P_INV_REQ_TLV             (56)*/		
-    wfaStaAcceptP2pInvReq,	/*    WFA_STA_ACCEPT_P2P_INV_REQ_TLV           (57)*/		
-    wfaStaSendP2pProvDisReq,    /*    WFA_STA_SEND_P2P_PROV_DIS_REQ_TLV    (58)*/    
-    wfaStaSetWpsPbc,            /*    WFA_STA_SET_WPS_PBC_TLV              (59)*/    
+    wfaStaSendP2pInvReq,        /*    WFA_STA_SEND_P2P_INV_REQ_TLV             (56)*/
+    wfaStaAcceptP2pInvReq,	/*    WFA_STA_ACCEPT_P2P_INV_REQ_TLV           (57)*/
+    wfaStaSendP2pProvDisReq,    /*    WFA_STA_SEND_P2P_PROV_DIS_REQ_TLV    (58)*/
+    wfaStaSetWpsPbc,            /*    WFA_STA_SET_WPS_PBC_TLV              (59)*/
 
     wfaStaWpsReadPin,           /*    WFA_STA_WPS_READ_PIN_TLV             (60)*/
-    wfaStaWpsEnterPin,          /*    WFA_STA_WPS_ENTER_PIN_TLV	           (61)*/		
-    wfaStaGetPsk,               /*    WFA_STA_GET_PSK_TLV                  (62)*/    
-    wfaStaP2pReset,             /*    WFA_STA_P2P_RESET_TLV                (63)*/    
+    wfaStaWpsEnterPin,          /*    WFA_STA_WPS_ENTER_PIN_TLV	           (61)*/
+    wfaStaGetPsk,               /*    WFA_STA_GET_PSK_TLV                  (62)*/
+    wfaStaP2pReset,             /*    WFA_STA_P2P_RESET_TLV                (63)*/
     wfaStaWpsReadLabel,         /*    WFA_STA_WPS_READ_LABEL_TLV           (64)*/
     wfaStaGetP2pIpConfig,       /*    WFA_STA_GET_P2P_IP_CONFIG_TLV        (65)*/
     wfaStaSendServiceDiscoveryReq,    /*    WFA_STA_SEND_SERVICE_DISCOVERY_REQ_TLV                (66)*/
@@ -147,15 +147,15 @@ xcCommandFuncPtr gWfaCmdFuncTbl[WFA_STA_COMMANDS_END] =
     wfaStaSetRadio,           /*    WFA_STA_SET_RADIO_TLV              (72)*/
     wfaStaSetRFeature,        /*    WFA_STA_RFEATURE_TLV               (73)*/
 
-	wfaStaStartWfdConnection,   /*    WFA_STA_START_WFD_CONNECTION_TLV               (74)*/
-	wfaStaCliCommand,         /*   WFA_STA_CLI_CMD_TLV            (75)*/
-	wfaStaConnectGoStartWfd,   /*    WFA_STA_CONNECT_GO_START_WFD_TLV               (76)*/
-	wfaStaGenerateEvent,         /*   WFA_STA_GENERATE_EVENT_TLV            (77)*/
-	wfaStaReinvokeWfdSession,         /*   WFA_STA_REINVOKE_WFD_SESSION_TLV            (78)*/
-	wfaStaGetParameter,         /*   WFA_STA_GET_PARAMETER_TLV            (79)*/
-	
+    wfaStaStartWfdConnection,   /*    WFA_STA_START_WFD_CONNECTION_TLV               (74)*/
+    wfaStaCliCommand,         /*   WFA_STA_CLI_CMD_TLV            (75)*/
+    wfaStaConnectGoStartWfd,   /*    WFA_STA_CONNECT_GO_START_WFD_TLV               (76)*/
+    wfaStaGenerateEvent,         /*   WFA_STA_GENERATE_EVENT_TLV            (77)*/
+    wfaStaReinvokeWfdSession,         /*   WFA_STA_REINVOKE_WFD_SESSION_TLV            (78)*/
+    wfaStaGetParameter,         /*   WFA_STA_GET_PARAMETER_TLV            (79)*/
+
 };
-    
+
 
 /*
  * NotDefinedYet(): a dummy function

@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -37,7 +37,7 @@
 #define  CA_RESPONSE_BUF_SIZE   128
 
 /* Profile Key words */
-#define KW_PROFILE                 1 
+#define KW_PROFILE                 1
 #define KW_DIRECTION               2
 #define KW_DIPADDR                 3
 #define KW_DPORT                   4
@@ -72,10 +72,10 @@
 #define WFA_STREAM_ACTIVE          1
 
 /* Traffic Directions */
-#define DIRECT_SEND                1 
-#define DIRECT_RECV                2 
+#define DIRECT_SEND                1
+#define DIRECT_RECV                2
 
-#define TG_PROTO_TCP               0 
+#define TG_PROTO_TCP               0
 #define TG_PROTO_UDP               1
 
 #define TG_WMM_AC_UP0         12     /* User Priority 0 */
@@ -105,8 +105,6 @@
 
 /* wmm defs */
 #define TOS_VO      0xD0         // 110 0  0000 (6)  AC_VO tos/dscp values
-//Atheros Madwifi use 0x88 for UPSD/Voice
-//#define TOS_VO      0x88       // 110 0  0000 (6)  AC_VO tos/dscp values
 #define TOS_VI      0xA0         // 101 0  0000 (5)  AC_VI
 #define TOS_BE      0x00         // 000 0  0000 (0)  AC_BE
 #define TOS_BK      0x20         // 001 0  0000 (1)  AC_BK
@@ -130,18 +128,18 @@ typedef struct _tg_stats
     unsigned int rxFrames;
     unsigned long long txPayloadBytes;
     unsigned long long rxPayloadBytes;
-    unsigned int outOfSequenceFrames; 
+    unsigned int outOfSequenceFrames;
     unsigned int lostPkts;        /* voice over wi-fi */
     unsigned long jitter;         /* voice over wi-fi */
 } tgStats_t;
 
 typedef struct _e2e_stats
 {
-   int seqnum;
-   int lsec;
-   int lusec;
-   int rsec;
-   int rusec;
+    int seqnum;
+    int lsec;
+    int lusec;
+    int rsec;
+    int rusec;
 } tgE2EStats_t;
 
 typedef struct _tg_profile
@@ -167,7 +165,7 @@ typedef struct _tg_stream
     int sockfd;
     int tblidx;
     int lastPktSN;        /* use for Jitter calculation */
-    int fmInterval;       
+    int fmInterval;
     int rxTimeLast;       /* use for pkLost             */
     int state;            /* indicate if the stream being active */
     tgProfile_t profile;
@@ -176,16 +174,8 @@ typedef struct _tg_stream
 
 typedef struct _traffic_header
 {
-   char hdr[20];   /* always wfa */
+    char hdr[20];   /* always wfa */
 } tgHeader_t;
-
-//typedef struct _traffic_header
-//{
-//   char wfaname[8];   /* always wfa */
-//   long int  counter; /* incremental counter */
-//   long int first4;   /*            */
-//   long int second4;  /*            */
-//} tgHeader_t;
 
 typedef struct _tg_wmm
 {
@@ -199,36 +189,35 @@ typedef struct _tg_wmm
     pthread_mutex_t thr_flag_mutex;
     pthread_mutex_t thr_stop_mutex;
 #else
-	//LPCTSTR lpszMutex;
     HANDLE thr;
     DWORD thr_id;
-	int timerid;
+    int timerid;
     HANDLE thr_flag_mutex;
     HANDLE thr_stop_mutex;
 #endif
-}tgWMM_t;
+} tgWMM_t;
 
 typedef int (*StationStateFunctionPtr)( char, int,int *); //PS,sleep period,state
 
 typedef struct station_state_table
 {
-   StationStateFunctionPtr statefunc;
-   char                    pw_offon;
-   int                     sleep_period;
+    StationStateFunctionPtr statefunc;
+    char                    pw_offon;
+    int                     sleep_period;
 } StationProcStatetbl_t;
 
 typedef int (*stationRecvStateFunctionPtr)(unsigned int *, int,int * ); //Recieved message buffer, length,state
 
 typedef struct console_rcv_state_table
 {
-   stationRecvStateFunctionPtr statefunc;
+    stationRecvStateFunctionPtr statefunc;
 } StationRecvProcStatetbl_t;
 
 typedef struct _tg_thr_data
 {
-   int tid;
-   StationProcStatetbl_t  *state;
-   int state_num;
+    int tid;
+    StationProcStatetbl_t  *state;
+    int state_num;
 } tgThrData_t;
 
 extern int wfaTGConfig(int len, BYTE *buf, int *respLen, BYTE *respBuf);
@@ -242,9 +231,9 @@ extern int wfaSendShortFile(int fromSockfd, int profId, BYTE *buf, int size, BYT
 extern int wfaFlushSockQueue(int profId);
 extern int wfaTGSendPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaTGStopPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
-/*   */
+
 tgStream_t *findStreamProfile(int streamId);
 tgProfile_t *findTGProfile(int streamId);
-int convertDscpToTos(int dscp); // return >=0 as TOS, othersiwe error.
+int convertDscpToTos(int dscp); // return >=0 as TOS, otherwise error.
 
 #endif

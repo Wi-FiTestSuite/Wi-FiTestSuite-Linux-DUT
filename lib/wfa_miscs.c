@@ -1,15 +1,15 @@
 /****************************************************************************
 *
 * Copyright (c) 2014 Wi-Fi Alliance
-* 
-* Permission to use, copy, modify, and/or distribute this software for any 
-* purpose with or without fee is hereby granted, provided that the above 
+*
+* Permission to use, copy, modify, and/or distribute this software for any
+* purpose with or without fee is hereby granted, provided that the above
 * copyright notice and this permission notice appear in all copies.
-* 
-* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
-* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
-* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
-* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+*
+* THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+* WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+* SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER
 * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 * NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 * USE OR PERFORMANCE OF THIS SOFTWARE.
@@ -54,25 +54,25 @@ void printProfile(tgProfile_t *pf)
 int isString(char *str)
 {
     if(*str == '\0')
-       return WFA_FAILURE;
+        return WFA_FAILURE;
 
-    if((str[0] >= 'a' && str[0] <= 'z') 
-          || (str[0] > 'A' && str[0] < 'Z'))
-       return WFA_SUCCESS;
+    if((str[0] >= 'a' && str[0] <= 'z')
+            || (str[0] > 'A' && str[0] < 'Z'))
+        return WFA_SUCCESS;
     else
-       return WFA_FAILURE;
+        return WFA_FAILURE;
 
 }
 
 int isNumber(char *str)
 {
     if(*str == '\0')
-       return WFA_FAILURE;
+        return WFA_FAILURE;
 
     if (str[0] >= '0' && str[0] <= '9')
-       return WFA_SUCCESS;
+        return WFA_SUCCESS;
     else
-       return WFA_FAILURE;
+        return WFA_FAILURE;
 }
 
 int isIpV4Addr(char *str)
@@ -81,22 +81,22 @@ int isIpV4Addr(char *str)
     char *tmpstr = str;
 
     if(*str == '\0')
-       return WFA_FAILURE;
+        return WFA_FAILURE;
 
     while(*tmpstr != '\0')
     {
-      if(*tmpstr == '.')
-      {
-         dots++;
-      }
+        if(*tmpstr == '.')
+        {
+            dots++;
+        }
 
-      tmpstr++;
+        tmpstr++;
     }
 
     if(dots <3)
-      return WFA_FAILURE;
+        return WFA_FAILURE;
     else
-      return WFA_SUCCESS;
+        return WFA_SUCCESS;
 }
 
 inline double wfa_timeval2double(struct timeval *tval)
@@ -112,53 +112,53 @@ inline void wfa_double2timeval(struct timeval *tval, double dval)
 
 inline double wfa_ftime_diff(struct timeval *t1, struct timeval *t2)
 {
-   double dtime;
+    double dtime;
 
-   dtime = wfa_timeval2double(t2) - wfa_timeval2double(t1);
-   return dtime ;
+    dtime = wfa_timeval2double(t2) - wfa_timeval2double(t1);
+    return dtime ;
 }
 
 int wfa_itime_diff(struct timeval *t1, struct timeval *t2)
 {
-   int dtime;
-   int sec = t2->tv_sec - t1->tv_sec;
-   int usec = t2->tv_usec - t1->tv_usec;
+    int dtime;
+    int sec = t2->tv_sec - t1->tv_sec;
+    int usec = t2->tv_usec - t1->tv_usec;
 
-   if(usec < 0)
-   {
-       sec -=1;
-       usec += 1000000;
-   }
+    if(usec < 0)
+    {
+        sec -=1;
+        usec += 1000000;
+    }
 
-   dtime = sec*1000000 + usec;
-   return dtime;
+    dtime = sec*1000000 + usec;
+    return dtime;
 }
 
 /*
- * THe following two functions are converting Little Endian to Big Endian. 
+ * THe following two functions are converting Little Endian to Big Endian.
  * If your machine is already a Big Endian, you may flag it out.
  */
 inline void int2BuffBigEndian(int val, char *buf)
 {
-   char *littleEn = (char *)&val;
+    char *littleEn = (char *)&val;
 
-   buf[0] = littleEn[3];
-   buf[1] = littleEn[2];
-   buf[2] = littleEn[1];
-   buf[3] = littleEn[0];
+    buf[0] = littleEn[3];
+    buf[1] = littleEn[2];
+    buf[2] = littleEn[1];
+    buf[3] = littleEn[0];
 }
 
 int bigEndianBuff2Int(char *buff)
 {
-   int val;
-   char *strval = (char *)&val;
+    int val;
+    char *strval = (char *)&val;
 
-   strval[0] = buff[3];
-   strval[1] = buff[2];
-   strval[2] = buff[1];
-   strval[3] = buff[0];
+    strval[0] = buff[3];
+    strval[1] = buff[2];
+    strval[2] = buff[1];
+    strval[3] = buff[0];
 
-   return val;
+    return val;
 }
 
 int wfa_estimate_timer_latency()
@@ -170,16 +170,16 @@ int wfa_estimate_timer_latency()
     gettimeofday(&t1, NULL);
     wUSLEEP(sleep);
 
-    wGETTIMEOFDAY(&t2, NULL); 
+    wGETTIMEOFDAY(&t2, NULL);
 
     tp2.tv_usec = t1.tv_usec + 20000;
     if( tp2.tv_usec >= 1000000)
     {
         tp2.tv_sec = t1.tv_sec +1;
-	tp2.tv_usec -= 1000000;
+        tp2.tv_usec -= 1000000;
     }
     else
         tp2.tv_sec = t1.tv_sec;
 
-    return latency = (t2.tv_sec - tp2.tv_sec) * 1000000 + (t2.tv_usec - tp2.tv_usec); 
+    return latency = (t2.tv_sec - tp2.tv_sec) * 1000000 + (t2.tv_usec - tp2.tv_usec);
 }
