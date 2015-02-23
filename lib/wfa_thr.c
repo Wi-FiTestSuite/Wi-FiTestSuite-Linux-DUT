@@ -830,6 +830,7 @@ void * wfa_wmm_thread(void *thr_param)
              * uses thread that is saved at last to pack the items and ships
              * it to CA.
              */
+
             if(myId == sendThrId)
             {
                 printf("Sending stats back\n");
@@ -1013,6 +1014,8 @@ void * wfa_wmm_thread(void *thr_param)
             }
             else if(myProfile->profile == PROF_TRANSC || myProfile->profile == PROF_START_SYNC || myProfile->profile == PROF_CALI_RTD)
             {
+           struct timeval tmout;
+
                 mySock = wfaCreateUDPSock(myProfile->sipaddr, myProfile->sport);
                 if(mySock < 0)
                 {
@@ -1026,18 +1029,29 @@ void * wfa_wmm_thread(void *thr_param)
                 totalTranPkts = 0xFFFFFFF0;
                 gtgTransac = myStreamId;
 
-                while(gtgTransac != 0)
-                {
+               /* set timeout for blocking receive */
+               tmout.tv_sec = 0;
+               tmout.tv_usec = 400000;   /* set the receive time out to 400 ms, 200ms is too short */
+               setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout));
+
+               while(gtgTransac != 0)
+               {
                     memset(trafficBuf, 0, sizeof((char*)trafficBuf));
 
                     if(mySock != -1)
                     {
                         int i = gtgTransac;
 
-                        nbytes = wfaRecvFile(mySock, i, (char  *)trafficBuf);
-                        if(nbytes <= 0)
-                            break;
-                    }
+                      nbytes = 0;
+
+                      /* check for data as long as we are in a transaction */
+                      while ((gtgTransac != 0) && (nbytes <= 0))
+                      {
+                          nbytes = wfaRecvFile(mySock, i, (char  *)trafficBuf);
+                      }
+                      /* It is the end of a transaction, go out of the loop */
+                      if (gtgTransac == 0) break;
+                   }
                     else
                     {
                         break;
@@ -1061,7 +1075,14 @@ void * wfa_wmm_thread(void *thr_param)
                 }
 
                 my_wmm->thr_flag = 0;
-            }
+               //////////////////// Wifi Alliance Added
+               if(mySock != -1)
+               {
+                   wCLOSE(mySock);
+                   mySock = -1;
+               }
+               //////////////////// Wifi Alliance Added
+           }
             break;
 
         default:
