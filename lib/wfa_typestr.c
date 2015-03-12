@@ -118,6 +118,15 @@ extern int xcCmdProcStaReinvokeWfdSession(char *, BYTE *, int *);
 extern int xcCmdProcStaGetParameter(char *, BYTE *, int *);
 
 
+extern int xcCmdProcStaNfcAction(char *, BYTE *, int *);
+
+extern int xcCmdProcStaInvokeCommand(char *, BYTE *, int *);
+extern int xcCmdProcStaManageService(char *, BYTE *, int *);
+
+extern int xcCmdProcStaGetEvents(char *, BYTE *, int *);
+extern int xcCmdProcStaGetEventDetails(char *, BYTE *, int *);
+
+
 /*
  * Initialize a command name table to its defined type and process function
  */
@@ -176,39 +185,46 @@ typeNameStr_t nameStr[] =
     {WFA_STA_SET_RIFS_TEST_TLV, "sta_set_rifs_test", xcCmdProcStaSetRIFS},
     {WFA_STA_SEND_COEXIST_MGMT_TLV, "sta_send_coexist_mgmt", xcCmdProcStaSendCoExistMGMT},
 #endif
-    {WFA_STA_P2P_GET_DEV_ADDRESS_TLV, "sta_get_p2p_dev_address", xcCmdProcStaGetP2pDevAddress},
-    {WFA_STA_P2P_SETP2P_TLV, "sta_set_p2p", xcCmdProcStaSetP2p},
-    {WFA_STA_P2P_CONNECT_TLV, "sta_p2p_connect", xcCmdProcStaP2pConnect},
-    {WFA_STA_P2P_START_AUTO_GO_TLV, "sta_start_autonomous_go", xcCmdProcStaP2pStartAutoGo},
-    {WFA_STA_P2P_START_GRP_FORMATION_TLV, "sta_p2p_start_group_formation", xcCmdProcStaP2pStartGroupFormation},
-    {WFA_STA_P2P_DISSOLVE_TLV, "sta_p2p_dissolve", xcCmdProcStaP2pDissolve},
-    {WFA_STA_P2P_SEND_INV_REQ_TLV, "sta_send_p2p_invitation_req", xcCmdProcStaSendP2pInvReq},
-    {WFA_STA_P2P_ACCEPT_INV_REQ_TLV, "sta_accept_p2p_invitation_req", xcCmdProcStaAcceptP2pInvReq},
-    {WFA_STA_P2P_SEND_PROV_DIS_REQ_TLV, "sta_send_p2p_provision_dis_req", xcCmdProcStaSendP2pProvDisReq},
-    {WFA_STA_WPS_SETWPS_PBC_TLV, "sta_set_wps_pbc", xcCmdProcStaSetWpsPbc},
-    {WFA_STA_WPS_READ_PIN_TLV, "sta_wps_read_pin", xcCmdProcStaWpsReadPin},
-    {WFA_STA_WPS_ENTER_PIN_TLV, "sta_wps_enter_pin", xcCmdProcStaWpsEnterPin},
-    {WFA_STA_P2P_GET_PSK_TLV, "sta_get_psk", xcCmdProcStaGetPsk},
-    {WFA_STA_P2P_RESET_TLV, "sta_p2p_reset", xcCmdProcStaP2pReset},
-    {WFA_STA_WPS_READ_LABEL_TLV, "sta_wps_read_label", xcCmdProcStaWpsReadLabel},
-    {WFA_STA_P2P_GET_IP_CONFIG_TLV, "sta_get_p2p_ip_config", xcCmdProcStaGetP2pIpConfig},
-    {WFA_STA_P2P_SEND_SERVICE_DISCOVERY_REQ_TLV, "sta_send_service_discovery_req", xcCmdProcStaSendServiceDiscoveryReq},
-    {WFA_STA_P2P_SEND_PRESENCE_REQ_TLV, "sta_send_p2p_presence_req", xcCmdProcStaSendP2pPresenceReq},
-    {WFA_STA_P2P_SET_SLEEP_TLV, "sta_set_sleep", xcCmdProcStaSetSleepReq},
-    {WFA_STA_P2P_SET_OPPORTUNISTIC_PS_TLV, "sta_set_opportunistic_ps", xcCmdProcStaSetOpportunistcPsReq},
-    {WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_TLV, "sta_add_arp_table_entry", xcCmdProcStaAddARPTableEntry},
-    {WFA_STA_P2P_BLOCK_ICMP_RESPONSE_TLV, "sta_block_icmp_response", xcCmdProcStaBlockICMPResponse},
-
-    {WFA_STA_SET_RADIO_TLV, "sta_set_radio", xcCmdProcStaSetRadio},
-    {WFA_STA_SET_RFEATURE_TLV, "sta_set_rfeature", xcCmdProcStaSetRFeature},
-
-    {WFA_STA_START_WFD_CONNECTION_TLV, "start_wfd_connection", xcCmdProcStaStartWfdConnection},
-    {WFA_STA_CLI_CMD_TLV, "wfa_cli_cmd", xcCmdProcStaCliCommand},
-    {WFA_STA_CONNECT_GO_START_WFD_TLV, "connect_go_start_wfd", xcCmdProcStaConnectGoStartWfd},
-    {WFA_STA_GENERATE_EVENT_TLV, "sta_generate_event", xcCmdProcStaGenerateEvent},
-    {WFA_STA_REINVOKE_WFD_SESSION_TLV, "reinvoke_wfd_session", xcCmdProcStaReinvokeWfdSession},
-    {WFA_STA_GET_PARAMETER_TLV, "sta_get_parameter", xcCmdProcStaGetParameter},
-
-
-    {-1, "", NULL},
+   {WFA_STA_P2P_GET_DEV_ADDRESS_TLV, "sta_get_p2p_dev_address", xcCmdProcStaGetP2pDevAddress},
+   {WFA_STA_P2P_SETP2P_TLV, "sta_set_p2p", xcCmdProcStaSetP2p},
+   {WFA_STA_P2P_CONNECT_TLV, "sta_p2p_connect", xcCmdProcStaP2pConnect},	
+   {WFA_STA_P2P_START_AUTO_GO_TLV, "sta_start_autonomous_go", xcCmdProcStaP2pStartAutoGo},	
+   {WFA_STA_P2P_START_GRP_FORMATION_TLV, "sta_p2p_start_group_formation", xcCmdProcStaP2pStartGroupFormation},
+   {WFA_STA_P2P_DISSOLVE_TLV, "sta_p2p_dissolve", xcCmdProcStaP2pDissolve},
+   {WFA_STA_P2P_SEND_INV_REQ_TLV, "sta_send_p2p_invitation_req", xcCmdProcStaSendP2pInvReq},
+   {WFA_STA_P2P_ACCEPT_INV_REQ_TLV, "sta_accept_p2p_invitation_req", xcCmdProcStaAcceptP2pInvReq},
+   {WFA_STA_P2P_SEND_PROV_DIS_REQ_TLV, "sta_send_p2p_provision_dis_req", xcCmdProcStaSendP2pProvDisReq},	
+   {WFA_STA_WPS_SETWPS_PBC_TLV, "sta_set_wps_pbc", xcCmdProcStaSetWpsPbc},
+   {WFA_STA_WPS_READ_PIN_TLV, "sta_wps_read_pin", xcCmdProcStaWpsReadPin},
+   {WFA_STA_WPS_ENTER_PIN_TLV, "sta_wps_enter_pin", xcCmdProcStaWpsEnterPin},
+   {WFA_STA_P2P_GET_PSK_TLV, "sta_get_psk", xcCmdProcStaGetPsk},
+   {WFA_STA_P2P_RESET_TLV, "sta_p2p_reset", xcCmdProcStaP2pReset},
+   {WFA_STA_WPS_READ_LABEL_TLV, "sta_wps_read_label", xcCmdProcStaWpsReadLabel},
+   {WFA_STA_P2P_GET_IP_CONFIG_TLV, "sta_get_p2p_ip_config", xcCmdProcStaGetP2pIpConfig},
+   {WFA_STA_P2P_SEND_SERVICE_DISCOVERY_REQ_TLV, "sta_send_service_discovery_req", xcCmdProcStaSendServiceDiscoveryReq},
+   {WFA_STA_P2P_SEND_PRESENCE_REQ_TLV, "sta_send_p2p_presence_req", xcCmdProcStaSendP2pPresenceReq},	
+   {WFA_STA_P2P_SET_SLEEP_TLV, "sta_set_sleep", xcCmdProcStaSetSleepReq},	
+   {WFA_STA_P2P_SET_OPPORTUNISTIC_PS_TLV, "sta_set_opportunistic_ps", xcCmdProcStaSetOpportunistcPsReq},	
+   {WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_TLV, "sta_add_arp_table_entry", xcCmdProcStaAddARPTableEntry},	
+   {WFA_STA_P2P_BLOCK_ICMP_RESPONSE_TLV, "sta_block_icmp_response", xcCmdProcStaBlockICMPResponse},	
+   
+   {WFA_STA_SET_RADIO_TLV, "sta_set_radio", xcCmdProcStaSetRadio},
+   {WFA_STA_SET_RFEATURE_TLV, "sta_set_rfeature", xcCmdProcStaSetRFeature},
+   
+   {WFA_STA_START_WFD_CONNECTION_TLV, "start_wfd_connection", xcCmdProcStaStartWfdConnection},
+   {WFA_STA_CLI_CMD_TLV, "wfa_cli_cmd", xcCmdProcStaCliCommand},
+   {WFA_STA_CONNECT_GO_START_WFD_TLV, "connect_go_start_wfd", xcCmdProcStaConnectGoStartWfd},
+   {WFA_STA_GENERATE_EVENT_TLV, "sta_generate_event", xcCmdProcStaGenerateEvent},
+   {WFA_STA_REINVOKE_WFD_SESSION_TLV, "reinvoke_wfd_session", xcCmdProcStaReinvokeWfdSession},
+   {WFA_STA_GET_PARAMETER_TLV, "sta_get_parameter", xcCmdProcStaGetParameter},
+   
+   {WFA_STA_NFC_ACTION_TLV, "sta_nfc_action", xcCmdProcStaNfcAction},
+   
+   {WFA_STA_INVOKE_COMMAND_TLV, "sta_invoke_command", xcCmdProcStaInvokeCommand},
+   {WFA_STA_MANAGE_SERVICE_TLV, "sta_manage_service", xcCmdProcStaManageService},
+   {WFA_STA_GET_EVENTS_TLV, "sta_get_events", xcCmdProcStaGetEvents},
+   {WFA_STA_GET_EVENT_DETAILS_TLV, "sta_get_event_details", xcCmdProcStaGetEventDetails},
+   
+      
+   {-1, "", NULL},
 };

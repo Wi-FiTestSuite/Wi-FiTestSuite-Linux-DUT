@@ -123,17 +123,24 @@ dutCommandRespFuncPtr wfaCmdRespProcFuncTbl[WFA_STA_RESPONSE_END+1] =
     wfaStaGenericResp,	 		/* (WFA_STA_SET_SLEEP_REQ_RESP_TLV -  */
 
 
-    wfaStaGenericResp, 		/* (WFA_STA_DISCONNECT_RESP_TLV  */
-    wfaStaGenericResp,		/* (WFA_STA_ADD_ARP_TABLE_ENTRY_RESP_TLV - 545 */
-    /* P2P */
-    wfaStaGenericResp,
-    wfaStaGenericResp,
-    wfaStaStartWfdConnectionResp,
-    wfaStaCliCmdResp,  /* 75 */
-    wfaStaConnectGoStartWfdResp,  /* 76 */
-    wfaStaGenericResp,  /* 77 */
-    wfaStaGenericResp,	/* 78 */
-    wfaStaGetParameterResp,	/* 79 */
+	wfaStaGenericResp, 		/* (WFA_STA_DISCONNECT_RESP_TLV  */ 
+	wfaStaGenericResp,		/* (WFA_STA_ADD_ARP_TABLE_ENTRY_RESP_TLV - 545 */ 
+	/* P2P */
+    wfaStaGenericResp,                  
+    wfaStaGenericResp,                   
+	wfaStaStartWfdConnectionResp,
+	wfaStaCliCmdResp,  /* 75 */
+	wfaStaConnectGoStartWfdResp,  /* 76 */
+	wfaStaGenericResp,  /* 77 */
+	wfaStaGenericResp,	/* 78 */
+	wfaStaGetParameterResp,	/* 79 */
+	wfaStaNfcActionResp, /* 80*/
+	wfaStaInvokeCommandResp, /* 81*/
+	wfaStaManageServiceResp, /* 82*/
+	wfaStaGetEventsResp, /* 83*/
+	wfaStaGetEventDataResp, /* 84*/
+	
+	
 
 };
 
@@ -1170,19 +1177,25 @@ int wfaStaGetParameterResp(BYTE *cmdBuf)
         done = 1;
         break;
 
-    case STATUS_COMPLETE:
-        if(getParamInfo->getParamType == eDiscoveredDevList)
-        {
-            sprintf(gRespStr, "status,COMPLETE,DeviceList,%s\r\n",getParamInfo->devList);
-            printf("status,COMPLETE,DeviceList,%s\r\n", getParamInfo->devList);
-            break;
-        }
-        else
-        {
-            sprintf(gRespStr, "status,COMPLETE,UnkownGetParmResp\r\n");
-            printf("status,COMPLETE,UnkownGetParmResp\r\n");
-            break;
-        }
+        case STATUS_COMPLETE:
+		if(getParamInfo->getParamType == eDiscoveredDevList)
+		{
+	        sprintf(gRespStr, "status,COMPLETE,DeviceList,%s\r\n",getParamInfo->devList);
+	        printf("status,COMPLETE,DeviceList,%s\r\n", getParamInfo->devList);
+	        break;		
+		}
+		if(getParamInfo->getParamType == eOpenPorts)
+		{
+	        sprintf(gRespStr, "status,COMPLETE,OpenPortList,%s\r\n",getParamInfo->devList);
+	        printf("status,COMPLETE,OpenPortList,%s\r\n", getParamInfo->devList);
+	        break;		
+		}
+		else
+		{
+	        sprintf(gRespStr, "status,COMPLETE,UnkownGetParmResp\r\n");
+	        printf("status,COMPLETE,UnkownGetParmResp\r\n");
+	        break;		
+		}
 
     default:
         sprintf(gRespStr, "status,INVALID\r\n");
@@ -1195,4 +1208,347 @@ int wfaStaGetParameterResp(BYTE *cmdBuf)
 
 }
 
+int wfaStaNfcActionResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *p2pResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caStaNfcActionResp_t *nfcAction= &p2pResp->cmdru.staNfcAction;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaNfcActionResp ...\n");
+    switch(p2pResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaNfcActionResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,result,%s,groupid,%s,peerRoole,%i\r\n", nfcAction->result,nfcAction->grpId,nfcAction->peerRole);
+        printf("status,COMPLETE,result,%s,groupid,%s,peerRoole,%i\r\n", nfcAction->result,nfcAction->grpId,nfcAction->peerRole);
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+int wfaStaInvokeCommandResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *dutResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caStaInvokeCmdResp_t *invokeCmdResp = &dutResp->cmdru.staInvokeCmd;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaInvokeCommandResp ...\n");
+    switch(dutResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaInvokeCommandResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+		if ( invokeCmdResp->invokeCmdRspType == eCmdPrimTypeAdvt )
+		{
+			int i;
+			char advidList[256];
+			char serviceList[256];
+			char serviceMac[256];
+			
+			memset(advidList,'\0',256);
+			memset(serviceList,'\0',256);
+			memset(serviceList,'\0',256);
+			
+			for (i =0 ; i < invokeCmdResp->invokeCmdResp.advRsp.numServInfo; i++)
+			{
+				sprintf(serviceList, "%s %s",serviceList,invokeCmdResp->invokeCmdResp.advRsp.servAdvInfo[i].servName );
+				sprintf(advidList, "%s %lx", advidList,invokeCmdResp->invokeCmdResp.advRsp.servAdvInfo[i].advtID );			
+				sprintf(serviceMac, "%s %s", serviceMac,invokeCmdResp->invokeCmdResp.advRsp.servAdvInfo[i].serviceMac );			
+			}
+			sprintf(gRespStr, "status,COMPLETE,ServName,%s,AdvID,%s,Service_Mac,%s\r\n",serviceList,advidList,serviceMac );
+			printf("status,COMPLETE,ServName,%s,AdvID,%s,Service_Mac,%s\r\n",serviceList,advidList,serviceMac );
+
+		}
+		else if( invokeCmdResp->invokeCmdRspType == eCmdPrimTypeSeek )
+		{
+			sprintf(gRespStr, "status,COMPLETE,SearchID,%lx\r\n",invokeCmdResp->invokeCmdResp.seekRsp.searchID );
+			printf("status,COMPLETE,SearchID,%lx\r\n",invokeCmdResp->invokeCmdResp.seekRsp.searchID );
+
+		}
+		else if( invokeCmdResp->invokeCmdRspType == eCmdPrimTypeConnSession )
+		{
+			sprintf(gRespStr, "status,COMPLETE,Session_id,%lx,P2P_result,%s,groupid,%s\r\n", \
+				invokeCmdResp->invokeCmdResp.connSessResp.sessionID,invokeCmdResp->invokeCmdResp.connSessResp.result,
+				invokeCmdResp->invokeCmdResp.connSessResp.grpId);
+			printf("status,COMPLETE,Session_id,%lx,P2P_result,%s,groupid,%s\r\n", \
+				invokeCmdResp->invokeCmdResp.connSessResp.sessionID,invokeCmdResp->invokeCmdResp.connSessResp.result,
+				invokeCmdResp->invokeCmdResp.connSessResp.grpId);
+
+		}
+		else if( invokeCmdResp->invokeCmdRspType == eCmdPrimTypeCancel || 
+			invokeCmdResp->invokeCmdRspType == eCmdPrimTypeConfirmSession||
+			invokeCmdResp->invokeCmdRspType == eCmdPrimTypeSetSessionReady||
+			invokeCmdResp->invokeCmdRspType == eCmdPrimTypeBoundPort||
+			invokeCmdResp->invokeCmdRspType == eCmdPrimTypeServiceStatusChange||
+			invokeCmdResp->invokeCmdRspType == eCmdPrimTypeCloseSession)
+		{
+			sprintf(gRespStr, "status,COMPLETE\r\n");
+			printf("status,COMPLETE\r\n");
+
+		}
+		
+		else
+		{
+		    sprintf(gRespStr, "status,INVALID\r\n");
+        	DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+		}
+			
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+
+int wfaStaManageServiceResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *dutResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caStaConnSessCmdResp_t *mangeServ= &dutResp->cmdru.staManageServ;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaManageServiceResp ...\n");
+    switch(dutResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaManageServiceResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+		sprintf(gRespStr, "status,COMPLETE,Session_id,%lx,P2P_result,%s,groupid,%s\r\n", \
+			mangeServ->sessionID,mangeServ->result,mangeServ->grpId);
+		printf("status,COMPLETE,Session_id,%lx,P2P_result,%s,groupid,%s\r\n", \
+			mangeServ->sessionID,mangeServ->result,mangeServ->grpId);			
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+
+int wfaStaGetEventsResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *dutResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caStaGetEventListCmdResp_t *resonse= &dutResp->cmdru.staGetEvents;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaGetEventsResp ...\n");
+    switch(dutResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaGetEventsResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,EventList,%s\r\n", resonse->result);
+        printf("status,COMPLETE,EventList,%s\r\n",resonse->result );
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+
+int wfaStaGetEventDataResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *dutResp = (dutCmdResponse_t *) (cmdBuf + 4);
+	caStaGetEventDetailsCmdResp_t *evntDataResp = &dutResp->cmdru.staGetEventDetails;
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaGetEventDataResp ...\n");
+    switch(dutResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaGetEventDataResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+		if ( evntDataResp->eventID== eSearchResult )
+		{
+
+			sprintf(gRespStr, "status,COMPLETE,SerchId,%lx,Service_Mac,%s,AdvID,%lx,Service_name,%s,service_status,%i\r\n",\
+				evntDataResp->getEventDetails.searchResult.searchID,\
+				evntDataResp->getEventDetails.searchResult.serviceMac,\
+				evntDataResp->getEventDetails.searchResult.advID,\
+				evntDataResp->getEventDetails.searchResult.serviceName,\
+				evntDataResp->getEventDetails.searchResult.serviceStatus);
+
+
+			printf("status,COMPLETE,SerchId,%lx,Service_Mac,%s,AdvID,%lx,Service_name,%s,service_status,%i\r\n",\
+				evntDataResp->getEventDetails.searchResult.searchID,\
+				evntDataResp->getEventDetails.searchResult.serviceMac,\
+				evntDataResp->getEventDetails.searchResult.advID,\
+				evntDataResp->getEventDetails.searchResult.serviceName,\
+				evntDataResp->getEventDetails.searchResult.serviceStatus );			
+
+		}
+		else if( evntDataResp->eventID == eSearchTerminated )
+		{
+			sprintf(gRespStr, "status,COMPLETE,SearchID,%lx\r\n",evntDataResp->getEventDetails.searchTerminated.searchID );
+			printf("status,COMPLETE,SearchID,%lx\r\n",evntDataResp->getEventDetails.searchTerminated.searchID );
+
+		}
+		else if( evntDataResp->eventID == eAdvertiseStatus )
+		{
+			char t_status[32];
+			if (evntDataResp->getEventDetails.advStatus.status == eAdvertised)
+				strcpy(t_status,"Advertised");
+			else
+				strcpy(t_status,"NotAdvertised");
+				
+
+			sprintf(gRespStr, "status,COMPLETE,AdvID,%lx,status,%s\r\n",\
+				evntDataResp->getEventDetails.advStatus.advID,t_status);
+
+			printf("status,COMPLETE,AdvID,%lx,status,%s\r\n",\
+				evntDataResp->getEventDetails.advStatus.advID,t_status );	
+
+
+		}
+		else if( evntDataResp->eventID== eSessionRequest )
+		{
+
+			sprintf(gRespStr, "status,COMPLETE,AdvID,%lx,Session_Mac,%s,session_ID,%lx\r\n",\
+				evntDataResp->getEventDetails.sessionReq.advID,\
+				evntDataResp->getEventDetails.sessionReq.sessionMac,\
+				evntDataResp->getEventDetails.sessionReq.sessionID);
+
+
+			printf("status,COMPLETE,AdvID,%lx,Session_Mac,%s,session_ID,%lx\r\n",\
+				evntDataResp->getEventDetails.sessionReq.advID,\
+				evntDataResp->getEventDetails.sessionReq.sessionMac,\
+				evntDataResp->getEventDetails.sessionReq.sessionID );			
+		}
+
+		else if( evntDataResp->eventID== eSessionStatus )
+		{
+			char t_status[32];
+			if (evntDataResp->getEventDetails.sessionStatus.state == eSessionStateOpen)
+				strcpy(t_status,"OPEN");
+			else if(evntDataResp->getEventDetails.sessionStatus.state == eSessionStateInitiated)
+				strcpy(t_status,"INITIATED");
+			else if(evntDataResp->getEventDetails.sessionStatus.state == eSessionStateRequested)
+				strcpy(t_status,"REQUESTED");
+			else if(evntDataResp->getEventDetails.sessionStatus.state == eSessionStateClosed)
+				strcpy(t_status,"CLOSED");								
+
+
+			sprintf(gRespStr, "status,COMPLETE,session_ID,%lx,Session_Mac,%s,state,%s\r\n",\
+				evntDataResp->getEventDetails.sessionStatus.sessionID,\
+				evntDataResp->getEventDetails.sessionStatus.sessionMac,\
+				t_status);
+
+
+			printf("status,COMPLETE,session_ID,%lx,Session_Mac,%s,state,%s\r\n",\
+				evntDataResp->getEventDetails.sessionStatus.sessionID,\
+				evntDataResp->getEventDetails.sessionStatus.sessionMac,\
+				t_status );			
+		}
+		
+		else if( evntDataResp->eventID== eConnectStatus )
+		{
+			char t_status[32];
+			if (evntDataResp->getEventDetails.connStatus.status == eNetworkRoleRejected)
+				strcpy(t_status,"NetworkRoleRejected");
+			else if(evntDataResp->getEventDetails.connStatus.status == eServiceRequestReceived)
+				strcpy(t_status,"ServiceRequestReceived");
+			else if(evntDataResp->getEventDetails.connStatus.status == eServiceRequestDifferred)
+				strcpy(t_status,"ServiceRequestDifferred");
+			else if(evntDataResp->getEventDetails.connStatus.status == eServiceRequestAccepted)
+				strcpy(t_status,"ServiceRequestAccepted");								
+			else if(evntDataResp->getEventDetails.connStatus.status == eServiceRequestFailed)
+				strcpy(t_status,"ServiceRequestFailed");								
+			else if(evntDataResp->getEventDetails.connStatus.status == eGroupFormationStarted)
+				strcpy(t_status,"GroupFormationStarted");								
+			else if(evntDataResp->getEventDetails.connStatus.status == eGroupFormationComplete)
+				strcpy(t_status,"GroupFormationComplete");								
+			else if(evntDataResp->getEventDetails.connStatus.status == eGroupFormationFailed)
+				strcpy(t_status,"GroupFormationFailed");	
+
+
+			sprintf(gRespStr, "status,COMPLETE,session_ID,%lx,Session_Mac,%s,status,%s\r\n",\
+				evntDataResp->getEventDetails.connStatus.sessionID,\
+				evntDataResp->getEventDetails.connStatus.sessionMac,\
+				t_status);
+
+
+			printf("status,COMPLETE,session_ID,%lx,Session_Mac,%s,status,%s\r\n",\
+				evntDataResp->getEventDetails.connStatus.sessionID,\
+				evntDataResp->getEventDetails.connStatus.sessionMac,\
+				t_status );			
+		}
+
+		else if( evntDataResp->eventID== ePortStatus )
+		{
+			char t_status[32];
+			if (evntDataResp->getEventDetails.portStatus.status == eLocalPortAllowed)
+				strcpy(t_status,"LocalPortAllowed");
+			else if(evntDataResp->getEventDetails.portStatus.status == eLocalPortBlocked)
+				strcpy(t_status,"LocalPortBlocked");
+			else if(evntDataResp->getEventDetails.portStatus.status == eFailure)
+				strcpy(t_status,"Failure");
+			else if(evntDataResp->getEventDetails.portStatus.status == eRemotePortAllowed)
+				strcpy(t_status,"RemotePortAllowed");								
+
+
+			sprintf(gRespStr, "status,COMPLETE,session_ID,%lx,Session_Mac,%s,port,%i,status,%s\r\n",\
+				evntDataResp->getEventDetails.portStatus.sessionID,\
+				evntDataResp->getEventDetails.portStatus.sessionMac,\
+				evntDataResp->getEventDetails.portStatus.port,t_status);
+
+
+			printf("status,COMPLETE,session_ID,%lx,Session_Mac,%s,port,%i,status,%s\r\n",\
+				evntDataResp->getEventDetails.portStatus.sessionID,\
+				evntDataResp->getEventDetails.portStatus.sessionMac,\
+				evntDataResp->getEventDetails.portStatus.port,t_status );			
+		}
+
+		
+		else
+		{
+		    sprintf(gRespStr, "status,INVALID\r\n");
+        	DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+		}
+			
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
 

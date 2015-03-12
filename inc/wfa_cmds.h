@@ -419,6 +419,7 @@ enum
     PROG_TYPE_TDLS,
     PROG_TYPE_VENT,
     PROG_TYPE_WFD,
+	PROG_TYPE_WFDS,
     PROG_TYPE_HS2,
     PROG_TYPE_HS2_R2
 };
@@ -473,9 +474,10 @@ typedef struct ca_sta_reinvoke_wfd_session
     BYTE wfdInvitationAction;
 } caStaReinvokeWfdSession_t;
 
-enum
-{
-    eDiscoveredDevList = 1,
+enum {
+	eDiscoveredDevList = 1,
+	eOpenPorts,
+		
 };
 
 
@@ -486,11 +488,291 @@ typedef struct ca_sta_get_parameter
     BYTE getParamValue;
 } caStaGetParameter_t;
 
-
-enum
+typedef struct ca_sta_nfc_action
 {
-    eUibcGen = 1,
-    eUibcHid,
+   char intf[WFA_IF_NAME_LEN];
+   WORD nfcOperation;
+   unsigned char intent_val_flag;
+   WORD intent_val;
+   unsigned char oper_chn_flag;
+   WORD oper_chn;	
+   unsigned char ssid_flag;
+   char ssid[WFA_SSID_NAME_LEN];  
+   unsigned char nfc_init_flag;
+   WORD nfc_init;	   
+} caStaNfcAction_t;
+
+enum {
+	eNfcWriteSelect = 1,
+	eNfcWriteConfig,
+	eNfcWritePasswd,		
+	eNfcReadTag,
+    eNfcHandOver,
+    eNfcWpsHandOver,
+    
+};
+
+enum {
+	eCmdPrimTypeAdvt = 1,
+	eCmdPrimTypeSeek,
+	eCmdPrimTypeCancel,
+	eCmdPrimTypeConnSession,   
+	eCmdPrimTypeConfirmSession,
+	eCmdPrimTypeSetSessionReady,   
+	eCmdPrimTypeBoundPort,   
+	eCmdPrimTypeServiceStatusChange,   
+	eCmdPrimTypeCloseSession,
+	
+};
+
+enum {
+	eServiceNameOOB= 1,
+	eServiceNameSend,
+	eServiceNameDisplay,
+	eServiceNamePlay,
+	eServiceNamePrint,	
+};
+
+enum {
+	eServiceRoleTx= 1,
+	eServiceRoleRx,	
+};
+
+enum {
+	ePrimitiveCmdType= 1,
+	eMessageCmdType,
+};
+
+enum {
+	eMsgReqSession= 1,
+	eMsgRmvSession,
+	eMsgRejSession,	
+	eMsgAddedSession,
+};
+enum {
+	eSearchResult= 1,
+	eSearchTerminated,
+	eAdvertiseStatus,	
+	eSessionRequest,
+	eConnectStatus,
+	eSessionStatus,	
+	ePortStatus,	
+};
+
+
+typedef struct sta_cmdType_Primitive_Adv
+{
+   WORD PrimType;
+   unsigned char serviceName_flag;
+   char serviceName[64];
+   unsigned char autoAccept_flag;
+   WORD autoAccpet;
+   unsigned char serviceInfo_flag;
+   char serviceInfo[64];
+   unsigned char serviceStatus_flag;
+   WORD serviceStaus;   
+}staCmdTypePrimitiveAdv;
+
+typedef struct sta_cmdType_Primitive_Seek
+{
+   WORD PrimType;
+   unsigned char serviceName_flag;
+   char serviceName[64];
+   unsigned char exactSearch_flag;
+   char exactSearch;
+   unsigned char macAddress_flag;
+   char macaddress[WFA_MAC_ADDR_STR_LEN];   
+   unsigned char serviceInfo_flag;
+   char serviceInfo[64];
+}staCmdTypePrimitiveSeek;
+
+typedef struct sta_cmdType_Primitive_Cancel
+{
+   WORD PrimType;
+   unsigned char cancelMethod_flag;
+   WORD cancelMethod; // use the enums of the service to indicate the API's   
+}staCmdTypePrimitiveCancel;
+
+typedef struct sta_cmdType_Primitive_ConnectSession
+{
+   WORD PrimType;
+   unsigned char serviceMac_flag;
+   char serviceMac[WFA_MAC_ADDR_STR_LEN];   
+   unsigned char advId_flag;
+   long int advID;   
+   unsigned char sessionInfo_flag;
+   char sessionInfo[64];
+   unsigned char networkRole_flag;
+   WORD networkRole;
+   unsigned char connCapInfo_flag;
+   WORD connCapInfo;
+   unsigned char ssid_flag;
+   char ssid[64];
+   unsigned char operChn_flag;
+   int operChn;
+}staCmdTypePrimitiveConnectSession;
+
+typedef struct sta_cmdType_Primitive_ConfirmSession
+{
+   WORD PrimType;
+   unsigned char sessionMac_flag;
+   char sessionMac[WFA_MAC_ADDR_STR_LEN];   
+   unsigned char sessionID_flag;
+   long int sessionID;   
+   unsigned char confirmed_flag;
+   WORD confirmed;
+}staCmdTypePrimitiveConfirmSession;
+typedef struct sta_cmdType_Primitive_SetSessionReady
+{
+   WORD PrimType;
+   unsigned char sessionMac_flag;
+   char sessionMac[WFA_MAC_ADDR_STR_LEN];   
+   unsigned char sessionID_flag;
+   long int sessionID;   
+}staCmdTypePrimitiveSetSessionReady;
+typedef struct sta_cmdType_Primitive_BoundPort
+{
+   WORD PrimType;
+   unsigned char sessionMac_flag;
+   char sessionMac[WFA_MAC_ADDR_STR_LEN];   
+   unsigned char sessionID_flag;
+   long int sessionID;   
+   unsigned char port_flag;
+   WORD port;
+}staCmdTypePrimitiveBoundPort;
+typedef struct sta_cmdType_Primitive_SerivceStatusChange
+{
+   WORD PrimType;
+   unsigned char advId_flag;
+   long int advID;   
+   unsigned char serviceStatus_flag;
+   WORD serviceStatus;
+}staCmdTypePrimitiveServiceStatusChange;
+
+typedef struct sta_cmdType_Primitive_CloseSession
+{
+   WORD PrimType;
+   unsigned char sessionMac_flag;
+   char sessionMac[WFA_MAC_ADDR_STR_LEN];   
+   unsigned char sessionID_flag;
+   long int sessionID;   
+}staCmdTypePrimitiveCloseSession;
+
+typedef struct sta_cmdType_Message
+{
+   WORD opcode;
+   unsigned char sessionId_flag;
+   long int sessionID;
+   unsigned char sessionMac_flag;
+   char sessionMac[WFA_MAC_ADDR_STR_LEN]; 
+}staCmdTypeMessage;
+
+typedef struct ca_sta_get_events
+{
+   char intf[WFA_IF_NAME_LEN];
+   BYTE program;
+} caStaGetEvents_t;
+
+
+typedef struct ca_sta_get_event_details
+{
+	char intf[WFA_IF_NAME_LEN];
+	BYTE program;
+	WORD eventId;
+
+} caStaGetEventDetails_t;
+
+typedef struct ca_sta_invoke_command
+{
+   char intf[WFA_IF_NAME_LEN];
+   WORD program;
+   WORD cmdType;
+   union _InvokeCmds
+   {
+   		union _PrimType
+		{
+		   	WORD PrimType;
+			staCmdTypePrimitiveAdv AdvPrim;
+			staCmdTypePrimitiveSeek SeekPrim;
+			staCmdTypePrimitiveCancel CancelPrim;
+			staCmdTypePrimitiveConnectSession ConnSessPrim;	
+			staCmdTypePrimitiveConfirmSession ConfSessPrim;
+			staCmdTypePrimitiveSetSessionReady SetSessRdyPrim;
+			staCmdTypePrimitiveBoundPort BoundPortPrim;
+			staCmdTypePrimitiveServiceStatusChange ServStatusChngPrim;
+			staCmdTypePrimitiveCloseSession CloseSessPrim;
+   		}primtiveType;		
+		staCmdTypeMessage Msg ;
+   }InvokeCmds;
+} caStaInvokeCmd_t;
+
+enum {
+	eWfdsMgtActionsTransfer= 1,
+	eWfdsMgtActionsPause,
+	eWfdsMgtActionsResume,
+	eWfdsMgtActionsModify,
+	eWfdsMgtActionsCancel,
+	eWfdsMgtActionsAmidClose,
+	eWfdsMgtActionsClose,
+	eWfdsMgtActionsReceive,
+	eWfdsMgtActionsPlay,
+	eWfdsMgtActionsDisplay,
+	eWfdsMgtActionsGetPrintAttr,
+	eWfdsMgtActionsPrintJobOper,
+	eWfdsMgtActionsGetJobAttr,
+	eWfdsMgtActionsCreateJobOper,
+	eWfdsMgtActionsSendPrintDoc,
+	eWfdsMgtActionsDoNothing,
+	
+};
+
+enum {
+	ePclmPdr= 1,
+	ePwgPdr,
+};
+typedef struct sta_wfds_ManageService
+{
+   WORD serviceName;
+   WORD serviceRole;
+   //optional args
+   unsigned char serviceMac_flag;
+   char serviceMac[WFA_MAC_ADDR_STR_LEN];   
+   unsigned char advId_flag;
+   long int advID;   
+   unsigned char sessionInfo_flag;
+   char sessionInfo[64];
+   unsigned char networkRole_flag;
+   WORD networkRole;
+   unsigned char connCapInfo_flag;
+   WORD connCapInfo;
+   unsigned char mngActions_flag;
+   unsigned char numMngActions;   
+   WORD mgtActions[8];
+   unsigned char sendFileList_flag;
+   unsigned char numFiles;
+   char fileList[2][16];
+   unsigned char modSendFileList_flag;
+   unsigned char numModFiles;   
+   char modFileList[2][16];      
+   unsigned char PdlType_flag;
+   WORD PdlType;
+   
+  } staWfdsMngService;
+
+typedef struct ca_sta_manage_service
+{
+   char intf[WFA_IF_NAME_LEN];
+   WORD program;
+   union _MngServiceCmds
+   {
+		staWfdsMngService MgtServ;
+   }MngCmds;
+} caStaMngServ_t;
+
+
+enum {
+	eUibcGen = 1,
+	eUibcHid,
     eFrameSkip,
     eInputContent,
     eI2cRead,
@@ -888,7 +1170,21 @@ typedef enum wfa_VideoFormats
     e848x480p60,
 } wfavideoFormats;
 
+typedef enum wfa_wfdsPresetTypes
+{	
+   eAcceptPD= 1,
+   eRejectPD,
+   eIgnorePD,
+} wfaWfdsPresetTypes;
 
+typedef enum wfa_wfdsConnCapInfo
+{	
+   eWfdsGO= 1,
+   eWfdsCLI,
+   eWfdsNewGO,
+   eWfdsNew,
+   eWfdsCliGO,
+} wfaWfdsConnCapInfo;
 
 typedef struct ca_sta_preset_parameters
 {
@@ -921,55 +1217,63 @@ typedef struct ca_sta_preset_parameters
 
     BYTE tdlsFlag;
 
-    BYTE wfdDevTypeFlag;
-    BYTE wfdDevType ;
-    BYTE wfdUibcGenFlag;
-    BYTE wfdUibcGen ;
-    BYTE wfdUibcHidFlag;
-    BYTE wfdUibcHid ;
-    BYTE wfdUiInputFlag;
-    BYTE wfdUiInputs ;
-    BYTE wfdUiInput[3] ;
-    BYTE wfdHdcpFlag;
-    BYTE wfdHdcp ;
-    BYTE wfdFrameSkipFlag;
-    BYTE wfdFrameSkip ;
-    BYTE wfdAvChangeFlag;
-    BYTE wfdAvChange ;
-    BYTE wfdStandByFlag;
-    BYTE wfdStandBy ;
-    BYTE wfdInVideoFlag;
-    BYTE wfdInVideo ;
-    BYTE wfdVideoFmatFlag;
-    BYTE wfdInputVideoFmats;
-    BYTE wfdVideoFmt[64];
-    BYTE wfdAudioFmatFlag;
-    BYTE wfdAudioFmt ;
-    BYTE wfdI2cFlag;
-    BYTE wfdI2c ;
-    BYTE wfdVideoRecoveryFlag;
-    BYTE wfdVideoRecovery ;
-    BYTE wfdPrefDisplayFlag;
-    BYTE wfdPrefDisplay ;
-    BYTE wfdServiceDiscoveryFlag;
-    BYTE wfdServiceDiscovery ;
-    BYTE wfd3dVideoFlag;
-    BYTE wfd3dVideo ;
-    BYTE wfdMultiTxStreamFlag;
-    BYTE wfdMultiTxStream ;
-    BYTE wfdTimeSyncFlag;
-    BYTE wfdTimeSync ;
-    BYTE wfdEDIDFlag;
-    BYTE wfdEDID ;
-    BYTE wfdUIBCPrepareFlag;
-    BYTE wfdUIBCPrepare ;
-    BYTE wfdCoupledCapFlag;
-    BYTE wfdCoupledCap ;
-    BYTE wfdOptionalFeatureFlag;
-    BYTE wfdSessionAvail ;
-    BYTE wfdSessionAvailFlag;
-    BYTE wfdDeviceDiscoverability ;
-    BYTE wfdDeviceDiscoverabilityFlag;
+   BYTE wfdDevTypeFlag;
+   BYTE wfdDevType ;
+   BYTE wfdUibcGenFlag;
+   BYTE wfdUibcGen ;
+   BYTE wfdUibcHidFlag;
+   BYTE wfdUibcHid ;
+   BYTE wfdUiInputFlag;
+   BYTE wfdUiInputs ;   
+   BYTE wfdUiInput[3] ;
+   BYTE wfdHdcpFlag;
+   BYTE wfdHdcp ;
+   BYTE wfdFrameSkipFlag;
+   BYTE wfdFrameSkip ;
+   BYTE wfdAvChangeFlag;
+   BYTE wfdAvChange ;
+   BYTE wfdStandByFlag;
+   BYTE wfdStandBy ;
+   BYTE wfdInVideoFlag;
+   BYTE wfdInVideo ;
+   BYTE wfdVideoFmatFlag;
+   BYTE wfdInputVideoFmats;
+   BYTE wfdVideoFmt[64];
+   BYTE wfdAudioFmatFlag;
+   BYTE wfdAudioFmt ;   
+   BYTE wfdI2cFlag;
+   BYTE wfdI2c ;
+   BYTE wfdVideoRecoveryFlag;
+   BYTE wfdVideoRecovery ;   
+   BYTE wfdPrefDisplayFlag;
+   BYTE wfdPrefDisplay ;   
+   BYTE wfdServiceDiscoveryFlag;
+   BYTE wfdServiceDiscovery ;   
+   BYTE wfd3dVideoFlag;
+   BYTE wfd3dVideo ;   
+   BYTE wfdMultiTxStreamFlag;
+   BYTE wfdMultiTxStream ;   
+   BYTE wfdTimeSyncFlag;
+   BYTE wfdTimeSync ;   
+   BYTE wfdEDIDFlag;
+   BYTE wfdEDID ;   
+   BYTE wfdUIBCPrepareFlag;
+   BYTE wfdUIBCPrepare ;      
+   BYTE wfdCoupledCapFlag;
+   BYTE wfdCoupledCap ; 
+   BYTE wfdOptionalFeatureFlag;
+   BYTE wfdSessionAvail ; 
+   BYTE wfdSessionAvailFlag;
+   BYTE wfdDeviceDiscoverability ; 
+   BYTE wfdDeviceDiscoverabilityFlag;
+
+   // WFDS
+   BYTE wfdsType;
+   BYTE wfdsConnectionCapability;
+   BYTE wfdsConnectionCapabilityFlag;
+   
+  
+   
 } caStaPresetParameters_t;
 
 typedef struct ca_sta_set_11n

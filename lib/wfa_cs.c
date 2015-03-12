@@ -2308,14 +2308,41 @@ int wfaStaPresetParams(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
         }
     }
 
-    if (presetDone)
-    {
-        PresetParamsResp->status = STATUS_COMPLETE;
-    }
-    else
-    {
-        PresetParamsResp->status = STATUS_INVALID;
-    }
+   if(presetParams->program == PROG_TYPE_WFDS)
+   {
+
+	   if(presetParams->wfdsType == eAcceptPD)
+	   {
+	      // preset to accept PD request
+		 if (presetParams->wfdsConnectionCapabilityFlag == 1) 
+		 {
+		 	// use  presetParams->wfdsConnectionCapability and set role accordingly
+		 }
+
+	   }
+	   if(presetParams->wfdsType == eRejectPD)
+	   {
+	      // preset to Reject PD request
+	   }
+	   if(presetParams->wfdsType == eIgnorePD)
+	   {
+	      // preset to Ignore PD request
+	   }
+	   if(presetParams->wfdsType == eRejectSession)
+	   {
+	      // preset to reject Session request
+	   }
+	   
+   }
+   
+   if (presetDone)
+   {
+      PresetParamsResp->status = STATUS_COMPLETE;
+   }
+   else
+   {
+      PresetParamsResp->status = STATUS_INVALID;
+   }
 
     wfaEncodeTLV(WFA_STA_PRESET_PARAMETERS_RESP_TLV, 4, (BYTE *)PresetParamsResp, respBuf);
     *respLen = WFA_TLV_HDR_LEN + 4;
@@ -3888,12 +3915,253 @@ int wfaStaGetParameter(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
         }
     }
 
+	if(staGetParam->program == PROG_TYPE_WFDS)
+	{
 
-    infoResp.status = STATUS_COMPLETE;
-    wfaEncodeTLV(WFA_STA_GET_PARAMETER_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);
-    *respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+		if(staGetParam->getParamValue == eDiscoveredDevList )
+		{
+			// Get the discovered devices, make space seperated list and return, check list is not bigger than 128 bytes.
+			paramList->getParamType = eDiscoveredDevList;
+			strcpy((char *)&paramList->devList, "11:22:33:44:55:66 22:33:44:55:66:77 33:44:55:66:77:88");
+			
+		}
+		if(staGetParam->getParamValue == eOpenPorts)
+		{
+			// Run the port checker tool 
+			// Get all the open ports and make space seperated list and return, check list is not bigger than 128 bytes.
+			paramList->getParamType = eOpenPorts;
+			strcpy((char *)&paramList->devList, "22 139 445 68 9700");
+			
+		}
+		
+	}
 
-    return WFA_SUCCESS;
+	infoResp.status = STATUS_COMPLETE;
+	wfaEncodeTLV(WFA_STA_GET_PARAMETER_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);	
+	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+	
+   return WFA_SUCCESS;
 }
+
+
+int wfaStaNfcAction(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+
+	dutCmdResponse_t infoResp;
+	caStaNfcAction_t *getStaNfcAction = (caStaNfcAction_t *)caCmdBuf;  //uncomment and use it
+	
+	 printf("\n Entry wfaStaNfcAction... ");
+
+	if(getStaNfcAction->nfcOperation == eNfcHandOver)
+	{
+		printf("\n NfcAction - HandOver... ");
+	
+	}
+	else if(getStaNfcAction->nfcOperation == eNfcReadTag)
+	{
+		printf("\n NfcAction - Read Tag... ");
+
+	}
+	else if(getStaNfcAction->nfcOperation == eNfcWriteSelect)
+	{
+		printf("\n NfcAction - Write Select... ");
+	
+	}
+	else if(getStaNfcAction->nfcOperation == eNfcWriteConfig)
+	{
+		printf("\n NfcAction - Write Config... ");
+	
+	}
+	else if(getStaNfcAction->nfcOperation == eNfcWritePasswd)
+	{
+		printf("\n NfcAction - Write Password... ");
+	
+	}
+	else if(getStaNfcAction->nfcOperation == eNfcWpsHandOver)
+	{
+		printf("\n NfcAction - WPS Handover... ");
+	
+	}
+	
+	 // Fetch the device mode and put in	 infoResp->cmdru.p2presult 
+	 //strcpy(infoResp->cmdru.p2presult, "GO");
+	
+	 // Fetch the device grp id and put in	 infoResp->cmdru.grpid 
+	 //strcpy(infoResp->cmdru.grpid, "AA:BB:CC:DD:EE:FF_DIRECT-SSID");
+	 
+	 strcpy(infoResp.cmdru.staNfcAction.result, "CLIENT");
+	 strcpy(infoResp.cmdru.staNfcAction.grpId, "AA:BB:CC:DD:EE:FF_DIRECT-SSID");
+	 infoResp.cmdru.staNfcAction.peerRole = 1;
+	
+	
+
+
+	infoResp.status = STATUS_COMPLETE;
+	wfaEncodeTLV(WFA_STA_NFC_ACTION_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf); 
+	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+	
+   return WFA_SUCCESS;
+}
+
+int wfaStaInvokeCommand(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+
+	dutCmdResponse_t infoResp;
+	caStaInvokeCmd_t *staInvokeCmd = (caStaInvokeCmd_t *)caCmdBuf;  //uncomment and use it
+	
+	 printf("\n Entry wfaStaInvokeCommand... ");
+
+
+	 // based on the command type , invoke API or complete the required procedures
+	 // return the  defined parameters based on the command that is received ( example response below)
+
+	if(staInvokeCmd->cmdType == ePrimitiveCmdType && staInvokeCmd->InvokeCmds.primtiveType.PrimType == eCmdPrimTypeAdvt )
+	{
+		 infoResp.cmdru.staInvokeCmd.invokeCmdRspType = eCmdPrimTypeAdvt;
+		 infoResp.cmdru.staInvokeCmd.invokeCmdResp.advRsp.numServInfo = 1;
+		 strcpy(infoResp.cmdru.staInvokeCmd.invokeCmdResp.advRsp.servAdvInfo[0].servName,"org.wi-fi.wfds.send.rx");
+		 infoResp.cmdru.staInvokeCmd.invokeCmdResp.advRsp.servAdvInfo[0].advtID = 0x0000f;
+		 strcpy(infoResp.cmdru.staInvokeCmd.invokeCmdResp.advRsp.servAdvInfo[0].serviceMac,"ab:cd:ef:gh:ij:kl");
+	}
+	else if (staInvokeCmd->cmdType == ePrimitiveCmdType && staInvokeCmd->InvokeCmds.primtiveType.PrimType == eCmdPrimTypeSeek)
+	{
+		infoResp.cmdru.staInvokeCmd.invokeCmdRspType = eCmdPrimTypeSeek;
+		infoResp.cmdru.staInvokeCmd.invokeCmdResp.seekRsp.searchID = 0x000ff;	
+	}
+	else if (staInvokeCmd->cmdType == ePrimitiveCmdType && staInvokeCmd->InvokeCmds.primtiveType.PrimType == eCmdPrimTypeConnSession)
+	{
+		infoResp.cmdru.staInvokeCmd.invokeCmdRspType = eCmdPrimTypeConnSession;
+		infoResp.cmdru.staInvokeCmd.invokeCmdResp.connSessResp.sessionID = 0x000ff;  
+		strcpy(infoResp.cmdru.staInvokeCmd.invokeCmdResp.connSessResp.result,"GO");
+		strcpy(infoResp.cmdru.staInvokeCmd.invokeCmdResp.connSessResp.grpId,"DIRECT-AB WFADUT");
+	
+	}	
+	infoResp.status = STATUS_COMPLETE;
+	wfaEncodeTLV(WFA_STA_INVOKE_CMD_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf); 
+	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+	
+   return WFA_SUCCESS;
+}
+
+
+int wfaStaManageService(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+
+	dutCmdResponse_t infoResp;
+	//caStaMngServ_t *staMngServ = (caStaMngServ_t *)caCmdBuf;  //uncomment and use it
+	
+	 printf("\n Entry wfaStaManageService... ");
+
+	// based on the manage service type , invoke API's or complete the required procedures
+	// return the  defined parameters based on the command that is received ( example response below)
+	strcpy(infoResp.cmdru.staManageServ.result, "CLIENT");
+	strcpy(infoResp.cmdru.staManageServ.grpId, "AA:BB:CC:DD:EE:FF_DIRECT-SSID");
+    infoResp.cmdru.staManageServ.sessionID = 0x000ff;
+
+	infoResp.status = STATUS_COMPLETE;
+	wfaEncodeTLV(WFA_STA_MANAGE_SERVICE_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf); 
+	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+	
+   return WFA_SUCCESS;
+}
+
+
+	
+int wfaStaGetEvents(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+
+	dutCmdResponse_t infoResp;
+	//caStaGetEvents_t *staGetEvents = (caStaGetEvents_t *)caCmdBuf;  //uncomment and use it
+	
+	 printf("\n Entry wfaStaGetEvents... ");
+
+	// Get all the event from the Log file or stored events
+	// return the  received/recorded events as space seperated list   ( example response below)
+	strcpy(infoResp.cmdru.staGetEvents.result, "SearchResult SearchTerminated AdvertiseStatus SessionRequest ConnectStatus SessionStatus PortStatus");
+	
+	infoResp.status = STATUS_COMPLETE;
+	wfaEncodeTLV(WFA_STA_GET_EVENTS_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf); 
+	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+	
+   return WFA_SUCCESS;
+}
+
+int wfaStaGetEventDetails(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+
+	dutCmdResponse_t infoResp;
+	caStaGetEventDetails_t *getStaGetEventDetails = (caStaMngServ_t *)caCmdBuf;  //uncomment and use it
+	
+	 printf("\n Entry wfaStaGetEventDetails... ");
+
+
+	 // based on the Requested Event type
+	 // return the latest corresponding evnet detailed parameters  ( example response below)
+
+	if(getStaGetEventDetails->eventId== eSearchResult )
+	{
+		// fetch from log file or event history for the search result event and return the parameters
+		infoResp.cmdru.staGetEventDetails.eventID= eSearchResult;
+
+		infoResp.cmdru.staGetEventDetails.getEventDetails.searchResult.searchID = 0x00abcd;
+		strcpy(infoResp.cmdru.staGetEventDetails.getEventDetails.searchResult.serviceMac,"ab:cd:ef:gh:ij:kl");
+		infoResp.cmdru.staGetEventDetails.getEventDetails.searchResult.advID = 0x00dcba;
+		strcpy(infoResp.cmdru.staGetEventDetails.getEventDetails.searchResult.serviceName,"org.wi-fi.wfds.send.rx");
+
+		infoResp.cmdru.staGetEventDetails.getEventDetails.searchResult.serviceStatus = eServiceAvilable;
+	}
+	else if (getStaGetEventDetails->eventId == eSearchTerminated)
+	{		// fetch from log file or event history for the search terminated event and return the parameters
+		infoResp.cmdru.staGetEventDetails.eventID= eSearchTerminated;	
+		infoResp.cmdru.staGetEventDetails.getEventDetails.searchTerminated.searchID = 0x00abcd;
+	}
+	else if (getStaGetEventDetails->eventId == eAdvertiseStatus)
+	{// fetch from log file or event history for the Advertise Status event and return the parameters
+		infoResp.cmdru.staGetEventDetails.eventID= eAdvertiseStatus;	
+		infoResp.cmdru.staGetEventDetails.getEventDetails.advStatus.advID = 0x00dcba;
+
+		infoResp.cmdru.staGetEventDetails.getEventDetails.advStatus.status = eAdvertised;	
+	}	
+	else if (getStaGetEventDetails->eventId == eSessionRequest)
+	{// fetch from log file or event history for the session request event and return the parameters
+		infoResp.cmdru.staGetEventDetails.eventID= eSessionRequest;	
+		infoResp.cmdru.staGetEventDetails.getEventDetails.sessionReq.advID = 0x00dcba;
+		strcpy(infoResp.cmdru.staGetEventDetails.getEventDetails.sessionReq.sessionMac,"ab:cd:ef:gh:ij:kl");
+		infoResp.cmdru.staGetEventDetails.getEventDetails.sessionReq.sessionID = 0x00baba;	
+	}	
+	else if (getStaGetEventDetails->eventId ==eSessionStatus )
+	{// fetch from log file or event history for the session status event and return the parameters
+		infoResp.cmdru.staGetEventDetails.eventID= eSessionStatus;	
+		infoResp.cmdru.staGetEventDetails.getEventDetails.sessionStatus.sessionID = 0x00baba;	
+		strcpy(infoResp.cmdru.staGetEventDetails.getEventDetails.sessionStatus.sessionMac,"ab:cd:ef:gh:ij:kl");
+		infoResp.cmdru.staGetEventDetails.getEventDetails.sessionStatus.state = eSessionStateOpen;	
+	}	
+	else if (getStaGetEventDetails->eventId == eConnectStatus)
+	{
+		infoResp.cmdru.staGetEventDetails.eventID= eConnectStatus;	
+		infoResp.cmdru.staGetEventDetails.getEventDetails.connStatus.sessionID = 0x00baba;	
+		strcpy(infoResp.cmdru.staGetEventDetails.getEventDetails.connStatus.sessionMac,"ab:cd:ef:gh:ij:kl");
+		infoResp.cmdru.staGetEventDetails.getEventDetails.connStatus.status = eGroupFormationComplete;	
+	
+	}	
+	else if (getStaGetEventDetails->eventId == ePortStatus)
+	{
+		infoResp.cmdru.staGetEventDetails.eventID= ePortStatus;	
+		infoResp.cmdru.staGetEventDetails.getEventDetails.portStatus.sessionID = 0x00baba;	
+		strcpy(infoResp.cmdru.staGetEventDetails.getEventDetails.portStatus.sessionMac,"ab:cd:ef:gh:ij:kl");
+		infoResp.cmdru.staGetEventDetails.getEventDetails.portStatus.port = 1009;
+		infoResp.cmdru.staGetEventDetails.getEventDetails.portStatus.status = eLocalPortAllowed;	
+	}	
+
+
+
+	infoResp.status = STATUS_COMPLETE;
+	wfaEncodeTLV(WFA_STA_GET_EVENT_DETAILS_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf); 
+	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+	
+   return WFA_SUCCESS;
+}
+
+	
 
 

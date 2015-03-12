@@ -4857,6 +4857,7 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
                 str = strtok_r(uilist, " ", &uilist);
                 if(str == NULL || str[0] == '\0')
                     break;
+			   printf("\n The UI input is : %s",str);
 
                 if(strcasecmp(str, "keyboard") == 0)
                 {
@@ -4952,6 +4953,7 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
                 str = strtok_r(videolist, " ", &videolist);
                 if(str == NULL || str[0] == '\0')
                     break;
+			   printf("\n The Video format is : %s",str);
 
                 tstr1 = strtok_r(str, "-", &str);
                 tstr2 = strtok_r(str, "-", &str);
@@ -5152,22 +5154,27 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
             {
                 presetTestParams->program=PROG_TYPE_PMF;
             }
-            else if (strcasecmp(str, "General") == 0)
-            {
-                presetTestParams->program=PROG_TYPE_GEN;
-            }
-            else if (strcasecmp(str, "TDLS") == 0)
-            {
-                presetTestParams->program=PROG_TYPE_TDLS;
-            }
-            else if (strcasecmp(str, "VOE") == 0)
-            {
-                presetTestParams->program=PROG_TYPE_VENT;
-            }
-            else if (strcasecmp(str, "WFD") == 0)
-            {
-                presetTestParams->program=PROG_TYPE_WFD;
-            }
+			else if (strcasecmp(str, "General") == 0)
+			{
+				presetTestParams->program=PROG_TYPE_GEN;
+			}
+			else if (strcasecmp(str, "TDLS") == 0)
+			{
+				presetTestParams->program=PROG_TYPE_TDLS;
+			}
+			else if (strcasecmp(str, "VOE") == 0)
+			{
+				presetTestParams->program=PROG_TYPE_VENT;
+			}
+			else if (strcasecmp(str, "WFD") == 0)
+			{
+				presetTestParams->program=PROG_TYPE_WFD;
+			}
+			else if (strcasecmp(str, "WFDS") == 0)
+			{
+				presetTestParams->program=PROG_TYPE_WFDS;
+			}
+			
         }
         else if(strcasecmp(str, "CoupledCap") == 0)
         {
@@ -5190,6 +5197,48 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
                 presetTestParams->supplicant = eWpaSupplicant;
             }
         }
+		else if(strcasecmp(str, "type") == 0)
+		{
+		   str = strtok_r(NULL, ",", &pcmdStr);
+		   if(strcasecmp(str, "AcceptPD") == 0)
+		   {
+			  presetTestParams->wfdsType= eAcceptPD;
+		   }
+		   else if (strcasecmp(str, "RejectPD") == 0)
+		   {
+			  presetTestParams->wfdsType= eRejectPD;
+		   }
+		   else if (strcasecmp(str, "IgnorePD") == 0)
+		   {
+			  presetTestParams->wfdsType= eIgnorePD;
+		   }
+
+		}
+		else if(strcasecmp(str, "connectionCapabilityInfo") == 0)
+		{
+		   presetTestParams->wfdsConnectionCapabilityFlag=1;	
+		   str = strtok_r(NULL, ",", &pcmdStr);
+		   if(strcasecmp(str, "GO") == 0)
+		   {
+			  presetTestParams->wfdsConnectionCapability= eWfdsGO;
+		   }
+		   else if (strcasecmp(str, "CLI") == 0)
+		   {
+			  presetTestParams->wfdsConnectionCapability= eWfdsCLI;
+		   }
+		   else if (strcasecmp(str, "NewGO") == 0)
+		   {
+			  presetTestParams->wfdsConnectionCapability= eWfdsNewGO;
+		   }
+		   else if (strcasecmp(str, "New") == 0)
+		   {
+			  presetTestParams->wfdsConnectionCapability= eWfdsNew;
+		   }
+		   else if (strcasecmp(str, "CliGO") == 0)
+		   {
+			  presetTestParams->wfdsConnectionCapability= eWfdsCliGO;
+		   }
+		}
     }
 
     wfaEncodeTLV(WFA_STA_PRESET_PARAMETERS_TLV, sizeof(caStaPresetParameters_t), (BYTE *)presetTestParams, aBuf);
@@ -6034,26 +6083,929 @@ int xcCmdProcStaGetParameter(char *pcmdStr, BYTE *aBuf, int *aLen)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
 
-            if (strcasecmp(str, "WFD") == 0)
-            {
-                staGetParameter->program= PROG_TYPE_WFD;
-                str = strtok_r(NULL, ",", &pcmdStr);
-                if(strcasecmp(str, "Parameter") == 0)
-                {
-                    str = strtok_r(NULL, ",", &pcmdStr);
-                    if (strcasecmp(str, "DiscoveredDevList") == 0)
-                    {
-                        staGetParameter->getParamValue= eDiscoveredDevList;
-                    }
-                }
-            }
-        }
-    }
-
-    wfaEncodeTLV(WFA_STA_GET_PARAMETER_TLV, sizeof(caStaGetParameter_t), (BYTE *)staGetParameter, aBuf);
-
-    *aLen = 4+sizeof(caStaGetParameter_t);
-
-    return WFA_SUCCESS;
+		  if (strcasecmp(str, "WFD") == 0)
+		  {
+	  		  staGetParameter->program= PROG_TYPE_WFD;
+		  }
+		  else if (strcasecmp(str, "WFDS") == 0)
+		  {
+	  		  staGetParameter->program= PROG_TYPE_WFDS;
+		  }
+			  
+		  str = strtok_r(NULL, ",", &pcmdStr);
+		  if(strcasecmp(str, "Parameter") == 0)
+		  {
+			 str = strtok_r(NULL, ",", &pcmdStr);  
+			 if (strcasecmp(str, "DiscoveredDevList") == 0)
+			 {
+				 staGetParameter->getParamValue= eDiscoveredDevList;
+			 }
+			 else if (strcasecmp(str, "OpenPorts") == 0)
+			 {
+				 staGetParameter->getParamValue= eOpenPorts;				 
+			 }			 
+		  }
+		  
+	   	}
+	   
+	}
+	
+	wfaEncodeTLV(WFA_STA_GET_PARAMETER_TLV, sizeof(caStaGetParameter_t), (BYTE *)staGetParameter, aBuf);
+	
+	*aLen = 4+sizeof(caStaGetParameter_t);
+	 
+	return WFA_SUCCESS;
 }
+
+
+int xcCmdProcStaNfcAction(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+	caStaNfcAction_t *staNfcAction = (caStaNfcAction_t *) (aBuf+sizeof(wfaTLV));
+	char *str;
+	
+	if(aBuf == NULL)
+	   return FALSE;
+	
+	memset(aBuf, 0, *aLen);
+	
+	for(;;)
+	{
+	   str = strtok_r(NULL, ",", &pcmdStr);
+	   if(str == NULL || str[0] == '\0')
+		  break;
+	
+	   if(strcasecmp(str, "interface") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  strncpy(staNfcAction->intf, str,WFA_IF_NAME_LEN-1);
+		  staNfcAction->intf[WFA_IF_NAME_LEN-1]='\0';
+	   }
+	   else if(strcasecmp(str, "operation") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  if (strcasecmp(str, "write_select") == 0)
+		  {
+			  staNfcAction->nfcOperation= eNfcWriteSelect;
+		  }
+		  else if(strcasecmp(str, "read_tag") == 0)
+		  {
+			  staNfcAction->nfcOperation= eNfcReadTag;
+		  }
+		  else if(strcasecmp(str, "conn_hndovr") == 0)
+		  {
+			  staNfcAction->nfcOperation= eNfcHandOver;
+		  }
+		  else if(strcasecmp(str, "write_config") == 0)
+		  {
+			  staNfcAction->nfcOperation= eNfcWriteConfig;
+		  }
+		  else if(strcasecmp(str, "write_passwd") == 0)
+		  {
+			  staNfcAction->nfcOperation= eNfcWritePasswd;
+		  }
+		  else if(strcasecmp(str, "wps_conn_hndovr") == 0)
+		  {
+			  staNfcAction->nfcOperation= eNfcWpsHandOver;
+		  }		  
+	   }	   
+	   else if(strcasecmp(str, "intent_val") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+		  staNfcAction->intent_val= atoi(str);
+		  staNfcAction->intent_val_flag=1;		  
+	   }
+	   else if(strcasecmp(str, "oper_chn") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+		  staNfcAction->oper_chn= atoi(str);
+		  staNfcAction->oper_chn_flag=1;
+	   }
+	   else if(strcasecmp(str, "ssid") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  strncpy(staNfcAction->ssid, str, WFA_SSID_NAME_LEN-1);
+		  staNfcAction->ssid[WFA_SSID_NAME_LEN-1]='\0';
+		  staNfcAction->ssid_flag =1;
+	   }   
+	   else if(strcasecmp(str, "init") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+		  staNfcAction->nfc_init= atoi(str);
+		  staNfcAction->nfc_init_flag=1;
+	   }	   
+	}
+	
+	wfaEncodeTLV(WFA_STA_NFC_ACTION_TLV, sizeof(caStaNfcAction_t), (BYTE *)staNfcAction, aBuf);
+	
+	*aLen = 4+sizeof(caStaNfcAction_t);
+	 
+	return WFA_SUCCESS;
+}
+
+
+int xcCmdProcStaInvokeCommand(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+	caStaInvokeCmd_t *staInvokeCmd = (caStaInvokeCmd_t *) (aBuf+sizeof(wfaTLV));
+	char *str;
+	
+	if(aBuf == NULL)
+	   return FALSE;
+	
+	memset(aBuf, 0, *aLen);
+	
+	for(;;)
+	{
+	   str = strtok_r(NULL, ",", &pcmdStr);
+	   if(str == NULL || str[0] == '\0')
+		  break;
+	
+	   if(strcasecmp(str, "interface") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  strncpy(staInvokeCmd->intf, str,WFA_IF_NAME_LEN-1);
+		  staInvokeCmd->intf[WFA_IF_NAME_LEN-1]='\0';
+	   }
+	   else if(strcasecmp(str, "prog") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  if (strcasecmp(str, "WFDS") == 0)
+		  {
+			  staInvokeCmd->program= PROG_TYPE_WFDS;
+		  }
+	   }	   
+	   else if(strcasecmp(str, "command_type") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+		  if (strcasecmp(str, "Primitive") == 0)
+		  {
+			  staInvokeCmd->cmdType= ePrimitiveCmdType;
+		  }
+		  else if(strcasecmp(str, "Message") == 0)
+		  {
+			  staInvokeCmd->cmdType= eMessageCmdType;
+		  }
+	   }
+
+	   else if(strcasecmp(str, "primitive_type") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+		  if (strcasecmp(str, "Advertise") == 0)
+		  {
+			  staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.PrimType= eCmdPrimTypeAdvt;
+
+			  for(;;)
+			  {
+				 str = strtok_r(NULL, ",", &pcmdStr);
+				 if(str == NULL || str[0] == '\0')
+					break;
+
+				  if (strcasecmp(str, "service_name") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  if (strcasecmp(str, "OOB") == 0)
+					  {
+						  strcpy(staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.serviceName, "OOB");						  
+					  }
+					  else
+					  {
+						  strncpy(staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.serviceName, str,63);						 
+						  staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.serviceName[63]='\0';						  
+					  }
+
+					  staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.serviceName_flag= 1;
+				  }
+				  else if (strcasecmp(str, "auto_accept") == 0)
+				  {
+					  staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.autoAccept_flag= 1;				  		
+					  str = strtok_r(NULL, ",", &pcmdStr);
+
+					  staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.autoAccpet= atoi(str);
+
+				  }
+				  else if (strcasecmp(str, "service_info") == 0)
+				  {
+					  staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.serviceInfo_flag= 1;				  		
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  strncpy(staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.serviceInfo, str,63);
+					  staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.serviceInfo[63]='\0';
+
+				  }
+				  else if (strcasecmp(str, "service_status") == 0)
+				  {
+					  staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.serviceStatus_flag= 1;				  		
+					  str = strtok_r(NULL, ",", &pcmdStr);
+  					  staInvokeCmd->InvokeCmds.primtiveType.AdvPrim.serviceStaus= atoi(str);
+				  }
+				  
+			  }
+				  
+				  
+		  }
+
+		  else if (strcasecmp(str, "Seek") == 0)
+		  {
+			  staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.PrimType= eCmdPrimTypeSeek;
+
+			  for(;;)
+			  {
+				 str = strtok_r(NULL, ",", &pcmdStr);
+				 if(str == NULL || str[0] == '\0')
+					break;
+
+				  if (strcasecmp(str, "service_name") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  if (strcasecmp(str, "OOB") == 0)
+					  {
+						  strcpy(staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.serviceName, "OOB");						  
+					  }
+					  else
+					  {
+						  strncpy(staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.serviceName, str,63);						  
+						  staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.serviceName[63]='\0';
+						  
+					  }
+					  staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.serviceName_flag= 1;
+				  }
+				  else if (strcasecmp(str, "exact_search") == 0)
+				  {
+					  staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.exactSearch_flag= 1;				  		
+					  str = strtok_r(NULL, ",", &pcmdStr);
+  					  staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.exactSearch= atoi(str);
+				  }
+				  else if (strcasecmp(str, "mac_address") == 0)
+				  {
+					  staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.macAddress_flag= 1;				  		
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  strncpy(staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.macaddress,str,WFA_MAC_ADDR_STR_LEN-1);
+		  			  staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.macaddress[WFA_MAC_ADDR_STR_LEN-1]='\0';
+				  }
+				  else if (strcasecmp(str, "service_info") == 0)
+				  {
+					  staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.serviceInfo_flag= 1;				  		
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  strncpy(staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.serviceInfo, str,63);
+					  staInvokeCmd->InvokeCmds.primtiveType.SeekPrim.serviceInfo[63]='\0';
+				  }				  
+				  
+			  	}
+		  }
+		  else if(strcasecmp(str, "Cancel") == 0)
+		  {
+			  staInvokeCmd->InvokeCmds.primtiveType.CancelPrim.PrimType= eCmdPrimTypeCancel;
+			  for(;;)
+			  {
+				 str = strtok_r(NULL, ",", &pcmdStr);
+				 if(str == NULL || str[0] == '\0')
+					break;
+				 if (strcasecmp(str, "cancelMethod") == 0)
+				 {		  
+				 	str = strtok_r(NULL, ",", &pcmdStr);
+					staInvokeCmd->InvokeCmds.primtiveType.CancelPrim.cancelMethod_flag= 1;
+					if (strcasecmp(str, "Seek") == 0)
+					  	staInvokeCmd->InvokeCmds.primtiveType.CancelPrim.cancelMethod= eCmdPrimTypeSeek;
+					else if (strcasecmp(str, "Advertise") == 0) // not  defined in CAPI, just for information
+					  	staInvokeCmd->InvokeCmds.primtiveType.CancelPrim.cancelMethod= eCmdPrimTypeAdvt;				
+
+				 }
+				 
+			  }
+		  }
+		  else if(strcasecmp(str, "ConnectSession") == 0)
+		  {
+			  staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.PrimType= eCmdPrimTypeConnSession;
+			  for(;;)
+			  {
+				 str = strtok_r(NULL, ",", &pcmdStr);
+				 if(str == NULL || str[0] == '\0')
+					break;
+				 if (strcasecmp(str, "service_mac") == 0)
+				 {
+				 	 str = strtok_r(NULL, ",", &pcmdStr);
+					 staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.serviceMac_flag= 1;				 
+					 strncpy(staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.serviceMac,str,WFA_MAC_ADDR_STR_LEN-1);
+					 staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.serviceMac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+				 }
+				 else if (strcasecmp(str, "AdvID") == 0)
+				 {
+				 	 str = strtok_r(NULL, ",", &pcmdStr);
+					 staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.advId_flag= 1;				 
+					 staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.advID = strtol(str,NULL,16);
+				 }			
+				 else if (strcasecmp(str, "session_info") == 0)
+				 {
+				 	str = strtok_r(NULL, ",", &pcmdStr);
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.sessionInfo_flag= 1;				  		
+					strncpy(staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.sessionInfo,str,63);
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.sessionInfo[63]='\0';
+				 }				 				 
+				 else if (strcasecmp(str, "network_role") == 0)
+				 {
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.networkRole_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.networkRole= atoi(str);
+				 }				 				 
+				 else if (strcasecmp(str, "connectionCapabilityInfo") == 0)
+				 {
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.connCapInfo_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+					if(strcasecmp(str, "GO") == 0)
+					{
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.connCapInfo= eWfdsGO;
+					}
+					else if (strcasecmp(str, "CLI") == 0)
+					{
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.connCapInfo= eWfdsCLI;
+					}
+					else if (strcasecmp(str, "NewGO") == 0)
+					{
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.connCapInfo= eWfdsNewGO;
+					}
+					else if (strcasecmp(str, "New") == 0)
+					{
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.connCapInfo= eWfdsNew;
+					}
+					else if (strcasecmp(str, "CliGO") == 0)
+					{
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.connCapInfo= eWfdsCliGO;
+					}
+				 }				 				 		 
+				 else if (strcasecmp(str, "ssid") == 0)
+				 {
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.ssid_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+					strncpy(staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.ssid,str,63);
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.ssid[63]='\0';					
+				 }				 				 
+				 else if (strcasecmp(str, "Oper_chn") == 0)
+				 {
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.operChn_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+					staInvokeCmd->InvokeCmds.primtiveType.ConnSessPrim.operChn= atoi(str);
+				 }				 				 
+			  }
+			  
+		  }		  
+
+		   else if(strcasecmp(str, "ConfirmSession") == 0)
+		   {
+			   staInvokeCmd->InvokeCmds.primtiveType.ConfSessPrim.PrimType= eCmdPrimTypeConfirmSession;
+			   for(;;)
+			   {
+				  str = strtok_r(NULL, ",", &pcmdStr);
+				  if(str == NULL || str[0] == '\0')
+					 break;
+				  if (strcasecmp(str, "session_mac") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  staInvokeCmd->InvokeCmds.primtiveType.ConfSessPrim.sessionMac_flag= 1; 			  
+					  strncpy(staInvokeCmd->InvokeCmds.primtiveType.ConfSessPrim.sessionMac,str,WFA_MAC_ADDR_STR_LEN-1);
+					  staInvokeCmd->InvokeCmds.primtiveType.ConfSessPrim.sessionMac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+				  }
+				  else if (strcasecmp(str, "session_id") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  staInvokeCmd->InvokeCmds.primtiveType.ConfSessPrim.sessionID_flag= 1;				  
+					  staInvokeCmd->InvokeCmds.primtiveType.ConfSessPrim.sessionID = strtol(str,NULL,16);
+				  } 		 
+				  else if (strcasecmp(str, "confirmed") == 0)
+				  {
+					 staInvokeCmd->InvokeCmds.primtiveType.ConfSessPrim.confirmed_flag= 1; 					 
+					 str = strtok_r(NULL, ",", &pcmdStr);
+					 staInvokeCmd->InvokeCmds.primtiveType.ConfSessPrim.confirmed= atoi(str);
+				  } 							  
+			   	}
+		   }	   
+		   else if(strcasecmp(str, "SetSessionReady") == 0)
+		   {
+			   staInvokeCmd->InvokeCmds.primtiveType.SetSessRdyPrim.PrimType= eCmdPrimTypeSetSessionReady;
+			   for(;;)
+			   {
+				  str = strtok_r(NULL, ",", &pcmdStr);
+				  if(str == NULL || str[0] == '\0')
+					 break;
+				  if (strcasecmp(str, "session_mac") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  staInvokeCmd->InvokeCmds.primtiveType.SetSessRdyPrim.sessionMac_flag= 1; 			  
+					  strncpy(staInvokeCmd->InvokeCmds.primtiveType.SetSessRdyPrim.sessionMac,str,WFA_MAC_ADDR_STR_LEN-1);
+					  staInvokeCmd->InvokeCmds.primtiveType.SetSessRdyPrim.sessionMac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+				  }
+				  else if (strcasecmp(str, "session_id") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  staInvokeCmd->InvokeCmds.primtiveType.SetSessRdyPrim.sessionID_flag= 1;				  
+					  staInvokeCmd->InvokeCmds.primtiveType.SetSessRdyPrim.sessionID = strtol(str,NULL,16);
+				  } 		 
+			   	}
+		   }	   
+		   else if(strcasecmp(str, "BoundPort") == 0)
+		   {
+			   staInvokeCmd->InvokeCmds.primtiveType.BoundPortPrim.PrimType= eCmdPrimTypeBoundPort;
+			   for(;;)
+			   {
+				  str = strtok_r(NULL, ",", &pcmdStr);
+				  if(str == NULL || str[0] == '\0')
+					 break;
+				  if (strcasecmp(str, "session_mac") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  staInvokeCmd->InvokeCmds.primtiveType.BoundPortPrim.sessionMac_flag= 1; 			  
+					  strncpy(staInvokeCmd->InvokeCmds.primtiveType.BoundPortPrim.sessionMac,str,WFA_MAC_ADDR_STR_LEN-1);
+					  staInvokeCmd->InvokeCmds.primtiveType.BoundPortPrim.sessionMac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+				  }
+				  else if (strcasecmp(str, "session_id") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  staInvokeCmd->InvokeCmds.primtiveType.BoundPortPrim.sessionID_flag= 1;				  
+					  staInvokeCmd->InvokeCmds.primtiveType.BoundPortPrim.sessionID = strtol(str,NULL,16);
+				  }
+				  else if (strcasecmp(str, "port") == 0)
+				  {
+					 staInvokeCmd->InvokeCmds.primtiveType.BoundPortPrim.port_flag= 1; 					 
+					 str = strtok_r(NULL, ",", &pcmdStr);
+					 staInvokeCmd->InvokeCmds.primtiveType.BoundPortPrim.port= atoi(str);
+				  } 							  
+				  
+			   	}
+			   
+		   }	   
+		   else if(strcasecmp(str, "ServiceStatusChange") == 0)
+		   {
+			   staInvokeCmd->InvokeCmds.primtiveType.ServStatusChngPrim.PrimType= eCmdPrimTypeServiceStatusChange;
+			   for(;;)
+			   {
+				  str = strtok_r(NULL, ",", &pcmdStr);
+				  if(str == NULL || str[0] == '\0')
+					 break;
+				  if (strcasecmp(str, "advId") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  staInvokeCmd->InvokeCmds.primtiveType.ServStatusChngPrim.advId_flag= 1;				  
+					  staInvokeCmd->InvokeCmds.primtiveType.ServStatusChngPrim.advID = strtol(str,NULL,16);
+				  }
+				  else if (strcasecmp(str, "ServiceStatus") == 0)
+				  {
+					 staInvokeCmd->InvokeCmds.primtiveType.ServStatusChngPrim.serviceStatus_flag= 1; 					 
+					 str = strtok_r(NULL, ",", &pcmdStr);
+					 staInvokeCmd->InvokeCmds.primtiveType.ServStatusChngPrim.serviceStatus= atoi(str);
+				  } 							  
+				  
+			   	}
+			   
+		   }	   
+		   else if(strcasecmp(str, "CloseSession") == 0)
+		   {
+			   staInvokeCmd->InvokeCmds.primtiveType.CloseSessPrim.PrimType= eCmdPrimTypeCloseSession;
+			   for(;;)
+			   {
+				  str = strtok_r(NULL, ",", &pcmdStr);
+				  if(str == NULL || str[0] == '\0')
+					 break;
+				  if (strcasecmp(str, "session_mac") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  staInvokeCmd->InvokeCmds.primtiveType.CloseSessPrim.sessionMac_flag= 1; 			  
+					  strncpy(staInvokeCmd->InvokeCmds.primtiveType.CloseSessPrim.sessionMac,str,WFA_MAC_ADDR_STR_LEN-1);
+					  staInvokeCmd->InvokeCmds.primtiveType.CloseSessPrim.sessionMac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+				  }
+				  else if (strcasecmp(str, "session_id") == 0)
+				  {
+					  str = strtok_r(NULL, ",", &pcmdStr);
+					  staInvokeCmd->InvokeCmds.primtiveType.CloseSessPrim.sessionID_flag= 1;				  
+					  staInvokeCmd->InvokeCmds.primtiveType.CloseSessPrim.sessionID = strtol(str,NULL,16);
+				  }
+			   	}
+			   
+		   }	   
+		  
+	   }
+
+	   else if(strcasecmp(str, "opcode") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+		  if (strcasecmp(str, "REQUEST_SESSION") == 0)
+		  	staInvokeCmd->InvokeCmds.Msg.opcode= eMsgReqSession;
+		  else if (strcasecmp(str, "REMOVE_SESSION") == 0)
+		  	staInvokeCmd->InvokeCmds.Msg.opcode= eMsgRmvSession;
+		  else if (strcasecmp(str, "REJECT_SESSION") == 0)
+		  	staInvokeCmd->InvokeCmds.Msg.opcode= eMsgRejSession;
+		  else if (strcasecmp(str, "ADDED_SESSION") == 0)
+		  	staInvokeCmd->InvokeCmds.Msg.opcode= eMsgAddedSession;		  
+
+			for(;;)
+			{
+			  str = strtok_r(NULL, ",", &pcmdStr);
+			  if(str == NULL || str[0] == '\0')
+				 break;
+			  if (strcasecmp(str, "session_id") == 0)
+			  { 	   
+				 str = strtok_r(NULL, ",", &pcmdStr);
+				 staInvokeCmd->InvokeCmds.Msg.sessionId_flag= 1;
+				 staInvokeCmd->InvokeCmds.Msg.sessionID = strtol(str,NULL,16);				 
+			  }
+			  else if (strcasecmp(str, "session_mac") == 0) // not  defined in CAPI, just for information
+			  {
+				  str = strtok_r(NULL, ",", &pcmdStr);
+				  staInvokeCmd->InvokeCmds.Msg.sessionMac_flag= 1;
+				  strncpy(staInvokeCmd->InvokeCmds.Msg.sessionMac,str,WFA_MAC_ADDR_STR_LEN-1);
+				  staInvokeCmd->InvokeCmds.Msg.sessionMac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+			  }
+
+			}
+
+		  
+	   }
+	}
+	
+	wfaEncodeTLV(WFA_STA_INVOKE_COMMAND_TLV, sizeof(caStaInvokeCmd_t), (BYTE *)staInvokeCmd, aBuf);
+	
+	*aLen = 4+sizeof(caStaInvokeCmd_t);
+	 
+	return WFA_SUCCESS;
+}
+
+int xcCmdProcStaManageService(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+	caStaMngServ_t *staManageServCmd = (caStaMngServ_t *) (aBuf+sizeof(wfaTLV));
+	char *str;
+	
+	if(aBuf == NULL)
+	   return FALSE;
+	
+	memset(aBuf, 0, *aLen);
+	
+	for(;;)
+	{
+	   str = strtok_r(NULL, ",", &pcmdStr);
+	   if(str == NULL || str[0] == '\0')
+		  break;
+	
+	   if(strcasecmp(str, "interface") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  strncpy(staManageServCmd->intf, str,WFA_IF_NAME_LEN-1);
+		  staManageServCmd->intf[WFA_IF_NAME_LEN-1]='\0';
+	   }
+	   else if(strcasecmp(str, "prog") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  if (strcasecmp(str, "WFDS") == 0)
+		  {
+			  staManageServCmd->program= PROG_TYPE_WFDS;
+			  for(;;)
+			  {
+				 str = strtok_r(NULL, ",", &pcmdStr);
+				 if(str == NULL || str[0] == '\0')
+					break;
+				 if (strcasecmp(str, "service_name") == 0)
+				 {
+					 str = strtok_r(NULL, ",", &pcmdStr);
+					 if(strcasecmp(str, "Send") == 0)
+					 {
+						 staManageServCmd->MngCmds.MgtServ.serviceName= eServiceNameSend;
+					 }
+					 else if(strcasecmp(str, "Display") == 0)
+					 {
+						 staManageServCmd->MngCmds.MgtServ.serviceName= eServiceNameDisplay;
+					 }
+					 else if(strcasecmp(str, "Play") == 0)
+					 {
+						 staManageServCmd->MngCmds.MgtServ.serviceName= eServiceNamePlay;
+					 }
+					 else if(strcasecmp(str, "Print") == 0)
+					 {
+						 staManageServCmd->MngCmds.MgtServ.serviceName= eServiceNamePrint;
+					 }
+
+				 }
+				 else if (strcasecmp(str, "service_role") == 0)
+				 {
+					 str = strtok_r(NULL, ",", &pcmdStr);
+					 if (strcasecmp(str, "Tx") == 0)
+					   staManageServCmd->MngCmds.MgtServ.serviceRole= eServiceRoleTx;
+					 else
+					   staManageServCmd->MngCmds.MgtServ.serviceRole= eServiceRoleRx;
+				 }
+
+				 
+				 if (strcasecmp(str, "service_mac") == 0)
+				 {
+				 	 str = strtok_r(NULL, ",", &pcmdStr);				 
+					 staManageServCmd->MngCmds.MgtServ.serviceMac_flag= 1;				 
+					 strncpy(staManageServCmd->MngCmds.MgtServ.serviceMac,str,WFA_MAC_ADDR_STR_LEN-1);
+					 staManageServCmd->MngCmds.MgtServ.serviceMac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+				 }
+				 else if (strcasecmp(str, "AdvID") == 0)
+				 {
+				 	 str = strtok_r(NULL, ",", &pcmdStr);				 
+					 staManageServCmd->MngCmds.MgtServ.advId_flag= 1;				 
+					 staManageServCmd->MngCmds.MgtServ.advID=strtol(str,NULL,16);;
+				 }			
+				 else if (strcasecmp(str, "session_info") == 0)
+				 {
+				 	str = strtok_r(NULL, ",", &pcmdStr);				 
+					staManageServCmd->MngCmds.MgtServ.sessionInfo_flag= 1;				  		
+					strncpy(staManageServCmd->MngCmds.MgtServ.sessionInfo,str,63);
+					staManageServCmd->MngCmds.MgtServ.sessionInfo[63]='\0';
+				 }				 				 
+				 else if (strcasecmp(str, "network_role") == 0)
+				 {
+					staManageServCmd->MngCmds.MgtServ.networkRole_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+					staManageServCmd->MngCmds.MgtServ.networkRole= atoi(str);
+				 }				 				 
+				 else if (strcasecmp(str, "connectionCapabilityInfo") == 0)
+				 {
+					staManageServCmd->MngCmds.MgtServ.connCapInfo_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+					if(strcasecmp(str, "GO") == 0)
+					{
+					staManageServCmd->MngCmds.MgtServ.connCapInfo= eWfdsGO;
+					}
+					else if (strcasecmp(str, "CLI") == 0)
+					{
+					staManageServCmd->MngCmds.MgtServ.connCapInfo= eWfdsCLI;
+					}
+					else if (strcasecmp(str, "NewGO") == 0)
+					{
+					staManageServCmd->MngCmds.MgtServ.connCapInfo= eWfdsNewGO;
+					}
+					else if (strcasecmp(str, "New") == 0)
+					{
+					staManageServCmd->MngCmds.MgtServ.connCapInfo= eWfdsNew;
+					}
+					else if (strcasecmp(str, "CliGO") == 0)
+					{
+					staManageServCmd->MngCmds.MgtServ.connCapInfo= eWfdsCliGO;
+					}
+				 }		
+				 else if (strcasecmp(str, "manage_actions") == 0)
+				 {
+					staManageServCmd->MngCmds.MgtServ.mngActions_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+
+					char * str2, *subtoken, *saveptr2;
+					int index=0;
+					for (str2 = str; ; str2 = NULL) 
+					{
+						 subtoken = strtok_r(str2," ",&saveptr2);
+						 if (subtoken == NULL)
+							 break;
+						 if(strcasecmp(str, "transfer") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsTransfer;
+						 }
+						 else if (strcasecmp(str, "pause") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsPause;
+						 }
+						 else if (strcasecmp(str, "resume") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsResume;
+						 }
+						 else if (strcasecmp(str, "modify") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsModify;
+						 }
+						 else if (strcasecmp(str, "cancel") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsCancel;
+						 }
+						 else if (strcasecmp(str, "amidClose") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsAmidClose;
+						 }
+						 else if (strcasecmp(str, "close") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsClose;
+						 }
+						 else if (strcasecmp(str, "receive") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsReceive;
+						 }
+						 else if (strcasecmp(str, "play") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsPlay;
+						 }
+						 else if (strcasecmp(str, "display") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsDisplay;
+						 }
+						 else if (strcasecmp(str, "GetPrinterAttr") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsGetPrintAttr;
+						 }
+						 else if (strcasecmp(str, "PrintJobOperation") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsPrintJobOper;
+						 }
+						 else if (strcasecmp(str, "GetJobAttr") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsGetJobAttr;
+						 }
+						 else if (strcasecmp(str, "CreateJobOper") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsCreateJobOper;
+						 }
+						 else if (strcasecmp(str, "SendPrintDoc") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsSendPrintDoc;
+						 }
+						 else if (strcasecmp(str, "DoNothing") == 0)
+						 {
+						 	staManageServCmd->MngCmds.MgtServ.mgtActions[index]= eWfdsMgtActionsDoNothing;
+						 }
+					 
+						 index++;						
+					}
+					
+					staManageServCmd->MngCmds.MgtServ.numMngActions= index;
+
+				 }		
+				 else if (strcasecmp(str, "send_fileList") == 0)
+				 {
+					staManageServCmd->MngCmds.MgtServ.sendFileList_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+
+					char * str2, *subtoken, *saveptr2;
+					int index=0;
+					for (str2 = str; ; str2 = NULL) 
+					{
+						 subtoken = strtok_r(str2," ",&saveptr2);
+						 if (subtoken == NULL)
+							 break;
+						 strncpy(staManageServCmd->MngCmds.MgtServ.fileList[index],str,16);
+						 staManageServCmd->MngCmds.MgtServ.fileList[index][16]='\0';
+						 index++;
+					}
+					staManageServCmd->MngCmds.MgtServ.numModFiles= index;					
+				 }
+				 else if (strcasecmp(str, "sendModify_FileList") == 0)
+				 {
+					staManageServCmd->MngCmds.MgtServ.modSendFileList_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+
+					char * str2, *subtoken, *saveptr2;
+					int index=0;
+					for (str2 = str; ; str2 = NULL) 
+					{
+						 subtoken = strtok_r(str2," ",&saveptr2);
+						 if (subtoken == NULL)
+							 break;
+						 strncpy(staManageServCmd->MngCmds.MgtServ.modFileList[index],str,16);
+						 staManageServCmd->MngCmds.MgtServ.modFileList[index][16]='\0';
+						 index++;
+					}
+					staManageServCmd->MngCmds.MgtServ.numModFiles= index;					
+				 }
+				 else if (strcasecmp(str, "PdlType") == 0)
+				 {
+
+					staManageServCmd->MngCmds.MgtServ.PdlType_flag= 1;				  		
+					str = strtok_r(NULL, ",", &pcmdStr);
+					if(strcasecmp(str, "PCLM") == 0)
+					{
+						staManageServCmd->MngCmds.MgtServ.PdlType= ePclmPdr;
+					}
+					else if (strcasecmp(str, "PWG") == 0)
+					{
+						staManageServCmd->MngCmds.MgtServ.PdlType= ePwgPdr;
+					}
+				 }				 
+			  }
+		  }
+
+
+		  
+	   }
+	   
+
+   	}
+   
+   	wfaEncodeTLV(WFA_STA_MANAGE_SERVICE_TLV, sizeof(caStaMngServ_t), (BYTE *)staManageServCmd, aBuf);
+   
+   	*aLen = 4+sizeof(caStaMngServ_t);
+	
+   	return WFA_SUCCESS;
+}
+
+int xcCmdProcStaGetEvents(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+	caStaGetEvents_t *staGetEvents = (caStaGetEvents_t *) (aBuf+sizeof(wfaTLV));
+	char *str;
+	
+	if(aBuf == NULL)
+	   return FALSE;
+	
+	memset(aBuf, 0, *aLen);
+	
+	for(;;)
+	{
+	   str = strtok_r(NULL, ",", &pcmdStr);
+	   if(str == NULL || str[0] == '\0')
+		  break;
+	
+	   if(strcasecmp(str, "interface") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  strncpy(staGetEvents->intf, str,WFA_IF_NAME_LEN-1);
+		  staGetEvents->intf[WFA_IF_NAME_LEN-1]='\0';
+	   }
+	   else if(strcasecmp(str, "program") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+
+		  if (strcasecmp(str, "WFDS") == 0)
+		  {
+	  		  staGetEvents->program= PROG_TYPE_WFDS;
+		  }
+	   	}
+	   
+	}
+	
+	wfaEncodeTLV(WFA_STA_GET_EVENTS_TLV, sizeof(caStaGetEvents_t), (BYTE *)staGetEvents, aBuf);
+	
+	*aLen = 4+sizeof(caStaGetEvents_t);
+	 
+	return WFA_SUCCESS;
+}
+
+int xcCmdProcStaGetEventDetails(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+	caStaGetEventDetails_t *staGetEventDetails = (caStaGetEventDetails_t *) (aBuf+sizeof(wfaTLV));
+	char *str;
+	
+	if(aBuf == NULL)
+	   return FALSE;
+	
+	memset(aBuf, 0, *aLen);
+	
+	for(;;)
+	{
+	   str = strtok_r(NULL, ",", &pcmdStr);
+	   if(str == NULL || str[0] == '\0')
+		  break;
+	
+	   if(strcasecmp(str, "interface") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  strncpy(staGetEventDetails->intf, str,WFA_IF_NAME_LEN-1);
+		  staGetEventDetails->intf[WFA_IF_NAME_LEN-1]='\0';
+	   }
+	   else if(strcasecmp(str, "program") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+
+		  if (strcasecmp(str, "WFDS") == 0)
+		  {
+	  		  staGetEventDetails->program= PROG_TYPE_WFDS;
+		  }
+	   	}
+	   else if(strcasecmp(str, "EventName") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+
+		  if (strcasecmp(str, "SearchResult") == 0)
+		  {
+	  		  staGetEventDetails->eventId= eSearchResult; 			  
+		  }
+		  else if(strcasecmp(str, "SearchTerminated") == 0)
+		  {
+	  		  staGetEventDetails->eventId= eSearchTerminated;
+		  }
+		  else if(strcasecmp(str, "AdvertiseStatus") == 0)
+		  {
+	  		  staGetEventDetails->eventId= eAdvertiseStatus;
+		  }
+		  else if(strcasecmp(str, "SessionRequest") == 0)
+		  {
+	  		  staGetEventDetails->eventId= eSessionRequest;
+		  }
+		  else if(strcasecmp(str, "ConnectStatus") == 0)
+		  {
+	  		  staGetEventDetails->eventId= eConnectStatus;
+		  }
+		  else if(strcasecmp(str, "SessionStatus") == 0)
+		  {
+	  		  staGetEventDetails->eventId= eSessionStatus;
+		  }
+		  else if(strcasecmp(str, "PortStatus") == 0)
+		  {
+	  		  staGetEventDetails->eventId= ePortStatus;
+		  }
+		  
+	   	}
+	   
+	}
+	
+	wfaEncodeTLV(WFA_STA_GET_EVENT_DETAILS_TLV, sizeof(caStaGetEventDetails_t), (BYTE *)staGetEventDetails, aBuf);
+	
+	*aLen = 4+sizeof(caStaGetEventDetails_t);
+	 
+	return WFA_SUCCESS;
+}
+
+
+
 

@@ -100,6 +100,11 @@ int		wfaStaCliCmdResp(BYTE * cmdBuf);
 int		wfaStaConnectGoStartWfdResp(BYTE * cmdBuf);
 int		wfaStaGenericResp(BYTE * cmdBuf);
 int     wfaStaGetParameterResp(BYTE * cmdBuf);
+int     wfaStaNfcActionResp(BYTE * cmdBuf);
+int     wfaStaInvokeCommandResp(BYTE * cmdBuf);
+int     wfaStaManageServiceResp(BYTE * cmdBuf);
+int     wfaStaGetEventsResp(BYTE * cmdBuf);
+int     wfaStaGetEventDataResp(BYTE * cmdBuf);
 
 
 #endif

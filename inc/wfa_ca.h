@@ -119,5 +119,10 @@ extern int wfaStaConnectGoStartWfd(int len, BYTE *caCmdBuf, int *respLen, BYTE *
 extern int wfaStaGenerateEvent(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaReinvokeWfdSession(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaGetParameter(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaNfcAction(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaInvokeCommand(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaManageService(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaGetEvents(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaGetEventDetails(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 
 #endif
