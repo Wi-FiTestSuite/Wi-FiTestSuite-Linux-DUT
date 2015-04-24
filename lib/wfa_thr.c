@@ -687,7 +687,15 @@ void * wfa_wmm_thread(void *thr_param)
                 iOptVal = iOptVal * 16;
                 setsockopt(mySock, SOL_SOCKET, SO_SNDBUF, (char *)&iOptVal, (socklen_t )iOptLen);
 
-                wfaSendLongFile(mySock, myStreamId, respBuf, &respLen);
+              if ( (myProfile->rate != 0 ) /* WFA_SEND_FIX_BITRATE_MAX_FRAME_RATE)*/ && 
+                   (myProfile->pksize * myProfile->rate * 8 < WFA_SEND_FIX_BITRATE_MAX) )
+                 wfaSendBitrateData(mySock, myStreamId, respBuf, &respLen);
+              else
+              {
+                 wfaSendLongFile(mySock, myStreamId, respBuf, &respLen);
+              }
+
+              /* wfaSendLongFile(mySock, myStreamId, respBuf, &respLen); */
                 if(mySock != -1)
                 {
                     wCLOSE(mySock);

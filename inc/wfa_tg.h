@@ -36,6 +36,10 @@
 #define  LINUX_TIMER_RES        20000000      /* 20 MINSECONDS */
 #define  CA_RESPONSE_BUF_SIZE   128
 
+/* Limited bit rate generator related constant or threshold values defined here   */
+#define WFA_SEND_FIX_BITRATE_MAX             25*1024*1024  /* 25 Mbits per sec per stream */
+#define WFA_SEND_FIX_BITRATE_SLEEP_PER_SEND  1             /* mil-sec per sending sending*/
+
 /* Profile Key words */
 #define KW_PROFILE                 1
 #define KW_DIRECTION               2
@@ -232,6 +236,7 @@ extern int wfaFlushSockQueue(int profId);
 extern int wfaTGSendPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaTGStopPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 
+extern int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *aRespLen);
 tgStream_t *findStreamProfile(int streamId);
 tgProfile_t *findTGProfile(int streamId);
 int convertDscpToTos(int dscp); // return >=0 as TOS, otherwise error.

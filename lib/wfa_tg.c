@@ -128,20 +128,23 @@ tgStream_t *findStreamProfile(int id)
 
     return NULL;
 }
+
 tgProfile_t *findTGProfile(int streamId)
 {
-    int i;
+    volatile int i;
     tgStream_t *myStream = gStreams;
 
     for(i = 0; i< WFA_MAX_TRAFFIC_STREAMS; i++)
     {
-        if(myStream->id == streamId)
-            return &(myStream->profile);
-
-        myStream++;
+       if(myStream->id == streamId)
+          return &(myStream->profile);
+       
+       myStream++;
     }
+
     return NULL;
 }
+
 
 int convertDscpToTos(int dscp)// return >=0 as TOS, otherwise error.
 {
@@ -1312,3 +1315,216 @@ int wfaRecvFile(int mySockfd, int streamid, char *recvBuf)
     }
     return (bytesRecvd);
 }
+
+//  new add-on code to process limite bitrate data push
+//
+
+void wfaSleepMilsec(int milSec)
+{
+    if (milSec >0)
+    usleep(milSec * 1000);
+}
+
+/* send limite bitrate data only 
+  Condition under Win7:
+   payload <= 1000
+   rate    <= 3500
+
+
+*/
+int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen)
+{
+    tgProfile_t           *theProf = findTGProfile(streamId);
+    tgStream_t            *myStream =findStreamProfile(streamId);
+    int                   ret = WFA_SUCCESS;
+    struct sockaddr_in    toAddr;
+    char                  *packBuf=NULL; 
+    int                   packLen, bytesSent, rate;
+    int                   sleepTimePerSent = 0, nOverTimeCount = 0, nDuration=0, nOverSend=0;
+    unsigned long long int sleepTotal=0, extraTimeSpendOnSending=0;   /* sleep mil-sec per sending  */
+    int                   counter = 0, i;     /*  frame data sending count */
+    unsigned long         difftime;
+    dutCmdResponse_t      sendResp;
+
+    //int throttledRate = 0;
+    struct timeval        before, after; 
+
+    DPRINT_INFO(WFA_OUT, "wfaSendBitrateData entering\n");
+    /* error check section  */
+    if ( (mySockfd <= 0) || (streamId < 0) || ( pRespBuf == NULL) 
+            || ( pRespLen == NULL) || ( *pRespLen < WFA_TLV_HDR_LEN+4 ))
+    {
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData pass-in parameter err mySockfd=%i streamId=%i pRespBuf=0x%x pRespLen=0x%x, *pRespLen=%i\n",
+            mySockfd,streamId,pRespBuf,pRespLen,*pRespLen );
+        ret= WFA_FAILURE;
+        goto errcleanup;
+    }
+
+    if ( theProf == NULL || myStream == NULL)
+    {
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData parameter err in NULL pt theProf=%l myStream=%l \n",
+            theProf, myStream);
+        ret= WFA_FAILURE;
+        goto errcleanup;
+    }
+    if (theProf->rate == 0 || theProf->duration == 0)
+    {  /*  rate == 0 means unlimited to push data out which is not this routine to do */
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData usage error, bitrate=%i or duration=%i \n" , 
+            theProf->rate, theProf->duration);
+        ret= WFA_FAILURE;
+        goto errcleanup;
+    }
+
+    if ((theProf->rate > 3500) || (theProf->pksize > 1000))
+    {
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData Warning, must set total streams rate<=10000 and payload<=1000; stream bitrate may not meet\n");
+    }
+
+    /* calculate bitrate asked */
+    if ( (rate = theProf->pksize * theProf->rate * 8) > WFA_SEND_FIX_BITRATE_MAX)
+    {
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData over birate can do in the routine, req bitrate=%l \n",rate);
+        ret= WFA_FAILURE;
+        goto errcleanup;
+    }
+    /* alloc sending buff  */
+    //packLen = (theProf->pksize * theProf->rate)/ WFA_SEND_FIX_BITRATE_FRAMERATE ;
+    packLen = theProf->pksize;
+    packBuf = (char *)malloc(packLen+4);
+    if ( packBuf == NULL)
+    {
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData malloc err \n");
+        ret= WFA_FAILURE;
+        goto errcleanup;
+    }
+    memset(packBuf, 0, packLen + 4);
+    /*  initialize the destination address  */
+    memset(&toAddr, 0, sizeof(toAddr));
+    toAddr.sin_family = AF_INET;
+    toAddr.sin_addr.s_addr = inet_addr(theProf->dipaddr);
+    toAddr.sin_port = htons(theProf->dport); 
+
+    /*  set sleep time per sending */
+    if ( theProf->rate < 100  )
+        sleepTimePerSent =  WFA_SEND_FIX_BITRATE_SLEEP_PER_SEND  +1; 
+    else sleepTimePerSent = WFA_SEND_FIX_BITRATE_SLEEP_PER_SEND;
+
+    runLoop=1; /* global defined share with thread routine, should remove it later  */
+    while ( runLoop)
+    {
+        int iSleep = 0;
+        gettimeofday(&before, NULL);
+        /* send data per second loop */
+        for ( i=0; i<= (theProf->rate); i++)
+        {
+           counter++;
+           iSleep++;
+           /* fill in the counter */
+           int2BuffBigEndian(counter, &((tgHeader_t *)packBuf)->hdr[8]);
+           bytesSent = wfaTrafficSendTo(mySockfd, packBuf, packLen, 
+                 (struct sockaddr *)&toAddr);
+           if(bytesSent != -1)
+           {
+               myStream->stats.txPayloadBytes += bytesSent; 
+               myStream->stats.txFrames++ ;
+            }
+           else
+           {
+               counter--;
+               wfaSleepMilsec(1);
+               
+               sleepTotal = sleepTotal + (unsigned long long int) 1;
+               DPRINT_INFO(WFA_OUT, "wfaSendBitrateData wfaTrafficSendTo call ERR counter=%i i=%i; send busy, sleep %i MilSec then send\n", counter, i, sleepTimePerSent);
+               i--;
+           }
+           /*  sleep per batch sending */
+           if ( i == (theProf->rate/10) * iSleep)
+           {
+              wfaSleepMilsec(5);
+              sleepTotal = sleepTotal + (unsigned long long int) 5;
+              iSleep++;
+           }
+
+
+        }// for loop per second sending
+        iSleep = 0;
+        nDuration++;
+
+        /*calculate second rest part need to sleep  */
+        gettimeofday(&after, NULL);
+        difftime = wfa_itime_diff(&before, &after);
+        if ( difftime < 0 || difftime >= 1000000 )
+        {/* over time used, no sleep, go back to send */
+            nOverTimeCount++;
+            //if (difftime > 1200000 )
+               //DPRINT_INFO(WFA_OUT, "wfaSendBitrateData Warning difftime=%i nDuration=%i\n",difftime, nDuration);
+            if ( difftime > 1000000)
+                extraTimeSpendOnSending += (difftime - 1000000);
+            wfaSleepMilsec(1);
+            sleepTotal++;
+            continue;
+        }
+
+        /* difftime < 1 sec case, use sleep to catchup time as 1 sec per sending  */
+        /*  check with accumulated extra time spend on previous sending, difftime < 1 sec case */
+        if (extraTimeSpendOnSending > 0)
+        {
+            if ( extraTimeSpendOnSending > 1000000 - difftime )
+            {/* reduce sleep time to catch up over all on time sending   */
+                extraTimeSpendOnSending = (extraTimeSpendOnSending - (1000000 - difftime));
+                wfaSleepMilsec(5);
+                sleepTotal = sleepTotal + (unsigned long long int) 5;
+                continue;
+            }
+            else
+            {  /* usec used to   */
+                difftime =(unsigned long)( difftime - extraTimeSpendOnSending);
+                extraTimeSpendOnSending = 0; 
+            }
+        }
+        
+        difftime = difftime/1000; // convert to mil-sec
+
+        if(1000 - difftime > 0)
+        {/*  only sleep if there is extrac time with in the second did not spend on sending */
+            wfaSleepMilsec(1000 - difftime);
+            sleepTotal = sleepTotal + (unsigned long long int)(1000 - difftime);
+        }
+        
+        if ( theProf->duration < nDuration)
+        {
+            nOverSend++;
+        }
+
+    }// while loop
+
+    if (packBuf) free(packBuf);
+    /* return statistics */
+    sendResp.status = STATUS_COMPLETE;
+    sendResp.streamId = myStream->id;
+    
+    memcpy(&sendResp.cmdru.stats, &myStream->stats, sizeof(tgStats_t)); 
+
+    wfaEncodeTLV(WFA_TRAFFIC_AGENT_SEND_RESP_TLV, sizeof(dutCmdResponse_t), 
+                 (BYTE *)&sendResp, (BYTE *)pRespBuf);
+
+    *pRespLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+
+    extraTimeSpendOnSending = extraTimeSpendOnSending/1000;
+    DPRINT_INFO(WFA_OUT, "*** wfg_tg.cpp wfaSendBitrateData Count=%i txFrames=%i totalByteSent=%i sleepTotal=%llu milSec extraTimeSpendOnSending=%llu nOverTimeCount=%d nOverSend=%i rate=%d nDuration=%d ***\n", 
+        counter, (myStream->stats.txFrames),(unsigned int) (myStream->stats.txPayloadBytes), sleepTotal,extraTimeSpendOnSending, nOverTimeCount, nOverSend, theProf->rate , nDuration);
+    wfaSleepMilsec(1000);
+    return ret;
+
+errcleanup:
+    /* encode a TLV for response for "invalid ..." */
+    if (packBuf) free(packBuf);
+
+    sendResp.status = STATUS_INVALID;
+    wfaEncodeTLV(WFA_TRAFFIC_AGENT_SEND_RESP_TLV, 4, 
+                 (BYTE *)&sendResp, (BYTE *)pRespBuf);
+    /* done here */
+    *pRespLen = WFA_TLV_HDR_LEN + 4; 
+
+    return ret;
+}/*  wfaSendBitrateData  */

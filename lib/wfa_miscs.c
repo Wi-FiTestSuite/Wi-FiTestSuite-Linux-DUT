@@ -124,11 +124,28 @@ int wfa_itime_diff(struct timeval *t1, struct timeval *t2)
     int sec = t2->tv_sec - t1->tv_sec;
     int usec = t2->tv_usec - t1->tv_usec;
 
-    if(usec < 0)
-    {
-        sec -=1;
-        usec += 1000000;
-    }
+     if  (sec < 0)
+     {
+         //DPRINT_INFO(WFA_OUT, "wfa_itime_diff, time field ERR sec=%d \n", sec);
+         return 0;
+     }
+     else if ( (sec == 0))
+     {
+         
+         if ( usec >= 0)
+             return usec;
+         else
+         {
+             //DPRINT_INFO(WFA_OUT, "wfa_itime_diff, time field ERR sec=%d usec=%i\n", sec, usec);
+             return 0;
+         }
+
+     }
+     if(usec < 0)
+     {
+         sec -=1;
+         usec += 1000000;
+     }
 
     dtime = sec*1000000 + usec;
     return dtime;
