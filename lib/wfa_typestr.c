@@ -67,7 +67,7 @@ extern int xcCmdProcStaPresetTestParameters(char *pcmStr, BYTE *, int *);
 extern int xcCmdProcStaSetEapFAST(char *pcmStr, BYTE *, int *);
 extern int xcCmdProcStaSetEapAKA(char *pcmStr, BYTE *, int *);
 extern int xcCmdProcStaSetEapAKAPrime(char *pcmStr, BYTE *, int *);
-
+extern int xcCmdProcStaSetEapPWD(char *pcmStr, BYTE *, int *);
 extern int xcCmdProcStaSetSystime(char *pcmStr, BYTE *, int *);
 
 extern int xcCmdProcStaSet11n(char *pcmStr, BYTE *, int *);
@@ -178,7 +178,7 @@ typeNameStr_t nameStr[] =
     {WFA_STA_SET_EAPFAST_TLV, "sta_set_eapfast", xcCmdProcStaSetEapFAST},
     {WFA_STA_SET_EAPAKA_TLV, "sta_set_eapaka", xcCmdProcStaSetEapAKA},
    {WFA_STA_SET_EAPAKAPRIME_TLV, "sta_set_eapakaprime", xcCmdProcStaSetEapAKAPrime},
-   
+   {WFA_STA_SET_EAPPWD_TLV, "sta_set_eappwd", xcCmdProcStaSetEapPWD},
     {WFA_STA_SET_SYSTIME_TLV, "sta_set_systime", xcCmdProcStaSetSystime},
     {WFA_STA_SET_PWRSAVE_TLV, "sta_set_pwrsave", xcCmdProcStaSetPwrSave},
 #ifdef WFA_STA_TB

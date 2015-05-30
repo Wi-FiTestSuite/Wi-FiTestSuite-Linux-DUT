@@ -3853,7 +3853,63 @@ int xcCmdProcStaSetEapAKAPrime(char *pcmdStr, BYTE *aBuf, int *aLen)
     return WFA_SUCCESS;
 }
 
+int xcCmdProcStaSetEapPWD(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+    caStaSetEapPWD_t *setsec = (caStaSetEapPWD_t *) (aBuf+sizeof(wfaTLV));
+    char *str;
+    caStaSetEapPWD_t defparams = {"", "", "", "", "", ""};
+   
+    if(aBuf == NULL)
+        return WFA_FAILURE;
+   
+    memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapPWD_t));
 
+    for(;;)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        if(str == NULL || str[0] == '\0')
+            break;
+
+        if(strcasecmp(str, "interface") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);  
+            strncpy(setsec->intf, str, 15);
+        }
+        else if(strcasecmp(str, "ssid") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);  
+
+            strncpy(setsec->ssid, str, 64);
+        }
+        else if(strcasecmp(str, "username") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strcpy(setsec->username, str);
+        }
+        else if(strcasecmp(str, "password") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strcpy(setsec->passwd, str);
+        }
+        else if(strcasecmp(str, "keyMgmtType") == 0)
+        {
+            str=strtok_r(NULL, ",", &pcmdStr);
+            strncpy(setsec->keyMgmtType, str, 7);
+        }
+        else if(strcasecmp(str, "encpType") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(setsec->encrptype, str, 8);
+        }
+    }
+
+    wfaEncodeTLV(WFA_STA_SET_EAPPWD_TLV, sizeof(caStaSetEapPWD_t), (BYTE *)setsec, aBuf);
+
+    *aLen = 4+sizeof(caStaSetEapPWD_t);
+
+    return WFA_SUCCESS;
+}
 
 int xcCmdProcStaSetSystime(char *pcmdStr, BYTE *aBuf, int *aLen)
 {

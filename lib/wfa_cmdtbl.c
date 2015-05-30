@@ -159,7 +159,7 @@ xcCommandFuncPtr gWfaCmdFuncTbl[WFA_STA_COMMANDS_END] =
 	wfaStaGetEvents,         /*   WFA_STA_GET_EVENTS_TLV            (83)*/
 	wfaStaGetEventDetails,         /*   WFA_STA_GET_EVENT_DETAILS_TLV            (84)*/	
     wfaStaSetEapAKAPrime,          /*    WFA_STA_SET_EAPAKAPRIME_TLV             (85)*/
-
+    wfaStaSetEapPWD,          /*    WFA_STA_SET_EAPPWD_TLV             (81)*/	
 };
 
 

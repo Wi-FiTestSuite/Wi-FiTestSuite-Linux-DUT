@@ -2155,7 +2155,82 @@ int wfaStaSetEapAKAPrime(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     return WFA_SUCCESS;
 }
 
+/* EAP-PWD */
+int wfaStaSetEapPWD(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+    caStaSetEapPWD_t *setPWD = (caStaSetEapPWD_t *)caCmdBuf;
+    char *ifname = setPWD->intf;
+    dutCmdResponse_t *setEapPWDResp = &gGenericResp;
 
+#ifdef WFA_NEW_CLI_FORMAT
+    sprintf(gCmdStr, "wfa_set_eappwd %s %s %s %s", ifname, setPWD->ssid, setPWD->username, setPWD->passwd);
+    sret = system(gCmdStr);
+#else
+
+    sprintf(gCmdStr, "wpa_cli -i%s remove_network 0", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s add_network", ifname);
+    sret = system(gCmdStr);
+
+    if(strcasecmp(setPWD->keyMgmtType, "wpa2-sha256") == 0)
+    {
+    }
+    else if(strcasecmp(setPWD->keyMgmtType, "wpa2-eap") == 0)
+    {
+    }
+    else if(strcasecmp(setPWD->keyMgmtType, "wpa2-ft") == 0)
+    {
+
+    }
+    else if(strcasecmp(setPWD->keyMgmtType, "wpa") == 0)
+    {
+       sprintf(gCmdStr, "wpa_cli -i%s set_network 0 key_mgmt WPA-EAP", ifname);
+    }
+    else if(strcasecmp(setPWD->keyMgmtType, "wpa2") == 0)
+    {
+      // take all and device to pick one which is supported.
+      sprintf(gCmdStr, "wpa_cli -i%s set_network 0 key_mgmt WPA-EAP", ifname);
+    }
+    else
+    {
+       // ??
+       setEapPWDResp->status = STATUS_INVALID;
+       strcpy(setEapPWDResp->cmdru.info, "invalid key management parameter");
+       wfaEncodeTLV(WFA_STA_SET_EAPPWD_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)setEapPWDResp, respBuf);
+       *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+       return WFA_FAILURE;
+    }
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 pairwise CCMP", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 proto WPA2", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 eap PWD", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 identity '\"%s\"'", ifname, setPWD->username);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 password '\"%s\"'", ifname, setPWD->passwd);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 ssid '\"%s\"'", ifname, setPWD->ssid);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s enable_network 0", ifname);
+    sret = system(gCmdStr);
+#endif
+
+    setEapPWDResp->status = STATUS_COMPLETE;
+    wfaEncodeTLV(WFA_STA_SET_EAPPWD_RESP_TLV, 4, (BYTE *)setEapPWDResp, respBuf);
+    *respLen = WFA_TLV_HDR_LEN + 4;
+
+    return WFA_SUCCESS;
+}
 
 int wfaStaSetSystime(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {

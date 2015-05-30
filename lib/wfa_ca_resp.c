@@ -139,7 +139,7 @@ dutCommandRespFuncPtr wfaCmdRespProcFuncTbl[WFA_STA_RESPONSE_END+1] =
 	wfaStaManageServiceResp, /* 82*/
 	wfaStaGetEventsResp, /* 83*/
 	wfaStaGetEventDataResp, /* 84*/
-	
+        wfaStaGenericResp,      /* 81 */
 	
 
 };
