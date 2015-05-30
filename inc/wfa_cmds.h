@@ -173,8 +173,19 @@ typedef struct ca_sta_set_eapaka
     int pmf;               /* PMF enable or disable */
 } caStaSetEapAKA_t;
 
-enum sectype
+typedef struct ca_sta_set_eapakaprime
 {
+   char intf[WFA_IF_NAME_LEN];
+   char ssid[WFA_SSID_NAME_LEN];
+   char username[32];
+   char passwd[96];
+   char keyMgmtType[8];
+   char encrptype[9];
+} caStaSetEapAKAPrime_t;
+
+
+
+enum sectype {
     SEC_TYPE_PSK = 1,
     SEC_TYPE_EAPTLS,
     SEC_TYPE_EAPTTLS,
@@ -182,6 +193,8 @@ enum sectype
     SEC_TYPE_EAPSIM,
     SEC_TYPE_EAPFAST,
     SEC_TYPE_EAPAKA,
+   SEC_TYPE_EAPAKAPRIME,
+   
 };
 
 typedef struct ca_sta_set_security
@@ -200,6 +213,8 @@ typedef struct ca_sta_set_security
         caStaSetEapPEAP_t    peap;
         caStaSetEapAKA_t     aka;
         caStaSetEapFAST_t    fast;
+      caStaSetEapAKAPrime_t akaprime;
+      
     } secu;
 } caStaSetSecurity_t;
 

@@ -26,9 +26,9 @@ cp -f ../scripts/* /usr/local/sbin/
 cp  SigmaWTG ../dut/wfa_dut ../ca/wfa_ca /usr/bin
 cp ../console_src/wfa_con  /usr/bin/.
 cp  SigmaWTG.conf /etc
-if [ ! -d /SIGMA_WTG ] 
+if [ ! -d /SIGMA_WTGv2 ] 
 then
-	mkdir /SIGMA_WTG
+	mkdir /SIGMA_WTGv2
 fi	
 
 if [ ! -d /SIGMA_WTGv2 ]

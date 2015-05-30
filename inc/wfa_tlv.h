@@ -148,9 +148,9 @@ enum cmd_tags
 	WFA_STA_GET_EVENTS_TLV, /* 83 */
 	WFA_STA_GET_EVENT_DETAILS_TLV, /* 84 */
 	
-	   	
-
-    WFA_STA_COMMANDS_END                  /* 80 */
+   WFA_STA_SET_EAPAKAPRIME_TLV,           /* 80 */
+   
+   WFA_STA_COMMANDS_END                   /* 81 */
 };
 
 
@@ -256,7 +256,9 @@ enum resp_tags
 	WFA_STA_GET_EVENT_DETAILS_RESP_TLV,		/* 84 */
 	
 
-    WFA_STA_RESPONSE_END                        /* 80 */
+
+    WFA_STA_SET_EAPAKAPRIME_RESP_TLV,              /* 80 */    
+    WFA_STA_RESPONSE_END                        /* 81 */
 };
 
 #define WFA_TLV_HEAD_LEN 1+2

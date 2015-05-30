@@ -3795,6 +3795,66 @@ int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
     return WFA_SUCCESS;
 }
 
+int xcCmdProcStaSetEapAKAPrime(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+    caStaSetEapAKAPrime_t *setsec = (caStaSetEapAKAPrime_t *) (aBuf+sizeof(wfaTLV));
+    char *str;
+    caStaSetEapAKAPrime_t defparams = {"", "", "", "", "", ""};
+   
+    if(aBuf == NULL)
+        return WFA_FAILURE;
+   
+    memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapAKAPrime_t));
+
+    for(;;)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        if(str == NULL || str[0] == '\0')
+            break;
+
+        if(strcasecmp(str, "interface") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);  
+            strncpy(setsec->intf, str, 15);
+        }
+        else if(strcasecmp(str, "ssid") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);  
+
+            strncpy(setsec->ssid, str, 64);
+        }
+        else if(strcasecmp(str, "username") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strcpy(setsec->username, str);
+        }
+        else if(strcasecmp(str, "password") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strcpy(setsec->passwd, str);
+        }
+        else if(strcasecmp(str, "keyMgmtType") == 0)
+        {
+            str=strtok_r(NULL, ",", &pcmdStr);
+            strncpy(setsec->keyMgmtType, str, 7);
+        }
+        else if(strcasecmp(str, "encpType") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(setsec->encrptype, str, 8);
+        }
+    }
+
+    wfaEncodeTLV(WFA_STA_SET_EAPAKAPRIME_TLV, sizeof(caStaSetEapAKAPrime_t), (BYTE *)setsec, aBuf);
+
+    *aLen = 4+sizeof(caStaSetEapAKAPrime_t);
+
+    return WFA_SUCCESS;
+}
+
+
+
 int xcCmdProcStaSetSystime(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetSystime_t *systime = (caStaSetSystime_t *) (aBuf+sizeof(wfaTLV));
@@ -5276,7 +5336,7 @@ int xcCmdProcStaResetDefault(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
         else if(strcasecmp(str, "type") == 0) // dut or sta
         {
-            str = strtok_r(NULL, ",", &pcmdStr);
+           str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(reset->prog, str, 8);
         }
     }

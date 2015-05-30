@@ -58,6 +58,8 @@ int wfaStaSetWMMResp(BYTE *cmdBuf);
 int wfaStaPresetParametersResp(BYTE *cmdBuf);
 int wfaStaSetEapFASTResp(BYTE *cmdBuf);
 int wfaStaSetEapAKAResp(BYTE * cmdBuf);
+int wfaStaSetEapAKAPrimeResp(BYTE * cmdBuf);
+
 int wfaStaSetSystimeResp(BYTE * cmdBuf);
 
 int wfaStaSet11nResp(BYTE * cmdBuf);
