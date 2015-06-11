@@ -107,6 +107,7 @@ int     wfaStaInvokeCommandResp(BYTE * cmdBuf);
 int     wfaStaManageServiceResp(BYTE * cmdBuf);
 int     wfaStaGetEventsResp(BYTE * cmdBuf);
 int     wfaStaGetEventDataResp(BYTE * cmdBuf);
+int 	wfaStaExecActionResp(BYTE *cmdBuf);
 
 
 #endif

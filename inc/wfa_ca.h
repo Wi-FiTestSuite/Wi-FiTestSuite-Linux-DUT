@@ -126,5 +126,6 @@ extern int wfaStaInvokeCommand(int len, BYTE *caCmdBuf, int *respLen, BYTE *resp
 extern int wfaStaManageService(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaGetEvents(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaGetEventDetails(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaExecAction(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 
 #endif

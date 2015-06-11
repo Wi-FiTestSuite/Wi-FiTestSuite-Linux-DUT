@@ -41,6 +41,7 @@
 
 #define WFA_WFD_SESSION_ID_LEN 64
 #define WFA_URL_STRING_LEN          256
+#define WFA_EVT_ACTION_LEN 8
 
 
 #define IF_80211   1

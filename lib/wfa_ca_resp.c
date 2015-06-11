@@ -139,7 +139,8 @@ dutCommandRespFuncPtr wfaCmdRespProcFuncTbl[WFA_STA_RESPONSE_END+1] =
 	wfaStaManageServiceResp, /* 82*/
 	wfaStaGetEventsResp, /* 83*/
 	wfaStaGetEventDataResp, /* 84*/
-        wfaStaGenericResp,      /* 81 */
+        wfaStaGenericResp,      /* 85 */
+		wfaStaExecActionResp,      /* 86 */	
 	
 
 };
@@ -1184,10 +1185,16 @@ int wfaStaGetParameterResp(BYTE *cmdBuf)
 	        printf("status,COMPLETE,DeviceList,%s\r\n", getParamInfo->devList);
 	        break;		
 		}
-		if(getParamInfo->getParamType == eOpenPorts)
+		else if(getParamInfo->getParamType == eOpenPorts)
 		{
 	        sprintf(gRespStr, "status,COMPLETE,OpenPortList,%s\r\n",getParamInfo->devList);
 	        printf("status,COMPLETE,OpenPortList,%s\r\n", getParamInfo->devList);
+	        break;		
+		}
+		else if(getParamInfo->getParamType == eMasterPref)
+		{
+	        sprintf(gRespStr, "status,COMPLETE,MasterPref,%s\r\n",getParamInfo->masterPref);
+	        printf("status,COMPLETE,MasterPref,%s\r\n", getParamInfo->masterPref);
 	        break;		
 		}
 		else
@@ -1232,6 +1239,39 @@ int wfaStaNfcActionResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
+    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+
+    return done;
+}
+int wfaStaExecActionResp(BYTE *cmdBuf)
+{
+    int done=0;
+    dutCmdResponse_t *execActionResp = (dutCmdResponse_t *) (cmdBuf + 4);
+
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaExecActionResp ...\n");
+    switch(execActionResp->status)
+    {
+        case STATUS_RUNNING:
+        DPRINT_INFO(WFA_OUT, "wfaStaExecActionResp running ...\n");
+        done = 1;
+        break;
+
+        case STATUS_COMPLETE:
+        sprintf(gRespStr, "status,COMPLETE,mac,%s\r\n", execActionResp->cmdru.execAction.mac);
+        printf("status,COMPLETE,mac,%s\r\n", execActionResp->cmdru.execAction.mac);
+        break;
+
+        case STATUS_ERROR:
+        sprintf(gRespStr, "status,ERROR\r\n");
+        printf("status,COMPLETE\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+        break;
+
+        default:
+        sprintf(gRespStr, "status,INVALID\r\n");
+        DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
+    }
+ 
     wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;

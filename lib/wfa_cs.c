@@ -4140,6 +4140,15 @@ int wfaStaGetParameter(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 		}
 		
 	}
+	if(staGetParam->program == PROG_TYPE_NAN)
+   	{
+      if(staGetParam->getParamValue == eMasterPref )
+      {
+          // Get the master preference of the device and return the value
+          paramList->getParamType = eMasterPref;
+          strcpy((char *)&paramList->masterPref, "0xff");
+      }
+    }
 
 	infoResp.status = STATUS_COMPLETE;
 	wfaEncodeTLV(WFA_STA_GET_PARAMETER_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);	
@@ -4203,6 +4212,27 @@ int wfaStaNfcAction(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
 	infoResp.status = STATUS_COMPLETE;
 	wfaEncodeTLV(WFA_STA_NFC_ACTION_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf); 
+	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+	
+   return WFA_SUCCESS;
+}
+
+int wfaStaExecAction(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+
+	dutCmdResponse_t infoResp;
+	caStaExecAction_t *staExecAction = (caStaExecAction_t *)caCmdBuf;  //comment if not used
+	
+	 printf("\n Entry wfaStaExecAction... ");
+
+	if(staExecAction->prog == PROG_TYPE_NAN)
+	{
+		// Perform necessary configurations and actions
+		// return the MAC address conditionally as per CAPI specification
+	}
+	
+	infoResp.status = STATUS_COMPLETE;
+	wfaEncodeTLV(WFA_STA_EXEC_ACTION_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf); 
 	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
 	
    return WFA_SUCCESS;
@@ -4279,6 +4309,12 @@ int wfaStaGetEvents(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 	//caStaGetEvents_t *staGetEvents = (caStaGetEvents_t *)caCmdBuf;  //uncomment and use it
 	
 	 printf("\n Entry wfaStaGetEvents... ");
+	 
+	 if(staGetEvents->program == PROG_TYPE_NAN)
+	{ 
+		// Get all the events from the Log file or stored events
+		// return the  received/recorded event details - eventName, remoteInstanceID, localInstanceID, mac
+	}
 
 	// Get all the event from the Log file or stored events
 	// return the  received/recorded events as space seperated list   ( example response below)

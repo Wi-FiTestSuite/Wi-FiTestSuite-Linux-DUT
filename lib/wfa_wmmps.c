@@ -42,8 +42,8 @@ extern int num_stops;
 extern int num_hello;
 extern tgWMM_t wmm_thr[];
 
-extern unsigned int psTxMsg[ WMMPS_MSG_BUF_SIZE];
-extern unsigned int psRxMsg[ WMMPS_MSG_BUF_SIZE];
+extern unsigned int psTxMsg[WMMPS_MSG_BUF_SIZE];
+extern unsigned int psRxMsg[WMMPS_MSG_BUF_SIZE];
 extern int msgsize;
 
 char gCmdStr[WFA_CMD_STR_SZ];
