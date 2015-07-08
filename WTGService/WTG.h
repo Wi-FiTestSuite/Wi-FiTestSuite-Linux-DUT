@@ -17,7 +17,7 @@
 *****************************************************************************/
 
 /*
-* File: SigmaWTG.h - The header file for SigmaWTG.c
+* File: WTG.h - The header file for WTG.c
 *
 */
 

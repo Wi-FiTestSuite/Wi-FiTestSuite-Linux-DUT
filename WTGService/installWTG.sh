@@ -16,24 +16,24 @@
 # USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-# Install the SigmaWTG service to system startup
+# Install the Wi-Fi Test Suite WTG service to system startup
 
 
-sh $PWD/SigmaWTGService.sh stop
+sh $PWD/WTGService.sh stop
 mkdir /etc/WfaEndpoint
 cp -f ../wfa_cli.txt /etc/WfaEndpoint/.
 cp -f ../scripts/* /usr/local/sbin/
-cp  SigmaWTG ../dut/wfa_dut ../ca/wfa_ca /usr/bin
+cp  WTG ../dut/wfa_dut ../ca/wfa_ca /usr/bin
 cp ../console_src/wfa_con  /usr/bin/.
-cp  SigmaWTG.conf /etc
-if [ ! -d /SIGMA_WTG ] 
+cp  WTG.conf /etc
+if [ ! -d /WTS_WTG ] 
 then
-	mkdir /SIGMA_WTG
+	mkdir /WTS_WTG
 fi	
 
-if [ ! -d /SIGMA_WTGv2 ]
+if [ ! -d /WTS_WTGv2 ]
 then
-        mkdir /SIGMA_WTGv2
+        mkdir /WTS_WTGv2
 fi
 
 echo "DIR Configuration"
@@ -57,10 +57,10 @@ if [ $1 == "VE" ]
 then
 	cp startPCE_VE.sh /usr/bin
 	echo "in VE"
-	ln -s $PWD/SigmaWTGService_VE.sh /etc/rc.local
-	sh $PWD/SigmaWTGService_VE.sh start
+	ln -s $PWD/WTGService_VE.sh /etc/rc.local
+	sh $PWD/WTGService_VE.sh start
 else
-	ln -s $PWD/SigmaWTGService.sh /etc/rc.local
-	sh $PWD/SigmaWTGService.sh start
+	ln -s $PWD/WTGService.sh /etc/rc.local
+	sh $PWD/WTGService.sh start
 fi
 

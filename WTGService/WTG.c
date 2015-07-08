@@ -17,7 +17,7 @@
 *****************************************************************************/
 
 /*
-* File: SigmaWTG.c - The main program for Sigma WTG Service
+* File: WTG.c - The main program for Wi-Fi Test Suite WTG Service
 *       This is the program which controls the PC-Endpoint and all the required
 *	 control agents for Testbed STAs. This program runs as service and starts
 *	 during the system bootup. It restarts any WTG component(e.g. wfa_ca)
@@ -33,7 +33,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include "SigmaWTG.h"
+#include "WTG.h"
 
 struct WTG_Thread threadPool[MAX_THREAD];
 int iLogging=0;
@@ -54,12 +54,12 @@ int main(int argc,char **argv)
     memset(sValue,'\0',sizeof(sValue));
     memset(sDUTPort,'\0',sizeof(sDUTPort));
 
-    serviceLogFile=fopen("/var/log/WTG-Sigma.log","w");
+    serviceLogFile=fopen("/var/log/WTG-WTS.log","w");
     int iThreadCounter=0;
     if (argc < 2)
     {
-        printf("\n Usage : ./SigmaWTG Testbed STA Info File> \
-        \n    eg : ./SigmaWTG SigmaWTG.conf \n");
+        printf("\n Usage : ./WTG Testbed STA Info File> \
+        \n    eg : ./WTG WTG.conf \n");
     }
     else
     {

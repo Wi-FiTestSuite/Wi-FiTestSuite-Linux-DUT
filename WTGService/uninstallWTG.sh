@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #
 # Copyright (c) 2014 Wi-Fi Alliance
 # 
@@ -15,19 +17,13 @@
 #
 
 
-#PATH where Sigma WTG package is located
-PATH=/SIGMA_WTGv2
+# Uninstall the WTG service to system startup
 
-#Logging of each control agent
-logging=1
 
-# Control Port name
-# This PC must have two ports(one connected to the Control Network and other to the Test Network)
-# Specify the control port name (typically it is eth1)
-
-control_port_name=eth0
-
-######### PC Endpoint #########################
-
-# Port Number for PC-Endpoint traffic generator
-wtg_control_port_number=9003
+sh $PWD/WTGService.sh stop
+rm -f /usr/bin/WTG /usr/bin/wfa_dut /usr/bin/wfa_ca
+rm -f /usr/bin/wfa_con
+rm -f /etc/WTG.conf
+rm -f /etc/rc.local
+rm -f /etc/WfaEndpoint/*
+rmdir  /etc/WfaEndpoint

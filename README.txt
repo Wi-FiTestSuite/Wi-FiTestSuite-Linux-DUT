@@ -158,5 +158,5 @@ WFA_WMM_VOICE
 		EX: wfa_test_cli-TRUE,
 	3) keep the named shell script ( should match with CLI defined in wfa_cli.txt) in /usr/bin or /usr/sbin so that the system can call.
 
-For questions, send emails to sigmasupport@wi-fi.org 
+For questions, send emails to support@wi-fi.org 
 

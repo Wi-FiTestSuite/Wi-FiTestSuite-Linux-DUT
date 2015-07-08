@@ -17,12 +17,12 @@ CC=gcc
 CFLAGS= -Wall
 LIB=-lpthread
 
-SigmaWTG: SigmaWTG.c
+WTG: WTG.c
 	$(CC) $(CFLAGS) -o $@ $< $(LIB)
 
 clean:
-	rm -f SigmaWTG
+	rm -f WTG
 install:
-	sh installSigmaWTG.sh
+	sh installWTG.sh
 uninstall:
-	sh uninstallSigmaWTG.sh
+	sh uninstallWTG.sh

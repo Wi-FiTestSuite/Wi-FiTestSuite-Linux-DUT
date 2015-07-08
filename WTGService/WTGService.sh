@@ -16,35 +16,35 @@
 # USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-#  File: SigmaWTGService.sh - The script to control Sigma WTG Service
+#  File: WTGService.sh - The script to control Wi-Fi Test Suite WTG Service
 #	 This Service start PC-Endpoint and all the required control agents(for Testbed STAs)
-# 	 based on the configuration file - SigmaWTG.conf
+# 	 based on the configuration file - WTG.conf
 #
 #
 
-CONF_FILE=/etc/SigmaWTG.conf
-SERVICE=/usr/bin/SigmaWTG
+CONF_FILE=/etc/WTG.conf
+SERVICE=/usr/bin/WTG
 
 case "$1" in
     start)
-        echo "Starting Sigma WTG Service"
+        echo "Starting Wi-Fi Test Suite WTG Service"
 #	$SERVICE $CONF_FILE 2>&1 >/dev/null&
 	$SERVICE $CONF_FILE 2>&1 &
         ;;
     restart|reload|force-reload)
-        echo "Stopping Sigma WTG Service"
+        echo "Stopping Wi-Fi Test Suite WTG Service"
 	/usr/bin/killall -9 $SERVICE wfa_dut wfa_ca >/dev/null 2>&1
-        echo "Starting Sigma WTG Service"
+        echo "Starting Wi-Fi Test Suite WTG Service"
 	$SERVICE $CONF_FILE >/dev/null 2>&1 &
         exit 3
         ;;
     stop)
-        echo "Stopping Sigma WTG Service"
+        echo "Stopping Wi-Fi Test Suite WTG Service"
 	/usr/bin/killall -9 $SERVICE wfa_dut wfa_ca >/dev/null 2>&1
         ;;
     *)
     	# This case is called by /etc/init.d/rc.local on system bootup
-        echo "Starting Sigma WTG Service..."
+        echo "Starting Wi-Fi Test Suite WTG Service..."
 	$SERVICE $CONF_FILE >/dev/null 2>&1 &
         exit 0
         ;;
