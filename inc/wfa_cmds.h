@@ -173,8 +173,27 @@ typedef struct ca_sta_set_eapaka
     int pmf;               /* PMF enable or disable */
 } caStaSetEapAKA_t;
 
-enum sectype
+typedef struct ca_sta_set_eapakaprime
 {
+   char intf[WFA_IF_NAME_LEN];
+   char ssid[WFA_SSID_NAME_LEN];
+   char username[32];
+   char passwd[96];
+   char keyMgmtType[8];
+   char encrptype[9];
+} caStaSetEapAKAPrime_t;
+
+typedef struct ca_sta_set_eappwd
+{
+   char intf[WFA_IF_NAME_LEN];
+   char ssid[WFA_SSID_NAME_LEN];
+   char username[32];
+   char passwd[96];
+   char keyMgmtType[8];
+   char encrptype[9];
+} caStaSetEapPWD_t;
+
+enum sectype {
     SEC_TYPE_PSK = 1,
     SEC_TYPE_EAPTLS,
     SEC_TYPE_EAPTTLS,
@@ -182,6 +201,8 @@ enum sectype
     SEC_TYPE_EAPSIM,
     SEC_TYPE_EAPFAST,
     SEC_TYPE_EAPAKA,
+   SEC_TYPE_EAPAKAPRIME,
+   SEC_TYPE_EAPPWD,
 };
 
 typedef struct ca_sta_set_security
@@ -200,6 +221,8 @@ typedef struct ca_sta_set_security
         caStaSetEapPEAP_t    peap;
         caStaSetEapAKA_t     aka;
         caStaSetEapFAST_t    fast;
+      caStaSetEapAKAPrime_t akaprime;
+      caStaSetEapPWD_t       pwd;
     } secu;
 } caStaSetSecurity_t;
 
@@ -796,6 +819,27 @@ enum
     eProtectedVideoOnly,
 };
 
+enum event {
+    eDiscoveryResult = 1,
+    eReplied,
+    ePublishTerminated,
+    eSubscribeTerminated,
+    eFollowUpReceive,
+};
+
+enum method {
+    ePublish = 1,
+    eSubscribe,
+    eFollowUp,
+};
+
+enum methodtype {
+    eUnsolicited = 1,
+    eSolicited,
+	eActive,
+    ePassive,
+    eCancel,
+};
 
 typedef struct wfd_generate_event
 {
@@ -1476,6 +1520,41 @@ typedef struct ca_sta_rfeature
     wfaEnableType tpktimer;
 } caStaRFeat_t;
 
+typedef struct ca_sta_exec_action
+{
+   char intf[WFA_IF_NAME_LEN];
+   BYTE prog;
+   char nanOp[8];
+   char masterPref[8];
+   char randFactor[8];
+   char hopCount[8];
+   char highTsf[8];
+   char methodType[16];
+   char furtherAvailInd[8];
+   char mac[18];
+   char band[8];
+   unsigned short fiveGHzOnly;
+   char publishType[16];
+   char subscribeType[16];
+   char serviceName[64];
+   unsigned short sdfTxDw;
+   unsigned short sdfDelay;
+   char rxMatchFilter[64];
+   char txMatchFilter[64];
+   unsigned short discRangeLtd;
+   unsigned short discRangeIgnore;
+   unsigned short includeBit;
+   unsigned short srfType;
+   unsigned int remoteInstanceID;
+   unsigned int localInstanceID;   
+} caStaExecAction_t;
+
+typedef struct ca_sta_get_events
+{
+	char intf[WFA_IF_NAME_LEN];
+	BYTE program;
+	char action[8];
+} caStaGetEvents_t;
 
 typedef struct dut_commands
 {
@@ -1510,6 +1589,8 @@ typedef struct dut_commands
         caStaDevSendFrame_t     sf;
         caStaSetRadio_t      sr;
         caStaRFeat_t         rfeat;
+	   caStaExecAction_t	sact;
+	   caStaGetEvents_t		sevts;
     } cmdsu;
 } dutCommand_t;
 

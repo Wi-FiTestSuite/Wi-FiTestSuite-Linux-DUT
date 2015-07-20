@@ -112,6 +112,7 @@ typedef struct ca_sta_get_parameter_resp
 
     BYTE getParamType;
     char devList[128];
+	char masterPref[8];
 } caStaGetParameterResp_t;
 
 /* WFD */
@@ -278,6 +279,19 @@ typedef struct ca_sta_invoke_cmd_resp
 } caStaInvokeCmdResp_t;
 /* WFDS */
 
+typedef struct ca_sta_exec_action_resp
+{
+	char mac[18];
+} caStaExecActionResp_t;
+
+typedef struct ca_sta_get_events_resp
+{
+	char eventName[64];
+	unsigned int remoteInstanceID;
+	unsigned int localInstanceID;
+	char mac[18];
+} caStaGetEventsResp_t;
+
 typedef struct dut_cmd_response
 {
     int status;
@@ -291,6 +305,8 @@ typedef struct dut_cmd_response
         caDeviceGetInfoResp_t devInfo;
         caDeviceListIFResp_t ifList;
         caStaUploadResp_t  uld;
+	   caStaGetEventsResp_t getEvents;
+	   caStaExecActionResp_t execAction;
         char version[WFA_VERSION_LEN];
         char info[WFA_INFO_BUFSIZE];
         char bssid[WFA_MAC_ADDR_STR_LEN];

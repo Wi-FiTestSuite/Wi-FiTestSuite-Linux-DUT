@@ -58,6 +58,8 @@ int wfaStaSetWMMResp(BYTE *cmdBuf);
 int wfaStaPresetParametersResp(BYTE *cmdBuf);
 int wfaStaSetEapFASTResp(BYTE *cmdBuf);
 int wfaStaSetEapAKAResp(BYTE * cmdBuf);
+int wfaStaSetEapAKAPrimeResp(BYTE * cmdBuf);
+int wfaStaSetEapPWDResp(BYTE * cmdBuf);
 int wfaStaSetSystimeResp(BYTE * cmdBuf);
 
 int wfaStaSet11nResp(BYTE * cmdBuf);
@@ -105,6 +107,7 @@ int     wfaStaInvokeCommandResp(BYTE * cmdBuf);
 int     wfaStaManageServiceResp(BYTE * cmdBuf);
 int     wfaStaGetEventsResp(BYTE * cmdBuf);
 int     wfaStaGetEventDataResp(BYTE * cmdBuf);
+int 	wfaStaExecActionResp(BYTE *cmdBuf);
 
 
 #endif

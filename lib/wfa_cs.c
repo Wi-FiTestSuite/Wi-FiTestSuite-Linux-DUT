@@ -143,12 +143,12 @@ int wfaStaAssociate(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     else
     {
         /* use 'ifconfig' command to bring down the interface (linux specific) */
-        sprintf(gCmdStr, "ifconfig %s down", ifname);
-        sret = system(gCmdStr);
+      //sprintf(gCmdStr, "ifconfig %s down", ifname);
+      //sret = system(gCmdStr);
 
         /* use 'ifconfig' command to bring up the interface (linux specific) */
-        sprintf(gCmdStr, "ifconfig %s up", ifname);
-        sret = system(gCmdStr);
+      //sprintf(gCmdStr, "ifconfig %s up", ifname);
+      //sret = system(gCmdStr);
 
         /*
          *  use 'wpa_cli' command to force a 802.11 re/associate
@@ -2072,6 +2072,166 @@ int wfaStaSetEapAKA(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     return WFA_SUCCESS;
 }
 
+/* EAP-AKA' */
+int wfaStaSetEapAKAPrime(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+    caStaSetEapAKAPrime_t *setAKAPrime = (caStaSetEapAKAPrime_t *)caCmdBuf;
+    char *ifname = setAKAPrime->intf;
+    dutCmdResponse_t *setEapAkaPrimeResp = &gGenericResp;
+
+#ifdef WFA_NEW_CLI_FORMAT
+    sprintf(gCmdStr, "wfa_set_eapakaprime %s %s %s %s", ifname, setAKAPrime->ssid, setAKAPrime->username, setAKAPrime->passwd);
+    sret = system(gCmdStr);
+#else
+
+    sprintf(gCmdStr, "wpa_cli -i%s remove_network 0", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s add_network", ifname);
+    sret = system(gCmdStr);
+
+    if(strcasecmp(setAKAPrime->keyMgmtType, "wpa2-sha256") == 0)
+    {
+    }
+    else if(strcasecmp(setAKAPrime->keyMgmtType, "wpa2-eap") == 0)
+    {
+    }
+    else if(strcasecmp(setAKAPrime->keyMgmtType, "wpa2-ft") == 0)
+    {
+ 
+    }
+    else if(strcasecmp(setAKAPrime->keyMgmtType, "wpa") == 0)
+    {
+       sprintf(gCmdStr, "wpa_cli -i%s set_network 0 key_mgmt WPA-EAP", ifname);
+    }
+    else if(strcasecmp(setAKAPrime->keyMgmtType, "wpa2") == 0)
+    {
+      // take all and device to pick one which is supported.
+      sprintf(gCmdStr, "wpa_cli -i%s set_network 0 key_mgmt WPA-EAP", ifname);
+    }
+    else
+    {
+       // ??
+       setEapAkaPrimeResp->status = STATUS_INVALID;
+       strcpy(setEapAkaPrimeResp->cmdru.info, "invalid key management parameter");
+       wfaEncodeTLV(WFA_STA_SET_EAPAKAPRIME_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)setEapAkaPrimeResp, respBuf);
+       *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+       return WFA_FAILURE;
+    }
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 pairwise CCMP", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 proto WPA2", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 eap AKA\\'", ifname);
+    printf("eap command=%s\n", gCmdStr);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 phase1 '\"result_ind=1\"'", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 identity '\"%s\"'", ifname, setAKAPrime->username);
+    printf("user name=%s\n", setAKAPrime->username);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 password '\"%s\"'", ifname, setAKAPrime->passwd);
+    printf("password=%s\n", setAKAPrime->passwd);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 ssid '\"%s\"'", ifname, setAKAPrime->ssid);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s enable_network 0", ifname);
+    sret = system(gCmdStr);
+#endif
+
+    setEapAkaPrimeResp->status = STATUS_COMPLETE;
+    wfaEncodeTLV(WFA_STA_SET_EAPAKAPRIME_RESP_TLV, 4, (BYTE *)setEapAkaPrimeResp, respBuf);
+    *respLen = WFA_TLV_HDR_LEN + 4;
+
+    return WFA_SUCCESS;
+}
+
+/* EAP-PWD */
+int wfaStaSetEapPWD(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+    caStaSetEapPWD_t *setPWD = (caStaSetEapPWD_t *)caCmdBuf;
+    char *ifname = setPWD->intf;
+    dutCmdResponse_t *setEapPWDResp = &gGenericResp;
+
+#ifdef WFA_NEW_CLI_FORMAT
+    sprintf(gCmdStr, "wfa_set_eappwd %s %s %s %s", ifname, setPWD->ssid, setPWD->username, setPWD->passwd);
+    sret = system(gCmdStr);
+#else
+
+    sprintf(gCmdStr, "wpa_cli -i%s remove_network 0", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s add_network", ifname);
+    sret = system(gCmdStr);
+
+    if(strcasecmp(setPWD->keyMgmtType, "wpa2-sha256") == 0)
+    {
+    }
+    else if(strcasecmp(setPWD->keyMgmtType, "wpa2-eap") == 0)
+    {
+    }
+    else if(strcasecmp(setPWD->keyMgmtType, "wpa2-ft") == 0)
+    {
+
+    }
+    else if(strcasecmp(setPWD->keyMgmtType, "wpa") == 0)
+    {
+       sprintf(gCmdStr, "wpa_cli -i%s set_network 0 key_mgmt WPA-EAP", ifname);
+    }
+    else if(strcasecmp(setPWD->keyMgmtType, "wpa2") == 0)
+    {
+      // take all and device to pick one which is supported.
+      sprintf(gCmdStr, "wpa_cli -i%s set_network 0 key_mgmt WPA-EAP", ifname);
+    }
+    else
+    {
+       // ??
+       setEapPWDResp->status = STATUS_INVALID;
+       strcpy(setEapPWDResp->cmdru.info, "invalid key management parameter");
+       wfaEncodeTLV(WFA_STA_SET_EAPPWD_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)setEapPWDResp, respBuf);
+       *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
+       return WFA_FAILURE;
+    }
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 pairwise CCMP", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 proto WPA2", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 eap PWD", ifname);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 identity '\"%s\"'", ifname, setPWD->username);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 password '\"%s\"'", ifname, setPWD->passwd);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s set_network 0 ssid '\"%s\"'", ifname, setPWD->ssid);
+    sret = system(gCmdStr);
+
+    sprintf(gCmdStr, "wpa_cli -i%s enable_network 0", ifname);
+    sret = system(gCmdStr);
+#endif
+
+    setEapPWDResp->status = STATUS_COMPLETE;
+    wfaEncodeTLV(WFA_STA_SET_EAPPWD_RESP_TLV, 4, (BYTE *)setEapPWDResp, respBuf);
+    *respLen = WFA_TLV_HDR_LEN + 4;
+
+    return WFA_SUCCESS;
+}
+
 int wfaStaSetSystime(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
     caStaSetSystime_t *systime = (caStaSetSystime_t *)caCmdBuf;
@@ -2099,8 +2259,53 @@ int wfaStaPresetParams(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     caStaPresetParameters_t *presetParams = (caStaPresetParameters_t *)caCmdBuf;
     BYTE presetDone = 1;
     int st = 0;
+   char cmdStr[128];
+   char string[256];
+   FILE *tmpfd = NULL;
+   long val;
+   char *endptr;
 
     DPRINT_INFO(WFA_OUT, "Inside wfaStaPresetParameters function ...\n");
+
+   if (presetParams->supplicant == eWpaSupplicant)
+   {
+	st = access("/tmp/processid.txt", F_OK);
+	if (st != -1)
+	{
+	    st = remove("/tmp/processid.txt");
+	}
+	
+	sprintf(cmdStr, "/usr/local/sbin/findprocess.sh %s /tmp/processid.txt\n", "wpa_supplicant");
+	st = system(cmdStr);
+	
+	tmpfd = fopen("/tmp/processid.txt", "r+");
+	if (tmpfd == NULL)
+	{
+	    DPRINT_ERR(WFA_ERR, "process id file not exist\n");
+	    return WFA_FAILURE;
+	}
+	
+	for (;;)
+	{
+	    if (fgets(string, 256, tmpfd) == NULL)
+	        break;
+
+	    errno = 0;
+	    val = strtol(string, &endptr, 10);
+	    if (errno != 0 && val == 0)
+	    {
+		DPRINT_ERR(WFA_ERR, "strtol error\n");
+		return WFA_FAILURE;
+	    }
+	
+	    if (endptr == string)
+	    {
+		DPRINT_ERR(WFA_ERR, "No wpa_supplicant instance was found\n");
+	    }
+
+	    presetDone = 1;
+	}
+   }
 
     if(presetParams->wmmFlag)
     {
@@ -3935,6 +4140,15 @@ int wfaStaGetParameter(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 		}
 		
 	}
+	if(staGetParam->program == PROG_TYPE_NAN)
+   	{
+      if(staGetParam->getParamValue == eMasterPref )
+      {
+          // Get the master preference of the device and return the value
+          paramList->getParamType = eMasterPref;
+          strcpy((char *)&paramList->masterPref, "0xff");
+      }
+    }
 
 	infoResp.status = STATUS_COMPLETE;
 	wfaEncodeTLV(WFA_STA_GET_PARAMETER_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf);	
@@ -3998,6 +4212,27 @@ int wfaStaNfcAction(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
 	infoResp.status = STATUS_COMPLETE;
 	wfaEncodeTLV(WFA_STA_NFC_ACTION_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf); 
+	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
+	
+   return WFA_SUCCESS;
+}
+
+int wfaStaExecAction(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
+{
+
+	dutCmdResponse_t infoResp;
+	caStaExecAction_t *staExecAction = (caStaExecAction_t *)caCmdBuf;  //comment if not used
+	
+	 printf("\n Entry wfaStaExecAction... ");
+
+	if(staExecAction->prog == PROG_TYPE_NAN)
+	{
+		// Perform necessary configurations and actions
+		// return the MAC address conditionally as per CAPI specification
+	}
+	
+	infoResp.status = STATUS_COMPLETE;
+	wfaEncodeTLV(WFA_STA_EXEC_ACTION_RESP_TLV, sizeof(infoResp), (BYTE *)&infoResp, respBuf); 
 	*respLen = WFA_TLV_HDR_LEN + sizeof(infoResp);
 	
    return WFA_SUCCESS;
@@ -4074,6 +4309,12 @@ int wfaStaGetEvents(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 	//caStaGetEvents_t *staGetEvents = (caStaGetEvents_t *)caCmdBuf;  //uncomment and use it
 	
 	 printf("\n Entry wfaStaGetEvents... ");
+	 
+	 if(staGetEvents->program == PROG_TYPE_NAN)
+	{ 
+		// Get all the events from the Log file or stored events
+		// return the  received/recorded event details - eventName, remoteInstanceID, localInstanceID, mac
+	}
 
 	// Get all the event from the Log file or stored events
 	// return the  received/recorded events as space seperated list   ( example response below)

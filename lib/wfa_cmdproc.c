@@ -3795,6 +3795,122 @@ int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
     return WFA_SUCCESS;
 }
 
+int xcCmdProcStaSetEapAKAPrime(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+    caStaSetEapAKAPrime_t *setsec = (caStaSetEapAKAPrime_t *) (aBuf+sizeof(wfaTLV));
+    char *str;
+    caStaSetEapAKAPrime_t defparams = {"", "", "", "", "", ""};
+   
+    if(aBuf == NULL)
+        return WFA_FAILURE;
+   
+    memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapAKAPrime_t));
+
+    for(;;)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        if(str == NULL || str[0] == '\0')
+            break;
+
+        if(strcasecmp(str, "interface") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);  
+            strncpy(setsec->intf, str, 15);
+        }
+        else if(strcasecmp(str, "ssid") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);  
+
+            strncpy(setsec->ssid, str, 64);
+        }
+        else if(strcasecmp(str, "username") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strcpy(setsec->username, str);
+        }
+        else if(strcasecmp(str, "password") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strcpy(setsec->passwd, str);
+        }
+        else if(strcasecmp(str, "keyMgmtType") == 0)
+        {
+            str=strtok_r(NULL, ",", &pcmdStr);
+            strncpy(setsec->keyMgmtType, str, 7);
+        }
+        else if(strcasecmp(str, "encpType") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(setsec->encrptype, str, 8);
+        }
+    }
+
+    wfaEncodeTLV(WFA_STA_SET_EAPAKAPRIME_TLV, sizeof(caStaSetEapAKAPrime_t), (BYTE *)setsec, aBuf);
+
+    *aLen = 4+sizeof(caStaSetEapAKAPrime_t);
+
+    return WFA_SUCCESS;
+}
+
+int xcCmdProcStaSetEapPWD(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+    caStaSetEapPWD_t *setsec = (caStaSetEapPWD_t *) (aBuf+sizeof(wfaTLV));
+    char *str;
+    caStaSetEapPWD_t defparams = {"", "", "", "", "", ""};
+   
+    if(aBuf == NULL)
+        return WFA_FAILURE;
+   
+    memset(aBuf, 0, *aLen);
+    memcpy((void *)setsec, (void *)&defparams, sizeof(caStaSetEapPWD_t));
+
+    for(;;)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        if(str == NULL || str[0] == '\0')
+            break;
+
+        if(strcasecmp(str, "interface") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);  
+            strncpy(setsec->intf, str, 15);
+        }
+        else if(strcasecmp(str, "ssid") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);  
+
+            strncpy(setsec->ssid, str, 64);
+        }
+        else if(strcasecmp(str, "username") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strcpy(setsec->username, str);
+        }
+        else if(strcasecmp(str, "password") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strcpy(setsec->passwd, str);
+        }
+        else if(strcasecmp(str, "keyMgmtType") == 0)
+        {
+            str=strtok_r(NULL, ",", &pcmdStr);
+            strncpy(setsec->keyMgmtType, str, 7);
+        }
+        else if(strcasecmp(str, "encpType") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(setsec->encrptype, str, 8);
+        }
+    }
+
+    wfaEncodeTLV(WFA_STA_SET_EAPPWD_TLV, sizeof(caStaSetEapPWD_t), (BYTE *)setsec, aBuf);
+
+    *aLen = 4+sizeof(caStaSetEapPWD_t);
+
+    return WFA_SUCCESS;
+}
+
 int xcCmdProcStaSetSystime(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
     caStaSetSystime_t *systime = (caStaSetSystime_t *) (aBuf+sizeof(wfaTLV));
@@ -5276,7 +5392,7 @@ int xcCmdProcStaResetDefault(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
         else if(strcasecmp(str, "type") == 0) // dut or sta
         {
-            str = strtok_r(NULL, ",", &pcmdStr);
+           str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(reset->prog, str, 8);
         }
     }
@@ -6103,7 +6219,16 @@ int xcCmdProcStaGetParameter(char *pcmdStr, BYTE *aBuf, int *aLen)
 			 else if (strcasecmp(str, "OpenPorts") == 0)
 			 {
 				 staGetParameter->getParamValue= eOpenPorts;				 
-			 }			 
+			 }
+			 else if (strcasecmp(str, "NAN") == 0)
+		  	 {
+			 	staGetParameter->program= PROG_TYPE_NAN;
+			 	str = strtok_r(NULL, ",", &pcmdStr);
+             	if(strcasecmp(str, "Parameter") == 0)
+             	{
+					staGetParameter->getParamValue= eMasterPref;
+			 	}
+		  	 }			 
 		  }
 		  
 	   	}
@@ -6202,6 +6327,161 @@ int xcCmdProcStaNfcAction(char *pcmdStr, BYTE *aBuf, int *aLen)
 	return WFA_SUCCESS;
 }
 
+int xcCmdProcStaExecAction(char *pcmdStr, BYTE *aBuf, int *aLen)
+{
+	caStaExecAction_t *staExecAction = (caStaExecAction_t *) (aBuf+sizeof(wfaTLV));
+	char *str;
+	
+	if(aBuf == NULL)
+	   return FALSE;
+	
+	memset(aBuf, 0, *aLen);
+	
+	for(;;)
+	{
+	   str = strtok_r(NULL, ",", &pcmdStr);
+	   if(str == NULL || str[0] == '\0')
+		  break;
+	
+	   if(strcasecmp(str, "interface") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);	
+		  strncpy(staExecAction->intf, str,WFA_IF_NAME_LEN-1);
+		  staExecAction->intf[WFA_IF_NAME_LEN-1]='\0';
+	   }
+	   else if(strcasecmp(str, "prog") == 0)
+	   {
+		  str = strtok_r(NULL, ",", &pcmdStr);
+
+		  if (strcasecmp(str, "NAN") == 0)
+		  {
+	  		  staExecAction->prog= PROG_TYPE_NAN;
+		  }
+	   }
+	   else if(strcasecmp(str, "nanOp") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->nanOp, str, 8);
+	   }
+	   else if(strcasecmp(str, "masterPref") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->masterPref, str, 8);
+	   }
+	   else if(strcasecmp(str, "randFactor") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->randFactor, str, 8);
+	   }
+	   else if(strcasecmp(str, "hopCount") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->hopCount, str, 8);
+	   }
+	   else if(strcasecmp(str, "highTsf") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->highTsf, str, 8);
+	   }
+	   else if(strcasecmp(str, "methodType") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->methodType, str, 16);
+	   }
+	   else if(strcasecmp(str, "furtherAvailInd") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->furtherAvailInd, str, 8);
+	   }
+	   else if(strcasecmp(str, "mac") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->mac, str, WFA_MAC_ADDR_STR_LEN-1);
+         staExecAction->mac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+	   }
+	   else if(strcasecmp(str, "band") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->band, str, 8);
+	   }
+	   else if(strcasecmp(str, "fiveGHzOnly") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+		 staExecAction->fiveGHzOnly= atoi(str);
+	   }
+	   else if(strcasecmp(str, "publishType") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->publishType, str, 16);
+	   }
+	   else if(strcasecmp(str, "subscribeType") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->subscribeType, str, 16);
+	   }
+	   else if(strcasecmp(str, "serviceName") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->serviceName, str, 64);
+	   }
+	   else if(strcasecmp(str, "sdfTxDw") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->sdfTxDw= atoi(str);
+	   }
+	   else if(strcasecmp(str, "sdfDelay") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->sdfDelay= atoi(str);
+	   }
+	   else if(strcasecmp(str, "rxMatchFilter") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->rxMatchFilter, str, 64);
+	   }
+	   else if(strcasecmp(str, "txMatchFilter") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->txMatchFilter, str, 64);
+	   }
+	   else if(strcasecmp(str, "discRangeLtd") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->discRangeLtd= atoi(str);
+	   }
+	   else if(strcasecmp(str, "discRangeIgnore") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->discRangeIgnore= atoi(str);
+	   }
+	   else if(strcasecmp(str, "includeBit") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->includeBit= atoi(str);
+	   }
+	   else if(strcasecmp(str, "srfType") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->srfType= atoi(str);
+	   }
+	   else if(strcasecmp(str, "remoteInstanceID") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->remoteInstanceID= atoi(str);
+	   }
+	   else if(strcasecmp(str, "localInstanceID") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->localInstanceID= atoi(str);
+	   }
+	}
+	
+	wfaEncodeTLV(WFA_STA_EXEC_ACTION_TLV, sizeof(caStaExecAction_t), (BYTE *)staExecAction, aBuf);
+	
+	*aLen = 4+sizeof(caStaExecAction_t);
+	 
+	return WFA_SUCCESS;
+}
 
 int xcCmdProcStaInvokeCommand(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
@@ -6920,7 +7200,17 @@ int xcCmdProcStaGetEvents(char *pcmdStr, BYTE *aBuf, int *aLen)
 		  {
 	  		  staGetEvents->program= PROG_TYPE_WFDS;
 		  }
-	   	}
+		  if (strcasecmp(str, "NAN") == 0)
+		  {
+	  		  staGetEvents->program= PROG_TYPE_NAN;
+		  }
+	   	} 
+		else if(strcasecmp(str, "action") == 0)
+	    {
+        	str = strtok_r(NULL, ",", &pcmdStr);  
+        	strncpy(staGetEvents->action, str, WFA_EVT_ACTION_LEN-1);
+        	staGetEvents->action[WFA_EVT_ACTION_LEN-1]='\0';
+	    }
 	   
 	}
 	

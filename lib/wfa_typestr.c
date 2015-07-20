@@ -66,6 +66,8 @@ extern int xcCmdProcStaSetWMM(char *pcmStr, BYTE *, int *);
 extern int xcCmdProcStaPresetTestParameters(char *pcmStr, BYTE *, int *);
 extern int xcCmdProcStaSetEapFAST(char *pcmStr, BYTE *, int *);
 extern int xcCmdProcStaSetEapAKA(char *pcmStr, BYTE *, int *);
+extern int xcCmdProcStaSetEapAKAPrime(char *pcmStr, BYTE *, int *);
+extern int xcCmdProcStaSetEapPWD(char *pcmStr, BYTE *, int *);
 extern int xcCmdProcStaSetSystime(char *pcmStr, BYTE *, int *);
 
 extern int xcCmdProcStaSet11n(char *pcmStr, BYTE *, int *);
@@ -119,11 +121,12 @@ extern int xcCmdProcStaGetParameter(char *, BYTE *, int *);
 
 
 extern int xcCmdProcStaNfcAction(char *, BYTE *, int *);
+extern int xcCmdProcStaExecAction(char *pcmdStr, BYTE *, int *);
 
 extern int xcCmdProcStaInvokeCommand(char *, BYTE *, int *);
 extern int xcCmdProcStaManageService(char *, BYTE *, int *);
 
-extern int xcCmdProcStaGetEvents(char *, BYTE *, int *);
+extern int xcCmdProcStaGetEvents(char *pcmdStr, BYTE *, int *);
 extern int xcCmdProcStaGetEventDetails(char *, BYTE *, int *);
 
 
@@ -175,6 +178,8 @@ typeNameStr_t nameStr[] =
 #endif
     {WFA_STA_SET_EAPFAST_TLV, "sta_set_eapfast", xcCmdProcStaSetEapFAST},
     {WFA_STA_SET_EAPAKA_TLV, "sta_set_eapaka", xcCmdProcStaSetEapAKA},
+   {WFA_STA_SET_EAPAKAPRIME_TLV, "sta_set_eapakaprime", xcCmdProcStaSetEapAKAPrime},
+   {WFA_STA_SET_EAPPWD_TLV, "sta_set_eappwd", xcCmdProcStaSetEapPWD},
     {WFA_STA_SET_SYSTIME_TLV, "sta_set_systime", xcCmdProcStaSetSystime},
     {WFA_STA_SET_PWRSAVE_TLV, "sta_set_pwrsave", xcCmdProcStaSetPwrSave},
 #ifdef WFA_STA_TB
@@ -219,6 +224,7 @@ typeNameStr_t nameStr[] =
    {WFA_STA_GET_PARAMETER_TLV, "sta_get_parameter", xcCmdProcStaGetParameter},
    
    {WFA_STA_NFC_ACTION_TLV, "sta_nfc_action", xcCmdProcStaNfcAction},
+   {WFA_STA_EXEC_ACTION_TLV, "sta_exec_action", xcCmdProcStaExecAction},
    
    {WFA_STA_INVOKE_COMMAND_TLV, "sta_invoke_command", xcCmdProcStaInvokeCommand},
    {WFA_STA_MANAGE_SERVICE_TLV, "sta_manage_service", xcCmdProcStaManageService},
