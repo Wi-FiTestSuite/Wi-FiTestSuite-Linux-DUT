@@ -2939,9 +2939,10 @@ void wfaSendPing(tgPingStart_t *staPing, float *interval, int streamid)
 
 #ifdef WFA_PC_CONSOLE
 
-    printf("\nCS : The Stream ID is %d",streamid);
-    printf("\nCS :the addr is %s ",addr);
+    printf("\nwfa_cs.c wfaSendPing CS : The Stream ID is %d",streamid);
+    
     strcpy(addr,staPing->dipaddr);
+	printf("\nCS :the addr is %s ",addr);
     printf("\nCS :Inside the WFA_PC_CONSLE BLOCK");
     printf("\nCS :the addr is %s ",addr);
     if (staPing->iptype == 2)
@@ -2979,7 +2980,7 @@ void wfaSendPing(tgPingStart_t *staPing, float *interval, int streamid)
         if (tos < 0)
             printf("\nwfaSendPing invalid tos converted, dscp=%d",  staPing->dscp);
     }
-    printf("\nCS : The Stream ID is %d",streamid);
+    printf("\nwfa_cs.c wfaSendPing : The Stream ID=%d IPtype=%i\n",streamid, staPing->iptype);
     printf("IPtype : %i  tos=%d",staPing->iptype, tos);
 
     if (staPing->iptype == 2)
@@ -3015,7 +3016,7 @@ int wfaStopPing(dutCmdResponse_t *stpResp, int streamid)
     char strout[256];
     FILE *tmpfile = NULL;
     char cmdStr[128];
-    printf("Ping stop id %d\n", streamid);
+    printf("\nwfa_cs.c wfaStopPing:: stream id=%d\n", streamid);
     sprintf(cmdStr, "getpid.sh /tmp/spout_%d.txt /tmp/pid.txt",streamid);
     sret = system(cmdStr);
 
@@ -3046,7 +3047,7 @@ int wfaStopPing(dutCmdResponse_t *stpResp, int streamid)
             stpResp->cmdru.pingStp.sendCnt = atoi(strout);
     }
 
-    printf("after scan sent count %i\n", stpResp->cmdru.pingStp.sendCnt);
+    printf("\nwfaStopPing after scan sent count %i\n", stpResp->cmdru.pingStp.sendCnt);
 
 
     if(fscanf(tmpfile, "%s", strout) != EOF)
@@ -3058,7 +3059,7 @@ int wfaStopPing(dutCmdResponse_t *stpResp, int streamid)
         else
             stpResp->cmdru.pingStp.repliedCnt = atoi(strout);
     }
-    printf("after scan replied count %i\n", stpResp->cmdru.pingStp.repliedCnt);
+    printf("wfaStopPing after scan replied count %i\n", stpResp->cmdru.pingStp.repliedCnt);
 
     fclose(tmpfile);
 
@@ -4306,7 +4307,7 @@ int wfaStaGetEvents(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
 
 	dutCmdResponse_t infoResp;
-	//caStaGetEvents_t *staGetEvents = (caStaGetEvents_t *)caCmdBuf;  //uncomment and use it
+	caStaGetEvents_t *staGetEvents = (caStaGetEvents_t *)caCmdBuf;  //uncomment and use it
 	
 	 printf("\n Entry wfaStaGetEvents... ");
 	 

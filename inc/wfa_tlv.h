@@ -150,8 +150,8 @@ enum cmd_tags
 	
    WFA_STA_SET_EAPAKAPRIME_TLV,           /* 80 */
    WFA_STA_SET_EAPPWD_TLV,                /* 81 */
-   WFA_STA_COMMANDS_END                   /* 82 */
-   
+   WFA_STA_COMMANDS_END,                  /* 82 */
+  
    WFA_STA_EXEC_ACTION_TLV,			/* 86 */
 };
 
@@ -258,7 +258,7 @@ enum resp_tags
 	WFA_STA_GET_EVENT_DETAILS_RESP_TLV,		/* 84 */
     WFA_STA_SET_EAPAKAPRIME_RESP_TLV,              /* 80 */
     WFA_STA_SET_EAPPWD_RESP_TLV,                   /* 81 */
-    WFA_STA_RESPONSE_END                        /* 82 */
+    WFA_STA_RESPONSE_END,                        /* 82 */
 	WFA_STA_EXEC_ACTION_RESP_TLV,					/* 86 */
 };
 

@@ -109,7 +109,7 @@ int
 main(int argc, char **argv)
 {
     int	      nfds, maxfdn1 = -1, nbytes = 0, cmdLen = 0, isExit = 1;
-    int       respLen;
+    int       respLen, ret;
     WORD      locPortNo = 0;   /* local control port number                  */
     fd_set    sockSet;         /* Set of socket descriptors for select()     */
     BYTE      *xcCmdBuf=NULL, *parmsVal=NULL;
@@ -329,12 +329,14 @@ main(int argc, char **argv)
                     gWfaCmdFuncTbl[0](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
                 }
 
-                // gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
-                if(gxcSockfd != -1)
-                    if(wfaCtrlSend(gxcSockfd, (BYTE *)respBuf, respLen) != respLen)
-                    {
-                        DPRINT_WARNING(WFA_WNG, "wfa-wfaCtrlSend Error\n");
-                    }
+               // gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
+               if(gxcSockfd != -1)
+               {
+                 if((ret = wfaCtrlSend(gxcSockfd, (BYTE *)respBuf, respLen)) != respLen)
+                 {
+                      DPRINT_WARNING(WFA_WNG, "wfa-dut main:wfaCtrlSend returned value %d != respLen %d\n", ret, respLen);
+                 }
+               }
             }
 
         }

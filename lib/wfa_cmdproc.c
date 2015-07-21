@@ -691,25 +691,25 @@ int xcCmdProcAgentSendPing(char *pcmdStr, BYTE *aBuf, int *aLen)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(staping->dipaddr, str, 39);
-            DPRINT_INFO(WFA_OUT, "destination %s\n", staping->dipaddr);
+            DPRINT_INFO(WFA_OUT, "destination %s ", staping->dipaddr);
         }
         if(strcasecmp(str, "frameSize") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             staping->frameSize=atoi(str);
-            DPRINT_INFO(WFA_OUT, "framesize %i\n", staping->frameSize);
+            DPRINT_INFO(WFA_OUT, "framesize %i ", staping->frameSize);
         }
         if(strcasecmp(str, "frameRate") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             staping->frameRate=atof(str);
-            DPRINT_INFO(WFA_OUT, "framerate %f\n", staping->frameRate);
+            DPRINT_INFO(WFA_OUT, "framerate %f ", staping->frameRate);
         }
         if(strcasecmp(str, "duration") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             staping->duration=atoi(str);
-            DPRINT_INFO(WFA_OUT, "duration %i\n", staping->duration);
+            DPRINT_INFO(WFA_OUT, "duration %i \n", staping->duration);
         }
         if(strcasecmp(str, "type") == 0)
         {
@@ -723,7 +723,7 @@ int xcCmdProcAgentSendPing(char *pcmdStr, BYTE *aBuf, int *aLen)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             staping->iptype=atoi(str);
-            DPRINT_INFO(WFA_OUT, "iptype %i\n", staping->iptype);
+            DPRINT_INFO(WFA_OUT, "iptype %i \n", staping->iptype);
         }
         if(strcasecmp(str, "dscp") == 0)
         {

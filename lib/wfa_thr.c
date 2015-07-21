@@ -592,8 +592,8 @@ void * wfa_wmm_thread(void *thr_param)
     int myId = ((tgThrData_t *)thr_param)->tid;
     tgWMM_t *my_wmm = &wmm_thr[myId];
     tgStream_t *myStream = NULL;
-    int myStreamId;
-    int mySock = -1, status, respLen, nbytes = 0;
+    int myStreamId, i=0,rttime=0,difftime=0, rcvCount=0,sendCount=0;
+    int mySock = -1, status, respLen = 0, nbytes = 0, ret=0, j=0;
     tgProfile_t *myProfile;
     pthread_attr_t tattr;
 #ifdef WFA_WMM_PS_EXT
@@ -601,16 +601,18 @@ void * wfa_wmm_thread(void *thr_param)
     StationProcStatetbl_t  curr_state;
 #endif
 
-#ifdef WFA_VOICE_EXT
+//#ifdef WFA_VOICE_EXT
     struct timeval lstime, lrtime;
     int asn = 1;  /* everytime it starts from 1, and to ++ */
-#endif
+//#endif
 
     wPT_ATTR_INIT(&tattr);
     wPT_ATTR_SETSCH(&tattr, SCHED_RR);
 
     while(1)
     {
+        int sleepTotal=0,sendFailCount=0;
+        DPRINT_INFO(WFA_OUT, "wfa_wmm_thread::begin while loop for each send/rcv before mutex lock\n");
         pthread_mutex_lock(&my_wmm->thr_flag_mutex);
         /* it needs to reset the thr_flag to wait again */
         while(my_wmm->thr_flag == 0)
@@ -642,11 +644,17 @@ void * wfa_wmm_thread(void *thr_param)
             continue;
         }
 
-        printf("Mutex unlocked\n");
+        DPRINT_INFO(WFA_OUT, "wfa_wmm_thread::Mutex unlocked\n");
         switch(myProfile->direction)
         {
         case DIRECT_SEND:
             mySock = wfaCreateUDPSock(myProfile->sipaddr, myProfile->sport);
+            if (mySock <=0)
+            {
+               DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND ERROR failed create UDP socket! \n");
+               break;
+            }
+
             mySock = wfaConnectUDPPeer(mySock, myProfile->dipaddr, myProfile->dport);
             sendThrId = myId;
             /*
@@ -671,7 +679,8 @@ void * wfa_wmm_thread(void *thr_param)
             if(myProfile->maxcnt == 0)
             {
                 wSIGNAL(SIGALRM, tmout_stop_send);
-                wALARM(myProfile->duration);
+                wALARM(myProfile->duration );
+                DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND set stop alarm for %d sec \n", myProfile->duration);
             }
 
             if(myProfile->profile == PROF_MCAST)
@@ -726,13 +735,21 @@ void * wfa_wmm_thread(void *thr_param)
 
 
                 tmout.tv_sec = 0;
-                tmout.tv_usec = 15000;    // set for 20 min sec timeout
-                setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout));
-
+                tmout.tv_usec = 200;     // set for 300 us timeout for rcv              
+                ret = setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout)); 
+                tmout.tv_sec = 0;
+                tmout.tv_usec = 2000;    // set for 2-- mil- sec timeout for sending        
+                ret = setsockopt(mySock, SOL_SOCKET, SO_SNDTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout)); 
+                DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND,PROF_TRANSC while loop begin, setsockopt snd timeout ret=%d \n", ret);
+                rcvCount=0; sendFailCount=0;
+                j=0;  sendCount=0;
+                sleepTotal = 0;
                 while(gtgTransac != 0)
                 {
-#ifdef WFA_VOICE_EXT
-                    gettimeofday(&lstime, NULL);
+                   
+
+#ifdef WFA_VOICE_EXT                 
+					gettimeofday(&lstime, NULL);
                     /*
                      * If your device is BIG ENDIAN, you need to
                      * modify the the function calls
@@ -740,43 +757,58 @@ void * wfa_wmm_thread(void *thr_param)
                     int2BuffBigEndian(asn++, &((tgHeader_t *)trafficBuf)->hdr[8]);
                     int2BuffBigEndian(lstime.tv_sec, &((tgHeader_t *)trafficBuf)->hdr[12]);
                     int2BuffBigEndian(lstime.tv_usec, &((tgHeader_t *)trafficBuf)->hdr[16]);
+#else
+                    j++;
+                    i=0;
+                    do
+                    {
+
 #endif /* WFA_VOICE_EXT */
 
-                    if(gtgTransac != 0 && nbytes <= 0)
-                    {
-                        if(respBuf == NULL)
+                        if(gtgTransac != 0/* && nbytes <= 0 */)
                         {
-                            printf("a Null buff\n");
-                        }
-                        memset(respBuf, 0, WFA_RESP_BUF_SZ);
-                        respLen = 0;
-
-                        if(wfaSendShortFile(mySock, myStreamId,
-                                            trafficBuf, 0, respBuf, &respLen) == DONE)
-                        {
-                            if(wfaCtrlSend(gxcSockfd, respBuf, respLen) != respLen)
+                            if(respBuf == NULL)
                             {
-                                DPRINT_WARNING(WFA_WNG, "wfaCtrlSend Error\n");
+                                DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND,PROF_TRANSC::a Null respBuf\n");
                             }
-                        }
+                            memset(respBuf, 0, WFA_RESP_BUF_SZ);
+                            respLen = 0;
+                            memset(trafficBuf  ,0, MAX_UDP_LEN + 1);
+                            if(wfaSendShortFile(mySock, myStreamId,
+                                trafficBuf, 0, respBuf, &respLen) == DONE)
+                            {
+                                if(wfaCtrlSend(gxcSockfd, respBuf, respLen) != respLen)
+                                {
+                                    DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND,PROF_TRANSC::wfaCtrlSend Error for wfaSendShortFile\n");
+                                }
+                                sendFailCount++;
+                                i--;
+                                usleep(1000);
+                            }
+                            else
+                            {
+                                i++;
+                                sendCount++;
+                            }
 
-                        sentTranPkts++;
+                            //sentTranPkts++; /* send routine already incresed this counter  */
 
-                        if(sentTranPkts == myProfile->maxcnt)
-                        {
-                            break;
-                        }
-                    }
+                            if((myProfile->maxcnt>0) &&(sendCount == myProfile->maxcnt))
+                            {
+                                DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND,PROF_TRANSC::meet maxcnt=%d; end loop\n",myProfile->maxcnt);
+                                gtgTransac = 0; /* break snd/rcv wile loop  */
+                                break;
+                            }
 
-                    int nbytes = wfaRecvFile(mySock, myStreamId, (char  *)trafficBuf);
-                    if(nbytes <= 0)
-                    {
-                        setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout));
-                        printf("time out event, resend a new packet ...\n");
+                            nbytes = wfaRecvFile(mySock, myStreamId, (char  *)trafficBuf);
+                            if(nbytes <= 0)
+                            {/* Do not print any msg it will slow down process on snd/rcv  */
+                            //setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout)); 
+                            //printf("PROF_TRANSC::time out event, wfaRecvFile failed,resend a new packet ...\n");
 
-                        tmout.tv_sec = 0;
-                        tmout.tv_usec = 10000;    // set for 20 min sec timeout
-                        setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout));
+                            //tmout.tv_sec = 0;
+                            //tmout.tv_usec = 3000;    // set for 20 minlsec timeout              
+                            //setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout)); 
 #if 0  /* if your socket APIs does not support "recvfrom" timeout, this is the way to loop the descriptor */
                         gettimeofday(&curtime, NULL);
                         if(((curtime.tv_sec - nxtime.tv_sec) * 1000000 + (curtime.tv_usec -  nxtime.tv_usec)) < 20000)
@@ -791,18 +823,23 @@ void * wfa_wmm_thread(void *thr_param)
                             nxtime.tv_usec -= 1000000;
                         }
 #endif
-                        continue;
-                    }
-
-#ifdef WFA_VOICE_EXT
-                    /*
-                     * Roundtrip time delay:
-                     *   1. retrieve the timestamp
-                     *   2. calculate the Trt(1) roundtrip delay
-                     *   3. store the minimum Trt(1)
-                     *   4. store Cdut(t1) and Ctm(2)
-                     */
-                    gettimeofday(&lrtime, NULL);
+                              //continue;
+                            }
+                            else
+                            {
+                               rcvCount++;
+                               nbytes = 0;
+                            }
+                        } /*  if gtgTransac != 0 */
+#ifdef WFA_VOICE_EXT 
+                        /*
+                        * Roundtrip time delay:
+                        *   1. retrieve the timestamp
+                        *   2. calculate the Trt(1) roundtrip delay
+                        *   3. store the minimum Trt(1)
+                        *   4. store Cdut(t1) and Ctm(2)
+                        */
+                        gettimeofday(&lrtime, NULL);
 
                     /* get a round trip time */
                     rttime = wfa_ftime_diff(&lstime, &lrtime);
@@ -817,9 +854,31 @@ void * wfa_wmm_thread(void *thr_param)
                         }
                     }
 
-                    if(gtgCaliRTD != 0 )
+                        if(gtgCaliRTD != 0 )
+                        {
+                            usleep(20000); /* wait a few min seconds before retrying the next calibration */
+                        }
+#else
+                        /*  not voice case  */ 
+                        /*  for do-while loop for frame rate per sec */ 
+ 
+                    }while ((i <= myProfile->rate + myProfile->rate/3) && (myProfile->rate !=0) && (gtgTransac != 0 )); 
+
+                    gettimeofday(&lrtime, NULL);
+                    rttime = wfa_itime_diff(&lstime, &lrtime);
+                    /*  we cover frame rate = 0 case without any sleep to continue push data */
+                    if (((difftime = 1000000 - rttime) > 0) && (myProfile->rate != 0))
                     {
-                        wUSLEEP(20000); /* wait a few min seconds before retrying the next calibration */
+                        if ( j < myProfile->duration)
+                        {
+                           usleep (difftime);
+                           sleepTotal = sleepTotal + difftime/1000;
+                        }
+                    }
+                    if (j > myProfile->duration + 2)
+                    {/* avoid infinite loop  */
+                        DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND over time %d sec, stop sending\n",myProfile->duration);
+                        break;
                     }
 #endif /* WFA_VOICE_EXT */
                 } /* while */
@@ -829,7 +888,9 @@ void * wfa_wmm_thread(void *thr_param)
                     wCLOSE(mySock);
                     mySock = -1;
                 }
-            }
+                DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND::Sending stats back, sendCount=%d rcvCount=%d sleepTotal in mil-sec=%d sendFailCount=%d frmRate=%d do count=%d\n", sendCount,rcvCount,sleepTotal,sendFailCount, myProfile->rate, j);
+
+            }/* else if(myProfile->profile == PROF_TRANSC || myProfile->profile == PROF_START_SYNC || myProfile->profile == PROF_CALI_RTD) */
 
             wMEMSET(respBuf, 0, WFA_RESP_BUF_SZ);
             wSLEEP(1);
@@ -841,7 +902,6 @@ void * wfa_wmm_thread(void *thr_param)
 
             if(myId == sendThrId)
             {
-                printf("Sending stats back\n");
                 wfaSentStatsResp(gxcSockfd, respBuf);
                 printf("done stats\n");
                 sendThrId = 0;

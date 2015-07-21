@@ -444,7 +444,8 @@ enum
     PROG_TYPE_WFD,
 	PROG_TYPE_WFDS,
     PROG_TYPE_HS2,
-    PROG_TYPE_HS2_R2
+    PROG_TYPE_HS2_R2,
+	PROG_TYPE_NAN
 };
 
 typedef struct ca_sta_dev_sendframe
@@ -500,7 +501,7 @@ typedef struct ca_sta_reinvoke_wfd_session
 enum {
 	eDiscoveredDevList = 1,
 	eOpenPorts,
-		
+	eMasterPref,
 };
 
 
@@ -690,11 +691,11 @@ typedef struct sta_cmdType_Message
    char sessionMac[WFA_MAC_ADDR_STR_LEN]; 
 }staCmdTypeMessage;
 
-typedef struct ca_sta_get_events
-{
-   char intf[WFA_IF_NAME_LEN];
-   BYTE program;
-} caStaGetEvents_t;
+//typedef struct ca_sta_get_events
+//{
+//   char intf[WFA_IF_NAME_LEN];
+//   BYTE program;
+//} caStaGetEvents_t;
 
 
 typedef struct ca_sta_get_event_details

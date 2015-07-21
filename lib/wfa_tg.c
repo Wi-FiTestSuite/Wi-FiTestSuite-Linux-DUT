@@ -172,25 +172,27 @@ int wfaTGSendPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     tgStream_t *myStream = NULL;
 #endif
 
-    DPRINT_INFO(WFA_OUT, "Entering wfaTSendPing ...\n");
+    DPRINT_INFO(WFA_OUT, "\nEntering wfaTGSendPing ...\n");
     if(staPing->frameSize == 0)
-        staPing->frameSize = 100;
-
-    printf("framerate %f\n", staPing->frameRate);
+         staPing->frameSize = 100;
+    
+    
     if(staPing->frameRate == 0)
-        staPing->frameRate = 1;
+         staPing->frameRate = 1;
 
     interval = (float) 1/staPing->frameRate;
-    printf("TG: interval %f\n", interval);
+    
 
     if(staPing->duration == 0)
-        staPing->duration = 30;
+         staPing->duration = 30;
+    printf("framerate %f interval %f streamID %d duration %d\n", 
+            staPing->frameRate, interval, streamId,staPing->duration);
 
     switch(staPing->type)
     {
     case WFA_PING_ICMP_ECHO:
 #ifndef WFA_PING_UDP_ECHO_ONLY
-        printf("The steam ID is:%d \n",streamId);
+        
         wfaSendPing(staPing, &interval, streamId);
 
         spresp->status = STATUS_COMPLETE;
@@ -1352,10 +1354,10 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
     DPRINT_INFO(WFA_OUT, "wfaSendBitrateData entering\n");
     /* error check section  */
     if ( (mySockfd <= 0) || (streamId < 0) || ( pRespBuf == NULL) 
-            || ( pRespLen == NULL) || ( *pRespLen < WFA_TLV_HDR_LEN+4 ))
+            || ( pRespLen == NULL) )
     {
-        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData pass-in parameter err mySockfd=%i streamId=%i pRespBuf=0x%x pRespLen=0x%x, *pRespLen=%i\n",
-            mySockfd,streamId,pRespBuf,pRespLen,*pRespLen );
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData pass-in parameter err mySockfd=%i streamId=%i pRespBuf=0x%x pRespLen=0x%x\n",
+            mySockfd,streamId,pRespBuf,pRespLen );
         ret= WFA_FAILURE;
         goto errcleanup;
     }
