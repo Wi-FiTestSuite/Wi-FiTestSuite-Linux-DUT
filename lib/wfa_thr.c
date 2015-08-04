@@ -740,7 +740,7 @@ void * wfa_wmm_thread(void *thr_param)
                 //tmout.tv_sec = 0;
                 //tmout.tv_usec = 2000;    // set for 2-- mil- sec timeout for sending        
                 //ret = setsockopt(mySock, SOL_SOCKET, SO_SNDTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout)); 
-                DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND,PROF_TRANSC while loop begin, setsockopt snd timeout ret=%d \n", ret);
+                //DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND,PROF_TRANSC while loop begin, setsockopt snd timeout ret=%d \n", ret);
                 rcvCount=0; sendFailCount=0;
                 j=0;  sendCount=0;
                 sleepTotal = 0;
@@ -864,22 +864,25 @@ void * wfa_wmm_thread(void *thr_param)
  
                     }while ((i <= myProfile->rate + myProfile->rate/3) && (myProfile->rate !=0) && (gtgTransac != 0 )); 
 
-                    gettimeofday(&lrtime, NULL);
-                    rttime = wfa_itime_diff(&lstime, &lrtime);
-                    /*  we cover frame rate = 0 case without any sleep to continue push data */
-                    if (((difftime = 1000000 - rttime) > 0) && (myProfile->rate != 0))
+					if(myProfile->maxcnt == 0)
                     {
-                        if ( j < myProfile->duration)
-                        {
-                           usleep (difftime);
-                           sleepTotal = sleepTotal + difftime/1000;
-                        }
-                    }
-                    if (j > myProfile->duration + 2)
-                    {/* avoid infinite loop  */
-                        DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND over time %d sec, stop sending\n",myProfile->duration);
-                        break;
-                    }
+	                    gettimeofday(&lrtime, NULL);
+	                    rttime = wfa_itime_diff(&lstime, &lrtime);
+	                    /*  we cover frame rate = 0 case without any sleep to continue push data */
+	                    if (((difftime = 1000000 - rttime) > 0) && (myProfile->rate != 0))
+	                    {
+	                        if ( j < myProfile->duration)
+	                        {
+	                           usleep (difftime);
+	                           sleepTotal = sleepTotal + difftime/1000;
+	                        }
+	                    }
+	                    if (j > myProfile->duration + 2)
+	                    {	/* avoid infinite loop  */
+	                        DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND over time %d sec, stop sending\n",myProfile->duration);
+	                        break;
+	                    }
+					}
 #endif /* WFA_VOICE_EXT */
                 } /* while */
 

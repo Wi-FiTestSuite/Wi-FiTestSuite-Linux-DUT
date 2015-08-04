@@ -89,7 +89,7 @@ int main(int argc,char **argv)
                     else if ( *sPath && *sControlPortName && getParameterValue(Line,"wtg_control_port_number",sValue))
                     {
                         if(iLogging)
-                            sprintf(sCommand,"%s %s %s  %s",WFA_DUT,"lo","8000","/var/log/WTG.log");
+                            sprintf(sCommand,"%s %s %s  %s",WFA_DUT,"lo","8000","/var/log/WTG-WTS.log");
                         else
                             sprintf(sCommand,"%s %s %s",WFA_DUT,"lo","8000");
 
