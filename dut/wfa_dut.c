@@ -214,7 +214,6 @@ main(int argc, char **argv)
 
 #ifdef WFA_WMM_PS_EXT
     /* WMMPS thread   */
-    int ret = 0;
     ret = pthread_mutex_init(&wmmps_mutex_info.thr_flag_mutex,NULL);
     if ( ret !=0)
     {

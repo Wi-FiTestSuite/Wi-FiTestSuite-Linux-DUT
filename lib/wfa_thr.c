@@ -735,12 +735,9 @@ void * wfa_wmm_thread(void *thr_param)
 
 
                 tmout.tv_sec = 0;
-                tmout.tv_usec = 200;     // set for 300 us timeout for rcv              
+                tmout.tv_usec = 15000;     // set for 15000 microsec timeout for rcv              
                 ret = setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout)); 
-                //tmout.tv_sec = 0;
-                //tmout.tv_usec = 2000;    // set for 2-- mil- sec timeout for sending        
-                //ret = setsockopt(mySock, SOL_SOCKET, SO_SNDTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout)); 
-                //DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND,PROF_TRANSC while loop begin, setsockopt snd timeout ret=%d \n", ret);
+                
                 rcvCount=0; sendFailCount=0;
                 j=0;  sendCount=0;
                 sleepTotal = 0;

@@ -68,8 +68,6 @@ extern int wfaStaSetWMM(int, BYTE *, int *, BYTE *);
 extern int wfaStaPresetParams(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetEapFAST(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetEapAKA(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
-extern int wfaStaSetEapAKAPrime(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
-extern int wfaStaSetEapPWD(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetSystime(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaResetTspecs(char* ifname);
 extern int wfaStaSet11n(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
