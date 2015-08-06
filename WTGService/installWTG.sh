@@ -36,7 +36,7 @@ then
         mkdir /WTS_WTGv2
 fi
 
-echo "DIR Configuration"
+echo "Identifier Configuration"
 if [ ! -d /usr/tmp ]
 then
 	mkdir /usr/tmp
@@ -53,14 +53,18 @@ cp  ../scripts/* /usr/local/sbin/
 chmod 777 /usr/local/sbin/*
 rm -f /etc/rc.local
 rm -f /tmp/*.txt
-if [ $1 == "VE" ]
-then
-	cp startPCE_VE.sh /usr/bin
-	echo "in VE"
-	ln -s $PWD/WTGService_VE.sh /etc/rc.local
-	sh $PWD/WTGService_VE.sh start
+if [ -z "$1" ]
+  then
+    ln -s $PWD/WTGService.sh /etc/rc.local
+    sh $PWD/WTGService.sh start
 else
-	ln -s $PWD/WTGService.sh /etc/rc.local
-	sh $PWD/WTGService.sh start
+if [ $1 = "VE" ]
+then
+    cp startPCE_VE.sh /usr/bin
+    echo "in VE"
+    ln -s $PWD/WTGService_VE.sh /etc/rc.local
+    sh $PWD/WTGService_VE.sh start
+ fi
 fi
+
 
