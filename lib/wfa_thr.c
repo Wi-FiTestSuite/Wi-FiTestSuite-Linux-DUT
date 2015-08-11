@@ -108,8 +108,8 @@ void tmout_stop_send(int num)
     int i =0;
 
     gettimeofday(&af,0);
-    DPRINT_INFO(WFA_OUT, "Exiting at sec %d usec %d\n", (int )af.tv_sec, (int)af.tv_usec);
-    DPRINT_INFO(WFA_OUT, "timer fired, stop sending traffic\n");
+    DPRINT_INFO(WFA_OUT, "timer fired, stop sending traffic, Exiting at sec %d usec %d\n", (int )af.tv_sec, (int)af.tv_usec);
+    //DPRINT_INFO(WFA_OUT, "timer fired, stop sending traffic\n");
 
     /*
      *  After runLoop reset, all sendLong will stop
@@ -732,6 +732,8 @@ void * wfa_wmm_thread(void *thr_param)
                 }
                 wFCNTL(mySock, F_SETFL, ioflags | O_NONBLOCK);
 #endif
+                gettimeofday(&lstime,0);
+                DPRINT_INFO(WFA_OUT, "Start sending traffic,at sec %d usec %d\n", (int )lstime.tv_sec, (int)lstime.tv_usec);
 
 
                 tmout.tv_sec = 0;
@@ -743,10 +745,8 @@ void * wfa_wmm_thread(void *thr_param)
                 sleepTotal = 0;
                 while(gtgTransac != 0)
                 {
-                   
-
-#ifdef WFA_VOICE_EXT                 
 					gettimeofday(&lstime, NULL);
+#ifdef WFA_VOICE_EXT  					
                     /*
                      * If your device is BIG ENDIAN, you need to
                      * modify the the function calls
@@ -1082,7 +1082,7 @@ void * wfa_wmm_thread(void *thr_param)
             }
             else if(myProfile->profile == PROF_TRANSC || myProfile->profile == PROF_START_SYNC || myProfile->profile == PROF_CALI_RTD)
             {
-           struct timeval tmout;
+                struct timeval tmout;
 
                 mySock = wfaCreateUDPSock(myProfile->sipaddr, myProfile->sport);
                 if(mySock < 0)
