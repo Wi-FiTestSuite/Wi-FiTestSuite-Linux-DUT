@@ -113,14 +113,11 @@ WFA_WMM_VOICE
        it is not installed on your PC. It also has instructions for the script
        file modification.
 
-   3.5  [REMOVED]
-
-   3.6  [REMOVED]
 
    3.7 Test Console with Python Script
        see 3.4
 
-   3.8 Running WMM-Power Save
+   3.8 Running WMM-Power Save (optional)
        Before doing following, some necessary setup commands must be executed,
        such as set security, association and configure IP address, etc.
 
