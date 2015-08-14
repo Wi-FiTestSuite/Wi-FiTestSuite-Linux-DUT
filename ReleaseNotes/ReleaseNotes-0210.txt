@@ -67,7 +67,7 @@ The changes include the following:
    b. line 134
    /* wmm defs */
 #define TOS_VO7     0xE0         // 111 0  0000 (7)  AC_VO tos/dscp values
-#define TOS_VO      0xD0         // 110 0  0000 (6)  AC_VO tos/dscp values
+#define TOS_VO      0xD0         // 110 1  0000 (6)  AC_VO tos/dscp values
 //Atheros Madwifi use 0x88 for UPSD/Voice
 //#define TOS_VO      0x88       // 110 0  0000 (6)  AC_VO tos/dscp values
 
