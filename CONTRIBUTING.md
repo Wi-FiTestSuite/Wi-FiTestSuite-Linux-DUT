@@ -1,19 +1,19 @@
 # **Contributing to Wi-Fi Test Suite**
 
-**Thank you for your interest in contributing to the Wi-Fi Alliance's (WFA) Wi-Fi Test Suite project!**
+**Thank you for your interest in contributing to the Wi-Fi Test Suite project!**
 
 ## 1. Become a Contributer
 
-Contributors are members who contribute to the code, testing, bug reporting, documentation, design, discussion etc. Contributors get involved in the project through the issue tracker, forum, and the contributor mailing list. Changes are submitted through pull requests which will be considered for inclusion in the project by Committers.
+Contributors are members who contribute to the code, testing, bug reporting, documentation, design, discussion, etc. Contributors get involved in the project through the issue tracker, forum, and the contributor mailing list. Changes are submitted through pull requests which will be considered for inclusion in the project by Committers.
 
-How to become one:
-Contributors must sign the WFA Contributor Agreement before contributing work to WFA Wi-Fi Test Suite software thru the following URL:http://www.wi-fi.org/wi-fi-alliance-contributor-agreement
+How to become a Contributor:
+Contributors must sign the Wi-Fi Alliance Contributor Agreement before contributing work to Wi-Fi Test Suite software through the following URL:http://www.wi-fi.org/wi-fi-alliance-contributor-agreement
 
-Contributors must follow the Contribution Standards, which is in sections 2 through 6 of this file. Submit a pull request. We'll evaluate the request to determine if it aligns with the projects goals. In addition to the goal alignment there is also a requirement to include appropriate tests and these tests run without failure. If all of the requirements are met we’ll accept it and merge it into the project.
+Contributors must follow the Contribution Standards, sections 2 through 6 of this file. 
 
 ## 2. Propose a Submission
 
-Proposals can be submitted via a WFA Wi-Fi Test Suite Blog or as an idea to the Contributor Mailing List. Submissions that follow our contribution standards and are aligned with the direction of the project will be accepted. Please review Wi-Fi Test Suite contributor model for more information about how proposals get processed once submitted.
+Proposals can be submitted via a Wi-Fi Test Suite Blog or as an idea to the Contributor Mailing List. Submissions that follow our contribution standards and are aligned with the direction of the project will be accepted. Please review Wi-Fi Test Suite contributor model for more information about how proposals are processed once submitted.
 
 ## 3. Minimum Requirements
 
