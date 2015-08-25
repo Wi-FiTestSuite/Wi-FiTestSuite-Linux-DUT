@@ -7,7 +7,7 @@ Wi-Fi Test Suite is a software platform originally developed by Wi-Fi Alliance, 
 Control agents are a proxy in which a CAPI control command is converted for the device into the device’s native control interface. APs, DUTs, sniffers, and STAs may require control agents. The Linux control agent can be downloaded through the [open source repository](https://github.com/Wi-FiAlliance/Wi-FiTestSuite-Linux-DUT).
 
 ##Installation from sources
-Refer to the [Install Guide](https://github.com/Wi-FiTestSuite/Wi-FiTestSuite-Linux-DUT/blob/master/INSTALL) for instructions on setting up a Linux DUT.
+Refer to the [Install Guide](https://github.com/Wi-FiTestSuite/Wi-FiTestSuite-Linux-DUT/blob/master/Docs/INSTALL) for instructions on setting up a Linux DUT.
 
 ##License
 Please refer to [LICENSE.txt](https://github.com/Wi-FiTestSuite/Wi-FiTestSuite-Linux-DUT/blob/master/LICENSE.txt).
