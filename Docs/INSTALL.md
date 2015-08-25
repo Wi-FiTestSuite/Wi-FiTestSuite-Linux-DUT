@@ -79,11 +79,11 @@ WFA_WMM_VOICE.
       manually started by typing "wpa_supplicant -Dmadwifi -iath0 -c "any 
       configuration file". Before doing this, you need to have a console 
       terminal to access/login the DUT.
-      Please refer the wpa_supplicant Docs/README and Linux setup document 
-      for setting auto-start.
+      Please refer the wpa_supplicant [Docs/README](https://github.com/Wi-FiTestSuite/Wi-FiTestSuite-Linux-DUT/blob/master/Docs/README) 
+	  and Linux setup document for setting auto-start.
 
    c. The IP address for the control link interface (can be USB, ethernet, or 
-      others with TCP/IP/aLink) needs to be set, e.g. 10.10.1.100 . This should be set for a differnt
+      others with TCP/IP/aLink) needs to be set, e.g. 10.10.1.100 . This should be set for a different
       subnet from the traffic agent interface (Wi-Fi interface).
 
    d. Once you have already logged in the DUT, type:
