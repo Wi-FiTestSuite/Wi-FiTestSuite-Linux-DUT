@@ -26,9 +26,7 @@ The sample code uses TCP over USB to provide connectivity between the DUT and th
 This code will need to be modified to support alternate connectivity methods. 
 
 The third component included is called the Test Console.  This component is a peer traffic 
-Generator to the DUT's traffic generator that can run on the Control PC. 
-
-Please refer to the WFA Porting Guidelines document for detailed instructions on the porting process. 
+Generator to the DUT's traffic generator that can run on the Control PC.
 
 The following instructions pertain to the direct use of this sample code in a Linux environment.
 
@@ -81,7 +79,7 @@ WFA_WMM_VOICE.
       manually started by typing "wpa_supplicant -Dmadwifi -iath0 -c "any 
       configuration file". Before doing this, you need to have a console 
       terminal to access/login the DUT.
-      Please refer the wpa_supplicant document/README and Linux setup document 
+      Please refer the wpa_supplicant Docs/README and Linux setup document 
       for setting auto-start.
 
    c. The IP address for the control link interface (can be USB, ethernet, or 

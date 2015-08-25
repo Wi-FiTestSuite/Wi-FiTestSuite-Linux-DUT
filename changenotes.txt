@@ -1,4 +1,0 @@
-
-This release inclues:
-
-the changes for VHT/Certified AC
