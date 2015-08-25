@@ -79,7 +79,7 @@ WFA_WMM_VOICE.
       manually started by typing "wpa_supplicant -Dmadwifi -iath0 -c "any 
       configuration file". Before doing this, you need to have a console 
       terminal to access/login the DUT.
-      Please refer the wpa_supplicant Docs/README, URL: https://github.com/Wi-FiTestSuite/Wi-FiTestSuite-Linux-DUT/blob/master/Docs/README
+      Please refer the wpa_supplicant Docs/README, URL: https://w1.fi/cgit/hostap/plain/wpa_supplicant/README
 	  and Linux setup document for setting auto-start.
 
    c. The IP address for the control link interface (can be USB, ethernet, or 
