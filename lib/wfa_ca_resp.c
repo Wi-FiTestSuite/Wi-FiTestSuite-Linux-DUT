@@ -606,10 +606,10 @@ int wfaStaGetBSSIDResp(BYTE *cmdBuf)
 int wfaStaSetEncryptionResp(BYTE *cmdBuf)
 {
     int done=0;
-    dutCmdResponse_t *getBssidResp = (dutCmdResponse_t *) (cmdBuf + 4);
+    dutCmdResponse_t *setEncryptionResp = (dutCmdResponse_t *) (cmdBuf + 4);
 
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetBSSIDResp ...\n");
-    switch(getBssidResp->status)
+    switch(setEncryptionResp->status)
     {
     case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaSetEncryption running ...\n");
@@ -617,8 +617,8 @@ int wfaStaSetEncryptionResp(BYTE *cmdBuf)
         break;
 
     case STATUS_COMPLETE:
-        sprintf(gRespStr, "status,COMPLETE,bssid,%s\r\n", getBssidResp->cmdru.bssid);
-        printf("status,COMPLETE,bssid,%s\r\n", getBssidResp->cmdru.bssid);
+        sprintf(gRespStr, "status,COMPLETE\r\n");
+        printf("status,COMPLETE\r\n");
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
         break;
 
