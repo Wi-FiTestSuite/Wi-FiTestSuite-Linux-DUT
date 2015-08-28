@@ -1361,10 +1361,10 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(setencryp->prog, str, 15);
         }
-        else if (strcasecmp(str, "Perfer") == 0)
+        else if (strcasecmp(str, "Prefer") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            setencryp->perfer = (atoi(str) == 1)?1:0;
+            setencryp->prefer = (atoi(str) == 1)?1:0;
         }
     }
 #endif
@@ -1534,10 +1534,10 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(setsec->prog, str, 15);
         }
-        else if (strcasecmp(str, "Perfer") == 0)
+        else if (strcasecmp(str, "Prefer") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            setsec->perfer = (atoi(str) == 1)?1:0;
+            setsec->prefer = (atoi(str) == 1)?1:0;
         }
     }
 

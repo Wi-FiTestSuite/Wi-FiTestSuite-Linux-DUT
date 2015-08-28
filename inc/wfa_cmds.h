@@ -88,7 +88,7 @@ typedef struct ca_sta_set_psk
     int pmf;               /* PMF enable or disable */
     char micAlg[16];
     char prog[16];
-    BOOL perfer;
+    BOOL prefer;
 } caStaSetPSK_t;
 
 typedef struct ca_sta_set_eaptls
@@ -115,7 +115,7 @@ typedef struct ca_sta_set_eapttls
     int pmf;               /* PMF enable or disable */
     char micAlg[16];
     char prog[16];
-    BOOL perfer;
+    BOOL prefer;
 } caStaSetEapTTLS_t;
 
 typedef struct ca_sta_set_eapsim
