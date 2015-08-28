@@ -1380,7 +1380,7 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
     caStaSetEapTLS_t *setsec = (caStaSetEapTLS_t *) (aBuf+sizeof(wfaTLV));
 #ifndef WFA_PC_CONSOLE
     char *str;
-    caStaSetEapTLS_t defparams = {"", "", "", "", "", ""};
+    caStaSetEapTLS_t defparams = {"", "", "", "", "", "", "", 0, ""};
 
     if(aBuf == NULL)
         return WFA_FAILURE;
