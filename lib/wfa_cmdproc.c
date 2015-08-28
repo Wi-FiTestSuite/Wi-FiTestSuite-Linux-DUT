@@ -3280,7 +3280,7 @@ int xcCmdProcStaBlockICMPResponse(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-    wfaEncodeTLV(WFA_STA_P2P_ADD_ARP_TABLE_ENTRY_TLV, sizeof(caStaBlockICMPResponse_t), (BYTE *)staBlockICMPResponse, aBuf);
+    wfaEncodeTLV(WFA_STA_P2P_BLOCK_ICMP_RESPONSE_TLV, sizeof(caStaBlockICMPResponse_t), (BYTE *)staBlockICMPResponse, aBuf);
 
     *aLen = 4+sizeof(caStaBlockICMPResponse_t);
 
