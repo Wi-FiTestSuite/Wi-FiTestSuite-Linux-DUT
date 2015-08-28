@@ -1830,9 +1830,9 @@ int xcCmdProcDeviceGetInfo(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-    wfaEncodeTLV(WFA_DEVICE_GET_INFO_TLV, 0, NULL, aBuf);
+    wfaEncodeTLV(WFA_DEVICE_GET_INFO_TLV, sizeof(dutCommand_t), (BYTE *)dutCmd, aBuf);
 
-    *aLen = 4;
+    *aLen = 4 + sizeof(dutCommand_t);
 
     return WFA_SUCCESS;
 }
