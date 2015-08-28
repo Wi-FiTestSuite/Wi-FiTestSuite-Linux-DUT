@@ -1465,6 +1465,7 @@ typedef struct ca_sta_reset_default
 {
     char intf[WFA_IF_NAME_LEN];
     char prog[8];
+    char type[8];
 } caStaResetDefault_t;
 
 typedef struct ca_dev_info
