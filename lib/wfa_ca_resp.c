@@ -608,7 +608,7 @@ int wfaStaSetEncryptionResp(BYTE *cmdBuf)
     int done=0;
     dutCmdResponse_t *setEncryptionResp = (dutCmdResponse_t *) (cmdBuf + 4);
 
-    DPRINT_INFO(WFA_OUT, "Entering wfaStaGetBSSIDResp ...\n");
+    DPRINT_INFO(WFA_OUT, "Entering wfaStaSetEncryptionResp ...\n");
     switch(setEncryptionResp->status)
     {
     case STATUS_RUNNING:
