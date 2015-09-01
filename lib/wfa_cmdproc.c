@@ -5285,12 +5285,12 @@ int xcCmdProcStaResetDefault(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "prog") == 0) // VHT, 11n, VOE; HS2; HS2-R2, etc
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(reset->prog, str, 8);
+            strncpy(reset->prog, str, sizeof(reset->prog));
         }
         else if(strcasecmp(str, "type") == 0) // dut or sta
         {
            str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(reset->prog, str, 8);
+            strncpy(reset->type, str, sizeof(reset->type));
         }
     }
 
