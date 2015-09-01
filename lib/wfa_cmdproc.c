@@ -2596,7 +2596,7 @@ int xcCmdProcStaP2pDissolve(char *pcmdStr, BYTE *aBuf, int *aLen)
         }
     }
 
-    wfaEncodeTLV(WFA_STA_P2P_DISSOLVE_TLV, sizeof(dutCommand_t), (BYTE *)staP2pDissolve, aBuf);
+    wfaEncodeTLV(WFA_STA_P2P_DISSOLVE_TLV, sizeof(caStaP2pDissolve_t), (BYTE *)staP2pDissolve, aBuf);
 
     *aLen = 4+sizeof(caStaP2pDissolve_t);
 
