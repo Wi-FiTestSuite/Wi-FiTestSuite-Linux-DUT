@@ -4050,7 +4050,7 @@ int xcCmdProcStaDevSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                     if(str == NULL || str[0] == '\0')
                         break;
 
-                    if (strcasecmp(str, "framename") == 0)
+                    if (strcasecmp(str, "type") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
                         if (strcasecmp(str, "discovery") == 0)
