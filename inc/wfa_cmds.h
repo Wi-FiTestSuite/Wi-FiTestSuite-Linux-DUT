@@ -95,11 +95,13 @@ typedef struct ca_sta_set_eaptls
 {
     char intf[WFA_IF_NAME_LEN];
     char ssid[WFA_SSID_NAME_LEN];
+    char username[32];
     char keyMgmtType[8];
     char encrptype[9];
     char trustedRootCA[128];
     char clientCertificate[128];
     int pmf;               /* PMF enable or disable */
+    char micAlg[16];
 } caStaSetEapTLS_t;
 
 typedef struct ca_sta_set_eapttls

@@ -1380,7 +1380,7 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
     caStaSetEapTLS_t *setsec = (caStaSetEapTLS_t *) (aBuf+sizeof(wfaTLV));
 #ifndef WFA_PC_CONSOLE
     char *str;
-    caStaSetEapTLS_t defparams = {"", "", "", "", "", ""};
+    caStaSetEapTLS_t defparams = {"", "", "", "", "", "", "", 0, ""};
 
     if(aBuf == NULL)
         return WFA_FAILURE;
@@ -1403,6 +1403,11 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(setsec->ssid, str, 64);
+        }
+        else if(strcasecmp(str, "username") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strcpy(setsec->username, str);
         }
         else if(strcasecmp(str, "keyMgmtType") == 0)
         {
@@ -1439,6 +1444,14 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
                 setsec->pmf = WFA_F_DISABLED;
             else
                 setsec->pmf = WFA_DISABLED;
+        }
+        else if(strcasecmp(str, "micAlg") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            if(strcasecmp(str, "SHA-1") != 0)
+                strncpy(setsec->micAlg, str, 15);
+            else
+                strncpy(setsec->micAlg, "SHA-1", 15);
         }
     }
 
