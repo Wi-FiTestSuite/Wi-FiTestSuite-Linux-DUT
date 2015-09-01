@@ -1499,6 +1499,9 @@ typedef struct ca_sta_rfeature
     wfaEnableType uapsd;
     char peer[18]; /* peer mac addr */
     wfaEnableType tpktimer;
+    char chswitchmode[16];
+    int offchnum;
+    char secchoffset[16];
 } caStaRFeat_t;
 
 typedef struct ca_sta_exec_action

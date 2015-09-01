@@ -5731,6 +5731,21 @@ int xcCmdProcStaSetRFeature(char *pcmdStr, BYTE *aBuf, int *aLen)
             else
                 rfeat->tpktimer = eDisable;
         }
+        else if(strcasecmp(str, "ChSwitchMode") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(rfeat->chswitchmode, str, sizeof(rfeat->chswitchmode));
+        }
+        else if(strcasecmp(str, "OffChNum") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            rfeat->offchnum = atoi(str);
+        }
+        else if(strcasecmp(str, "SecChOffset") == 0)
+        {
+            str = strtok_r(NULL, ",", &pcmdStr);
+            strncpy(rfeat->secchoffset, str, sizeof(rfeat->secchoffset));
+        }
     }
 
     wfaEncodeTLV(WFA_STA_SET_RFEATURE_TLV, sizeof(caStaRFeat_t), (BYTE *)rfeat, aBuf);
