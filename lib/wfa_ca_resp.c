@@ -153,7 +153,7 @@ int caCmdNotDefinedYet(BYTE *cmdBuf)
 
     sprintf(gRespStr, "status,ERROR,Command Not Defined\r\n");
     /* make sure if getting send error, will close the socket */
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+ //   wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     done = 0;
 
@@ -185,7 +185,7 @@ int wfaStaVerifyIpConnectResp(BYTE *cmdBuf)
     default:
         sprintf(gRespStr, "status,INVALID\r\n");
     }
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -214,7 +214,7 @@ int wfaStaIsConnectedResp(BYTE *cmdBuf)
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     return done;
 }
 
@@ -252,7 +252,7 @@ int wfaStaGetIpConfigResp(BYTE *cmdBuf)
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     return done;
 }
 
@@ -275,7 +275,7 @@ int wfaGetVersionResp(BYTE *cmdBuf)
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     return done ;
 }
 
@@ -300,7 +300,7 @@ int wfaStaGetInfoResp(BYTE *cmdBuf)
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -324,7 +324,7 @@ int wfaTrafficAgentConfigResp(BYTE *cmdBuf)
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     return done;
 }
 
@@ -403,7 +403,7 @@ int wfaTrafficAgentSendResp(BYTE *cmdBuf)
         strncat(gRespStr, "\r\n", 4);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     return done;
 }
 
@@ -476,8 +476,8 @@ int wfaTrafficAgentRecvStopResp(BYTE *cmdBuf)
         }
         strncat(gRespStr, "\r\n", 4);
     }
-
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+		
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     printf("gRespStr = %s", gRespStr);
     return done;
 }
@@ -504,7 +504,7 @@ int wfaTrafficAgentPingStartResp(BYTE *cmdBuf)
         sprintf(gRespStr, "status,INVALID\r\n");
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
 
     return done;
@@ -536,7 +536,7 @@ int wfaTrafficAgentPingStopResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     return done;
 }
 
@@ -568,7 +568,7 @@ int wfaStaGetMacAddressResp(BYTE *cmdBuf)
         printf("unknown status\n");
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -598,7 +598,7 @@ int wfaStaGetBSSIDResp(BYTE *cmdBuf)
         sprintf(gRespStr, "status,COMPLETE,mac,00:00:00:00:00:00\r\n");
         printf("unknown status\n");
     }
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -632,7 +632,7 @@ int wfaStaSetEncryptionResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -661,7 +661,7 @@ int wfaStaReAssociateResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -698,7 +698,7 @@ int wfaStaGetStatsResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -730,7 +730,7 @@ int wfaDeviceGetInfoResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -776,7 +776,7 @@ int wfaDeviceListIFResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+ //   wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -807,7 +807,7 @@ int wfaStaUploadResp(BYTE *cmdBuf)
         break;
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+ //   wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -842,7 +842,7 @@ int wfaStaGetP2pDevAddressResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -870,7 +870,7 @@ int wfaStaStartAutoGO(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -898,7 +898,7 @@ int wfaStaP2pStartGrpFormResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -926,7 +926,7 @@ int wfaStaWpsReadPinResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -954,7 +954,7 @@ int wfaStaGetPskResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -981,7 +981,7 @@ int wfaStaWpsReadLabelResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -1022,7 +1022,7 @@ int wfaStaGetP2pIpConfigResp(BYTE *cmdBuf)
 
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -1054,7 +1054,7 @@ int wfaStaGenericResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -1083,7 +1083,7 @@ int wfaStaStartWfdConnectionResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 
@@ -1128,7 +1128,7 @@ int wfaStaCliCmdResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -1157,7 +1157,7 @@ int wfaStaConnectGoStartWfdResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 
@@ -1209,8 +1209,7 @@ int wfaStaGetParameterResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
-
+//    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
     return done;
 
 }
@@ -1239,7 +1238,7 @@ int wfaStaNfcActionResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+ //   wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -1272,7 +1271,7 @@ int wfaStaExecActionResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
  
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+ //   wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -1353,7 +1352,7 @@ int wfaStaInvokeCommandResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+ //   wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -1384,7 +1383,7 @@ int wfaStaManageServiceResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+ //   wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -1413,7 +1412,7 @@ int wfaStaGetEventsResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+ //   wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
@@ -1587,7 +1586,7 @@ int wfaStaGetEventDataResp(BYTE *cmdBuf)
         DPRINT_INFO(WFA_OUT, " %s\n", gRespStr);
     }
 
-    wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
+ //   wfaCtrlSend(gCaSockfd, (BYTE *)gRespStr, strlen(gRespStr));
 
     return done;
 }
