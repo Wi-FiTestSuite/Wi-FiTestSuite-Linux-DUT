@@ -1388,7 +1388,7 @@ int wfaDeviceGetInfo(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     else
     {
         // Call internal API to pull the version ID */
-        memcpy(infoResp->cmdru.devInfo.firmware, "NOVERSION", 15);
+		strcpy(infoResp->cmdru.devInfo.firmware, "NOVERSION");
     }
 
     infoResp->status = STATUS_COMPLETE;
