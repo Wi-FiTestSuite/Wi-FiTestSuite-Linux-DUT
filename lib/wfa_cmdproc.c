@@ -2152,7 +2152,7 @@ int xcCmdProcStaDebugSet(char *pcmdStr, BYTE *aBuf, int *aLen)
         if(strcasecmp(str, "level") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            if(atoi(str) == WFA_DEBUG_INFO || WFA_DEBUG_WARNING)
+            if(atoi(str) == WFA_DEBUG_INFO || atoi(str) == WFA_DEBUG_WARNING)
             {
                 debugSet->cmdsu.dbg.level = atoi(str);
                 DPRINT_INFO(WFA_OUT, "dbg level %i\n", debugSet->cmdsu.dbg.level);
