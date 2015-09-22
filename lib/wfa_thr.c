@@ -99,7 +99,7 @@ static double rttime = 0;
 int sendThrId = 0;
 
 /* this is to stop sending packets by timer       */
-void tmout_stop_send(int num)
+static void tmout_stop_send(int num)
 {
     struct timeval af;
     int i =0;
@@ -251,7 +251,7 @@ int wfaTGSetPrio(int sockfd, int tgUserPriority)
  *    Set thread priorities
  *    It is an optional experiment if you decide not necessary.
  */
-void wfaSetThreadPrio(int tid, int userPriority)
+static void wfaSetThreadPrio(int tid, int userPriority)
 {
     struct sched_param tschedParam;
     pthread_attr_t tattr;
@@ -284,7 +284,7 @@ void wfaSetThreadPrio(int tid, int userPriority)
  * collects the traffic statistics from other threads and
  * sends the collected information to CA
  */
-void  wfaSentStatsResp(int sock, BYTE *buf)
+static void  wfaSentStatsResp(int sock, BYTE *buf)
 {
     int i, total=0, pkLen;
     tgStream_t *allStreams = gStreams;
@@ -347,7 +347,7 @@ void  wfaSentStatsResp(int sock, BYTE *buf)
  *               puts the station into the PS mode indicated by psave and
  *               sends the packet after sleeping for sllep_period
  */
-int sender(char psave,int sleep_period, int userPriority)
+static int sender(char psave,int sleep_period, int userPriority)
 {
     int r;
 
