@@ -206,6 +206,7 @@ int wfaStaReAssociate(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
         /* use 'ifconfig' command to bring up the interface (linux specific) */
         sprintf(gCmdStr, "ifconfig %s up", ifname);
+        sret = system(gCmdStr);
 
         /*
          *  use 'wpa_cli' command to force a 802.11 re/associate
