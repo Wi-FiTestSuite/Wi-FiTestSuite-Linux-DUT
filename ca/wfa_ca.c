@@ -232,7 +232,7 @@ int main(int argc, char *argv[])
     }
 
     /* check need in case logpath allocated as require*/
-    if(logPath != NULL && strlen(logPath)) {
+    if(strlen(logPath)) {
         FILE *logfile;
         int fd;
         logfile = fopen(logPath,"a");
