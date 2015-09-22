@@ -56,7 +56,7 @@ int gtgPsPktRecvd = 0;                    // need to reset
 struct timeval time_ap;
 struct timeval time_ul;
 
-wfaWmmPS_t  wmmps_info;
+extern wfaWmmPS_t wmmps_info;
 tgWMM_t     wmmps_mutex_info;
 extern int gtgWmmPS;
 /*  function declaration */
