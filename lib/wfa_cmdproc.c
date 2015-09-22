@@ -1028,7 +1028,7 @@ int xcCmdProcStaVerifyIpConnection(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strcpy(verifyip->intf, str);
             verifyip->intf[15]='\0';
-            DPRINT_INFO(WFA_OUT, "interface %s %i\n", verifyip->intf, strlen(verifyip->intf));
+            DPRINT_INFO(WFA_OUT, "interface %s %zu\n", verifyip->intf, strlen(verifyip->intf));
         }
         else if(strcasecmp(str, "destination") == 0)
         {
@@ -5828,7 +5828,7 @@ int xcCmdProcStaCliCommand(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
 
     printf("\n The CA CLI command to DUT is : %s",pcmdStr);
-    printf("\n The CA CLI command to DUT Length : %d",strlen(pcmdStr));
+    printf("\n The CA CLI command to DUT Length : %zu",strlen(pcmdStr));
     wfaEncodeTLV(WFA_STA_CLI_CMD_TLV, strlen(pcmdStr), (BYTE *)pcmdStr, aBuf);
 
     *aLen = 4+strlen(pcmdStr);
