@@ -4175,7 +4175,7 @@ int wfaStaGetEventDetails(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
 
 	dutCmdResponse_t infoResp;
-	caStaGetEventDetails_t *getStaGetEventDetails = (caStaMngServ_t *)caCmdBuf;  //uncomment and use it
+	caStaGetEventDetails_t *getStaGetEventDetails = (caStaGetEventDetails_t *)caCmdBuf;  //uncomment and use it
 	
 	 printf("\n Entry wfaStaGetEventDetails... ");
 
