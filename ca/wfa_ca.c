@@ -52,7 +52,6 @@ extern typeNameStr_t nameStr[];
 extern char gRespStr[];
 
 int gSock = -1;
-int tmsockfd = -1;
 int gCaSockfd = -1;
 int xcSockfd = -1;
 int btSockfd;
@@ -137,7 +136,7 @@ int main(int argc, char *argv[])
     char cmdName[WFA_BUFF_32];
     int i, isFound = 0, nbytes, ret_status;
     WORD tag;
-    int tmsockfd, cmdLen = WFA_BUFF_1K;
+    int cmdLen = WFA_BUFF_1K;
     /* int maxfdn1; */
     BYTE xcCmdBuf[WFA_BUFF_4K];
     BYTE caCmdBuf[WFA_BUFF_4K];
