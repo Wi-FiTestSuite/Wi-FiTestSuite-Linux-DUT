@@ -360,7 +360,7 @@ int wfaTrafficAgentSendResp(BYTE *cmdBuf)
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %i", statResp[i].streamId);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
 
         printf("streamids %s\n", gRespStr);
@@ -369,34 +369,34 @@ int wfaTrafficAgentSendResp(BYTE *cmdBuf)
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, "%i ", statResp[i].cmdru.stats.txFrames);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
 
         strncat(gRespStr, ",rxFrames,", 10);
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, "%i ", statResp[i].cmdru.stats.rxFrames);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
 
         strncat(gRespStr, ",txPayloadBytes,", 16);
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, "%llu ", statResp[i].cmdru.stats.txPayloadBytes);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
 
         strncat(gRespStr, ",rxPayloadBytes,", 16);
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %llu ", statResp[i].cmdru.stats.rxPayloadBytes);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
         strncat(gRespStr, ",outOfSequenceFrames,", 20);
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, "%i ", statResp[i].cmdru.stats.outOfSequenceFrames);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
 
         printf("jitter %lu\n", statResp[i].cmdru.stats.jitter);
@@ -442,37 +442,37 @@ int wfaTrafficAgentRecvStopResp(BYTE *cmdBuf)
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %d", statResp[i].streamId);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
         strncat(gRespStr, ",txFrames,", 10);
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %u", statResp[i].cmdru.stats.txFrames);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
         strncat(gRespStr, ",rxFrames,", 10);
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %u", statResp[i].cmdru.stats.rxFrames);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
         strncat(gRespStr, ",txPayloadBytes,", 16);
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %llu", statResp[i].cmdru.stats.txPayloadBytes);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
         strncat(gRespStr, ",rxPayloadBytes,", 16);
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %llu", statResp[i].cmdru.stats.rxPayloadBytes);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
         strncat(gRespStr, ",outOfSequenceFrames,", 20);
         for(i=0; i<numStreams; i++)
         {
             sprintf(copyBuf, " %d", statResp[i].cmdru.stats.outOfSequenceFrames);
-            strncat(gRespStr, copyBuf, sizeof(copyBuf)-1);
+            strncat(gRespStr, copyBuf, sizeof(gRespStr)-1);
         }
         strncat(gRespStr, "\r\n", 4);
     }
