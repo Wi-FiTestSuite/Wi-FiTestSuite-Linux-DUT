@@ -1455,7 +1455,7 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
         /*calculate second rest part need to sleep  */
         gettimeofday(&after, NULL);
         difftime = wfa_itime_diff(&before, &after);
-        if ( difftime < 0 || difftime >= 1000000 )
+        if (difftime >= 1000000)
         {/* over time used, no sleep, go back to send */
             nOverTimeCount++;
             //if (difftime > 1200000 )
