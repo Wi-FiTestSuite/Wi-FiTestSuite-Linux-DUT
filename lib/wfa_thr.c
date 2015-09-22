@@ -77,7 +77,6 @@ unsigned int psTxMsg[512];
 unsigned int psRxMsg[512];
 #endif /* WFA_WMM_PS_EXT */
 
-extern void tmout_stop_send(int);
 extern StationProcStatetbl_t stationProcStatetbl[LAST_TEST+1][11];
 
 int runLoop = 0;
@@ -89,7 +88,8 @@ BOOL gtgRecv = 0;
 extern int slotCnt;
 extern int btSockfd;
 int totalTranPkts=0, sentTranPkts=0;
-BYTE *trafficBuf=NULL, *respBuf=NULL;
+extern BYTE *trafficBuf;
+extern BYTE *respBuf;
 
 #ifdef WFA_VOICE_EXT
 double gtgPktRTDelay = 0xFFFFFFFF;

@@ -66,7 +66,8 @@ extern void wfaTGSetPrio(int, int);
 extern     int adj_latency;           /* adjust sleep time due to latency */
 char       gnetIf[WFA_BUFF_32];        /* specify the interface to use */
 
-extern BYTE   *trafficBuf, *respBuf;
+BYTE *trafficBuf = NULL;
+BYTE *respBuf = NULL;
 
 /* stream table */
 extern tgStream_t gStreams[];         /* streams' buffers             */ 
