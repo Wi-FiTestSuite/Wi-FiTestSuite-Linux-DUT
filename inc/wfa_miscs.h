@@ -27,7 +27,7 @@ extern inline double wfa_timeval2double(struct timeval *tval);
 extern inline void wfa_double2timeval(struct timeval *tval, double dval);
 extern inline double wfa_ftime_diff(struct timeval *t1, struct timeval *t2);
 extern int wfa_itime_diff(struct timeval *t1, struct timeval *t2);
-extern inline void int2BuffBigEndian(int val, char *buf);
-extern inline int bigEndianBuff2Int(char *buff);
+extern void int2BuffBigEndian(int val, char *buf);
+extern int bigEndianBuff2Int(char *buff);
 
 #endif

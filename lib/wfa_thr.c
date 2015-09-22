@@ -598,10 +598,10 @@ void * wfa_wmm_thread(void *thr_param)
     StationProcStatetbl_t  curr_state;
 #endif
 
-//#ifdef WFA_VOICE_EXT
     struct timeval lstime, lrtime;
+#ifdef WFA_VOICE_EXT
     int asn = 1;  /* everytime it starts from 1, and to ++ */
-//#endif
+#endif
 
     wPT_ATTR_INIT(&tattr);
     wPT_ATTR_SETSCH(&tattr, SCHED_RR);

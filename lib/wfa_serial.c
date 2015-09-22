@@ -187,7 +187,7 @@ int wfaCloseSerial(t_ifaceHandle *handle)
 #ifdef DEBUG_SERIAL
     DPRINT_INFO(WFA_OUT,"%s \n",__func__);
 #endif
-    if((handle == NULL) )
+    if (handle == NULL)
         return WFA_ERROR;
 
     if (handle->if_attr.serial.fd <0) {
@@ -226,7 +226,8 @@ int wfaSerialSend(t_ifaceHandle *handle, char *buffer, int bufferLen)
     }
 
     /*send the buffer serial port*/
-    write(handle->if_attr.serial.fd, buffer, bufferLen);
+    if (write(handle->if_attr.serial.fd, buffer, bufferLen) < 0)
+		return WFA_FAILURE;
     /* 100 micro sec per char in case of 115200 baud*/
     usleep((bufferLen + 25) *200);  
     return WFA_SUCCESS;

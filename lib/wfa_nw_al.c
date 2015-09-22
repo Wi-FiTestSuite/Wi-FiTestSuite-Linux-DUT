@@ -230,7 +230,7 @@ int wfaInterFacePeerConn(t_ifaceHandle *handle )
     printf("%s \n",__func__);
 #endif
 
-    if( (handle == NULL) ) {
+    if (handle == NULL) {
         return WFA_ERROR;
     }
     typeOfConn =  handle->ifaceType;
@@ -294,7 +294,7 @@ int wfaInterFacePeerConnClose(t_ifaceHandle *handle )
     printf("%s \n",__func__);
 #endif
 
-    if( (handle == NULL) ) {
+    if (handle == NULL) {
         return WFA_ERROR;
     }
     typeOfConn =  handle->ifaceType;
@@ -353,7 +353,7 @@ int wfaInterFaceClose(t_ifaceHandle *handle )
     printf("%s \n",__func__);
 #endif
 
-    if( (handle == NULL) ) {
+    if (handle == NULL) {
         return WFA_ERROR;
     }
 
