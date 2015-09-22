@@ -1101,7 +1101,7 @@ void * wfa_wmm_thread(void *thr_param)
 
                while(gtgTransac != 0)
                {
-                    memset(trafficBuf, 0, sizeof((char*)trafficBuf));
+                    trafficBuf[0] = 0;
 
                     if(mySock != -1)
                     {
@@ -1114,6 +1114,8 @@ void * wfa_wmm_thread(void *thr_param)
                       {
                           nbytes = wfaRecvFile(mySock, i, (char  *)trafficBuf);
                       }
+					  if (nbytes > 0)
+						trafficBuf[nbytes] = 0;
                       /* It is the end of a transaction, go out of the loop */
                       if (gtgTransac == 0) break;
                    }
