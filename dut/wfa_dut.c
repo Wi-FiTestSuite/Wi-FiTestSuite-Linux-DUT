@@ -318,7 +318,7 @@ main(int argc, char **argv)
         /* we just need to check client connecion*/
         memset(xcCmdBuf, 0, WFA_BUFF_1K);  /* reset the buffer */
 
-        retStatus = wfaInterFaceDataRecv(&dutHandle, xcCmdBuf, WFA_BUFF_1K, &nbytes);
+        retStatus = wfaInterFaceDataRecv(&dutHandle, (char *)xcCmdBuf, WFA_BUFF_1K, &nbytes);
 
         if(nbytes <=0)
         {
@@ -352,7 +352,7 @@ main(int argc, char **argv)
 
             /* gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf); */
 
-            retStatus = wfaInterFaceDataSend(&dutHandle,respBuf, respLen);
+            retStatus = wfaInterFaceDataSend(&dutHandle, (char *)respBuf, respLen);
             if(retStatus == -1) {
                 DPRINT_WARNING(WFA_WNG, "wfa-wfaCtrlSend Error\n");
             }

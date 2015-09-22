@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
         }
 #endif
 
-        retStatus = wfaInterFaceDataRecv(&ctrlRecvHandle, xcCmdBuf, WFA_BUFF_1K, &nbytes);
+        retStatus = wfaInterFaceDataRecv(&ctrlRecvHandle, (char *)xcCmdBuf, WFA_BUFF_1K, &nbytes);
         printf("retStatus %d nbytes %d {%s}",retStatus, nbytes, xcCmdBuf);
         if(nbytes <=0)
         {
