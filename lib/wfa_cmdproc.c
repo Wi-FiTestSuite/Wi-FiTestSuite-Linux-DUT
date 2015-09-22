@@ -7028,7 +7028,7 @@ int xcCmdProcStaManageService(char *pcmdStr, BYTE *aBuf, int *aLen)
 						 if (subtoken == NULL)
 							 break;
 						 strncpy(staManageServCmd->MngCmds.MgtServ.fileList[index],str,16);
-						 staManageServCmd->MngCmds.MgtServ.fileList[index][16]='\0';
+						 staManageServCmd->MngCmds.MgtServ.fileList[index][15]='\0';
 						 index++;
 					}
 					staManageServCmd->MngCmds.MgtServ.numModFiles= index;					
@@ -7046,7 +7046,7 @@ int xcCmdProcStaManageService(char *pcmdStr, BYTE *aBuf, int *aLen)
 						 if (subtoken == NULL)
 							 break;
 						 strncpy(staManageServCmd->MngCmds.MgtServ.modFileList[index],str,16);
-						 staManageServCmd->MngCmds.MgtServ.modFileList[index][16]='\0';
+						 staManageServCmd->MngCmds.MgtServ.modFileList[index][15]='\0';
 						 index++;
 					}
 					staManageServCmd->MngCmds.MgtServ.numModFiles= index;					
