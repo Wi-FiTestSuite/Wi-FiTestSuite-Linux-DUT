@@ -274,6 +274,7 @@ int wfaStaIsConnected(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     }
 
     sret = fscanf(tmpfile, "%s", (char *)result);
+    fclose(tmpfile);
 
     if(strncmp(result, "COMPLETED", 9) == 0)
         staConnectResp->cmdru.connected = 1;
@@ -3709,7 +3710,7 @@ int wfaStaCliCommand(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     char retstr[256];
     int CmdReturnFlag =0;
     char tmp[256];
-    FILE * sh_pipe;
+    FILE * sh_pipe = NULL;
     caStaCliCmdResp_t infoResp;
 
     printf("\nEntry wfaStaCliCommand; command Received: %s\n",caCmdBuf);
@@ -3790,6 +3791,7 @@ int wfaStaCliCommand(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
         printf("Error in closing shell cmd pipe\n");
         goto cleanup;
     }
+    sh_pipe = NULL;
     sleep(2);
 
     // find status first in output
@@ -3810,6 +3812,8 @@ int wfaStaCliCommand(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     infoResp.resFlag=CmdReturnFlag;
 
 cleanup:
+    if (sh_pipe)
+        pclose(sh_pipe);
 
     switch(st)
     {

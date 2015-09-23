@@ -1125,6 +1125,7 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
         /* done here */
         *aRespLen = WFA_TLV_HDR_LEN + 4;
 
+        wFREE(packBuf);
         return DONE;
     }
 
