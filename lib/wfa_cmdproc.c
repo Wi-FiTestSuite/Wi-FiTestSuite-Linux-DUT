@@ -5827,7 +5827,7 @@ int xcCmdProcStaCliCommand(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
 
     printf("\n The CA CLI command to DUT is : %s",pcmdStr);
-    printf("\n The CA CLI command to DUT Length : %d",strlen(pcmdStr));
+    printf("\n The CA CLI command to DUT Length : %zu",strlen(pcmdStr));
     wfaEncodeTLV(WFA_STA_CLI_CMD_TLV, strlen(pcmdStr), (BYTE *)pcmdStr, aBuf);
 
     *aLen = 4+strlen(pcmdStr);

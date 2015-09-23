@@ -1357,7 +1357,7 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
     if ( (mySockfd <= 0) || (streamId < 0) || ( pRespBuf == NULL) 
             || ( pRespLen == NULL) )
     {
-        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData pass-in parameter err mySockfd=%i streamId=%i pRespBuf=0x%x pRespLen=0x%x\n",
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData pass-in parameter err mySockfd=%i streamId=%i pRespBuf=0x%p pRespLen=0x%p\n",
             mySockfd,streamId,pRespBuf,pRespLen );
         ret= WFA_FAILURE;
         goto errcleanup;
@@ -1365,7 +1365,7 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
 
     if ( theProf == NULL || myStream == NULL)
     {
-        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData parameter err in NULL pt theProf=%l myStream=%l \n",
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData parameter err in NULL pt theProf=%p myStream=%p \n",
             theProf, myStream);
         ret= WFA_FAILURE;
         goto errcleanup;
@@ -1386,7 +1386,7 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
     /* calculate bitrate asked */
     if ( (rate = theProf->pksize * theProf->rate * 8) > WFA_SEND_FIX_BITRATE_MAX)
     {
-        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData over birate can do in the routine, req bitrate=%l \n",rate);
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData over birate can do in the routine, req bitrate=%d \n",rate);
         ret= WFA_FAILURE;
         goto errcleanup;
     }
