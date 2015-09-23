@@ -181,6 +181,7 @@ int wfaStaVerifyIpConnectResp(BYTE *cmdBuf)
     case STATUS_ERROR:
         sprintf(gRespStr, "status,ERROR\r\n");
         DPRINT_INFO(WFA_OUT, "%s", gRespStr);
+        break;
 
     default:
         sprintf(gRespStr, "status,INVALID\r\n");
