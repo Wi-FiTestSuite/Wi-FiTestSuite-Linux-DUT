@@ -1026,9 +1026,8 @@ int xcCmdProcStaVerifyIpConnection(char *pcmdStr, BYTE *aBuf, int *aLen)
         if(strcasecmp(str, "interface") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strcpy(verifyip->intf, str);
-            verifyip->intf[15]='\0';
-            DPRINT_INFO(WFA_OUT, "interface %s %i\n", verifyip->intf, strlen(verifyip->intf));
+            strncpy(verifyip->intf, str, 15);
+            DPRINT_INFO(WFA_OUT, "interface %s %zu\n", verifyip->intf, strlen(verifyip->intf));
         }
         else if(strcasecmp(str, "destination") == 0)
         {
@@ -1136,7 +1135,7 @@ int  xcCmdProcStaSetEncryption(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setencryp->ssid, str, 64);
+            strncpy(setencryp->ssid, str, WFA_SSID_NAME_LEN - 1);
         }
         else if(strcasecmp(str, "encpType") == 0)
         {
@@ -1218,7 +1217,7 @@ int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(ssec->ssid, str, 64);
+            strncpy(ssec->ssid, str, WFA_SSID_NAME_LEN - 1);
             DPRINT_INFO(WFA_OUT, "ssid %s\n", ssec->ssid);
         }
         else if(strcasecmp(str, "encpType") == 0)
@@ -1226,7 +1225,7 @@ int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
 
             if(strcasecmp(str, "tkip") == 0 || strcasecmp(str, "aes-ccmp") == 0)
-                strncpy(ssec->encpType, str, 9);
+                strncpy(ssec->encpType, str, 8);
         }
         else if(strcasecmp(str, "pmf") == 0)
         {
@@ -1252,7 +1251,7 @@ int xcCmdProcStaSetSecurity(char *pcmdStr, BYTE *aBuf, int *aLen)
                 if(strcasecmp(str, "passphrase") == 0)
                 {
                     str = strtok_r(NULL, ",", &pcmdStr);
-                    strncpy(ssec->secu.passphrase, str, 64);
+                    strncpy(ssec->secu.passphrase, str, 63);
                 }
             }
             else if(strcasecmp(str, "eaptls") == 0)
@@ -1312,7 +1311,7 @@ int xcCmdProcStaSetPSK(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setencryp->ssid, str, 64);
+            strncpy(setencryp->ssid, str, WFA_SSID_NAME_LEN - 1);
             DPRINT_INFO(WFA_OUT, "ssid %s\n", setencryp->ssid);
         }
         else if(strcasecmp(str, "passPhrase") == 0)
@@ -1402,17 +1401,17 @@ int xcCmdProcStaSetEapTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setsec->ssid, str, 64);
+            strncpy(setsec->ssid, str, WFA_SSID_NAME_LEN - 1);
         }
         else if(strcasecmp(str, "username") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strcpy(setsec->username, str);
+            strncpy(setsec->username, str, 31);
         }
         else if(strcasecmp(str, "keyMgmtType") == 0)
         {
             str=strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setsec->keyMgmtType, str, 8);
+            strncpy(setsec->keyMgmtType, str, 7);
         }
         else if(strcasecmp(str, "encpType") == 0)
         {
@@ -1490,12 +1489,12 @@ int xcCmdProcStaSetEapTTLS(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setsec->ssid, str, 64);
+            strncpy(setsec->ssid, str, WFA_SSID_NAME_LEN - 1);
         }
         else if(strcasecmp(str, "username") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strcpy(setsec->username, str);
+            strncpy(setsec->username, str, 31);
         }
         else if(strcasecmp(str, "password") == 0)
         {
@@ -1589,12 +1588,12 @@ int xcCmdProcStaSetEapSIM(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setsec->ssid, str, 64);
+            strncpy(setsec->ssid, str, WFA_SSID_NAME_LEN - 1);
         }
         else if(strcasecmp(str, "username") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strcpy(setsec->username, str);
+            strncpy(setsec->username, str, 31);
         }
         else if(strcasecmp(str, "password") == 0)
         {
@@ -1681,12 +1680,12 @@ int xcCmdProcStaSetPEAP(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setsec->ssid, str, 64);
+            strncpy(setsec->ssid, str, WFA_SSID_NAME_LEN - 1);
         }
         else if(strcasecmp(str, "username") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strcpy(setsec->username, str);
+            strncpy(setsec->username, str, 31);
         }
         else if(strcasecmp(str, "password") == 0)
         {
@@ -1770,7 +1769,7 @@ int xcCmdProcStaSetIBSS(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setibss->ssid, str, 64);
+            strncpy(setibss->ssid, str, WFA_SSID_NAME_LEN - 1);
             DPRINT_INFO(WFA_OUT, "ssid %s\n", setibss->ssid);
         }
         else if(strcasecmp(str, "channel") == 0)
@@ -1942,7 +1941,7 @@ int xcCmdProcStaAssociate(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setassoc->cmdsu.assoc.ssid, str, 64);
+            strncpy(setassoc->cmdsu.assoc.ssid, str, WFA_SSID_NAME_LEN - 1);
             DPRINT_INFO(WFA_OUT, "ssid %s\n", setassoc->cmdsu.assoc.ssid);
         }
         else if(strcasecmp(str, "bssid") == 0)
@@ -1995,7 +1994,7 @@ int xcCmdProcStaReAssociate(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setassoc->cmdsu.assoc.ssid, str, 64);
+            strncpy(setassoc->cmdsu.assoc.ssid, str, WFA_SSID_NAME_LEN - 1);
             DPRINT_INFO(WFA_OUT, "ssid %s\n", setassoc->cmdsu.assoc.ssid);
         }
         else if(strcasecmp(str, "bssid") == 0)
@@ -2083,7 +2082,7 @@ int xcCmdProcStaSetUAPSD(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setuapsd->ssid, str, 64);
+            strncpy(setuapsd->ssid, str, WFA_SSID_NAME_LEN - 1);
         }
         else if(strcasecmp(str, "maxSP") == 0)
         {
@@ -2215,7 +2214,7 @@ int xcCmdProcStaSetMode(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setmode->ssid, str, 64);
+            strncpy(setmode->ssid, str, WFA_SSID_NAME_LEN - 1);
         }
         else if(strcasecmp(str, "encpType") == 0)
         {
@@ -3644,12 +3643,12 @@ int xcCmdProcStaSetEapFAST(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setsec->ssid, str, 64);
+            strncpy(setsec->ssid, str, WFA_SSID_NAME_LEN - 1);
         }
         else if(strcasecmp(str, "username") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strcpy(setsec->username, str);
+            strncpy(setsec->username, str, 31);
         }
         else if(strcasecmp(str, "password") == 0)
         {
@@ -3743,12 +3742,12 @@ int xcCmdProcStaSetEapAKA(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ssid") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(setsec->ssid, str, 64);
+            strncpy(setsec->ssid, str, WFA_SSID_NAME_LEN - 1);
         }
         else if(strcasecmp(str, "username") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strcpy(setsec->username, str);
+            strncpy(setsec->username, str, 31);
         }
         else if(strcasecmp(str, "password") == 0)
         {
@@ -5285,12 +5284,12 @@ int xcCmdProcStaResetDefault(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "prog") == 0) // VHT, 11n, VOE; HS2; HS2-R2, etc
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(reset->prog, str, sizeof(reset->prog));
+            strncpy(reset->prog, str, sizeof(reset->prog) - 1);
         }
         else if(strcasecmp(str, "type") == 0) // dut or sta
         {
            str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(reset->type, str, sizeof(reset->type));
+            strncpy(reset->type, str, sizeof(reset->type) - 1);
         }
     }
 
@@ -5391,7 +5390,7 @@ int xcCmdProcStaSetWireless(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "program") == 0) // VHT or 11n or Voice
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(staWirelessParams->program, str, WFA_PROGNAME_LEN);
+            strncpy(staWirelessParams->program, str, WFA_PROGNAME_LEN - 1);
 
             if(strcasecmp(staWirelessParams->program, "VHT") == 0)
             {
@@ -5635,7 +5634,7 @@ int xcCmdProcStaSet11n(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "mcs_fixedrate") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(v11nParams->mcs_fixedrate,str,4);
+            strncpy(v11nParams->mcs_fixedrate,str,3);
             DPRINT_INFO(WFA_OUT, "\n mcs fixedrate -%s- \n", v11nParams->mcs_fixedrate);
         }
         else if(strcasecmp(str, "stbc_rx") == 0)
@@ -5708,7 +5707,7 @@ int xcCmdProcStaSetRFeature(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "prog") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(rfeat->prog, str, 8);
+            strncpy(rfeat->prog, str, 7);
         }
         else if(strcasecmp(str, "uapsd") == 0)
         {
@@ -5734,7 +5733,7 @@ int xcCmdProcStaSetRFeature(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "ChSwitchMode") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(rfeat->chswitchmode, str, sizeof(rfeat->chswitchmode));
+            strncpy(rfeat->chswitchmode, str, sizeof(rfeat->chswitchmode) - 1);
         }
         else if(strcasecmp(str, "OffChNum") == 0)
         {
@@ -5744,7 +5743,7 @@ int xcCmdProcStaSetRFeature(char *pcmdStr, BYTE *aBuf, int *aLen)
         else if(strcasecmp(str, "SecChOffset") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            strncpy(rfeat->secchoffset, str, sizeof(rfeat->secchoffset));
+            strncpy(rfeat->secchoffset, str, sizeof(rfeat->secchoffset) - 1);
         }
     }
 
@@ -6013,7 +6012,7 @@ int xcCmdProcStaGenerateEvent(char *pcmdStr, BYTE *aBuf, int *aLen)
                     else if(strcasecmp(str, "I2c_Struct") == 0)
                     {
                         str = strtok_r(NULL, ",", &pcmdStr);
-                        strncpy(pWfdEvent->wfdI2cData, str, strlen(str));
+                        strncpy(pWfdEvent->wfdI2cData, str, 31);
                         pWfdEvent->wfdI2cData[31]='\0';
                         pWfdEvent->wfdI2cDataflag=1;
                     }
@@ -6273,37 +6272,37 @@ int xcCmdProcStaExecAction(char *pcmdStr, BYTE *aBuf, int *aLen)
 	   else if(strcasecmp(str, "nanOp") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->nanOp, str, 8);
+         strncpy(staExecAction->nanOp, str, 7);
 	   }
 	   else if(strcasecmp(str, "masterPref") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->masterPref, str, 8);
+         strncpy(staExecAction->masterPref, str, 7);
 	   }
 	   else if(strcasecmp(str, "randFactor") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->randFactor, str, 8);
+         strncpy(staExecAction->randFactor, str, 7);
 	   }
 	   else if(strcasecmp(str, "hopCount") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->hopCount, str, 8);
+         strncpy(staExecAction->hopCount, str, 7);
 	   }
 	   else if(strcasecmp(str, "highTsf") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->highTsf, str, 8);
+         strncpy(staExecAction->highTsf, str, 7);
 	   }
 	   else if(strcasecmp(str, "methodType") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->methodType, str, 16);
+         strncpy(staExecAction->methodType, str, 15);
 	   }
 	   else if(strcasecmp(str, "furtherAvailInd") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->furtherAvailInd, str, 8);
+         strncpy(staExecAction->furtherAvailInd, str, 7);
 	   }
 	   else if(strcasecmp(str, "mac") == 0)
 	   {
@@ -6314,7 +6313,7 @@ int xcCmdProcStaExecAction(char *pcmdStr, BYTE *aBuf, int *aLen)
 	   else if(strcasecmp(str, "band") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->band, str, 8);
+         strncpy(staExecAction->band, str, 7);
 	   }
 	   else if(strcasecmp(str, "fiveGHzOnly") == 0)
 	   {
@@ -6324,17 +6323,17 @@ int xcCmdProcStaExecAction(char *pcmdStr, BYTE *aBuf, int *aLen)
 	   else if(strcasecmp(str, "publishType") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->publishType, str, 16);
+         strncpy(staExecAction->publishType, str, 15);
 	   }
 	   else if(strcasecmp(str, "subscribeType") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->subscribeType, str, 16);
+         strncpy(staExecAction->subscribeType, str, 15);
 	   }
 	   else if(strcasecmp(str, "serviceName") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->serviceName, str, 64);
+         strncpy(staExecAction->serviceName, str, 63);
 	   }
 	   else if(strcasecmp(str, "sdfTxDw") == 0)
 	   {
@@ -6349,12 +6348,12 @@ int xcCmdProcStaExecAction(char *pcmdStr, BYTE *aBuf, int *aLen)
 	   else if(strcasecmp(str, "rxMatchFilter") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->rxMatchFilter, str, 64);
+         strncpy(staExecAction->rxMatchFilter, str, 63);
 	   }
 	   else if(strcasecmp(str, "txMatchFilter") == 0)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
-         strncpy(staExecAction->txMatchFilter, str, 64);
+         strncpy(staExecAction->txMatchFilter, str, 63);
 	   }
 	   else if(strcasecmp(str, "discRangeLtd") == 0)
 	   {
