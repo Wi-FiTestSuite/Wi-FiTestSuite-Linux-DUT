@@ -206,6 +206,7 @@ int wfaStaReAssociate(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 
         /* use 'ifconfig' command to bring up the interface (linux specific) */
         sprintf(gCmdStr, "ifconfig %s up", ifname);
+        sret = system(gCmdStr);
 
         /*
          *  use 'wpa_cli' command to force a 802.11 re/associate
@@ -289,6 +290,8 @@ int wfaStaIsConnected(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     wfaEncodeTLV(WFA_STA_IS_CONNECTED_RESP_TLV, sizeof(dutCmdResponse_t), (BYTE *)staConnectResp, respBuf);
     *respLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
 
+	if (tmpfile)
+		fclose(tmpfile);
     return WFA_SUCCESS;
 }
 
@@ -1385,7 +1388,7 @@ int wfaDeviceGetInfo(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     else
     {
         // Call internal API to pull the version ID */
-        memcpy(infoResp->cmdru.devInfo.firmware, "NOVERSION", 15);
+		strcpy(infoResp->cmdru.devInfo.firmware, "NOVERSION");
     }
 
     infoResp->status = STATUS_COMPLETE;
@@ -4172,7 +4175,7 @@ int wfaStaGetEventDetails(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 {
 
 	dutCmdResponse_t infoResp;
-	caStaGetEventDetails_t *getStaGetEventDetails = (caStaMngServ_t *)caCmdBuf;  //uncomment and use it
+	caStaGetEventDetails_t *getStaGetEventDetails = (caStaGetEventDetails_t *)caCmdBuf;  //uncomment and use it
 	
 	 printf("\n Entry wfaStaGetEventDetails... ");
 

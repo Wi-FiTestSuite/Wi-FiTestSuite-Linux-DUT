@@ -66,7 +66,8 @@ extern void wfaTGSetPrio(int, int);
 extern     int adj_latency;           /* adjust sleep time due to latency */
 char       gnetIf[WFA_BUFF_32];        /* specify the interface to use */
 
-extern BYTE   *trafficBuf, *respBuf;
+BYTE *trafficBuf = NULL;
+BYTE *respBuf = NULL;
 
 /* stream table */
 extern tgStream_t gStreams[];         /* streams' buffers             */ 
@@ -142,17 +143,14 @@ main(int argc, char **argv)
     int         retStatus;
     int         opt;
     int         optionIndex = 0;
-    int         nfds;
-    int         maxfdn1 = -1;
     int         nbytes = 0;
     int         cmdLen = 0;
     int         isExit = 1;
     int         respLen;
     WORD        locPortNo = 0;      /* local control port number                  */
-    fd_set      sockSet;            /* Set of socket descriptors for select()     */
     BYTE        *xcCmdBuf = NULL;
     BYTE        *parmsVal = NULL;
-    struct timeval *toutvalp=NULL, *tovalp; /* Timeout for select()           */
+    struct timeval *toutvalp=NULL; /* Timeout for select()           */
     WORD      xcCmdTag;
 /*  struct sockfds fds;   */
     int i = 0;
@@ -308,11 +306,10 @@ main(int argc, char **argv)
          * The timer will be set for transaction traffic if no echo is back
          * The timeout from the select call force to send a new packet
          */
-        tovalp = NULL;
         if(gtimeOut != 0)
         {
           /* timeout is set to usec */
-          tovalp = wfaSetTimer(0, gtimeOut*1000, toutvalp);
+          wfaSetTimer(0, gtimeOut*1000, toutvalp);
         }
 
         /* need to check for tcp connection from client*/
@@ -321,7 +318,7 @@ main(int argc, char **argv)
         /* we just need to check client connecion*/
         memset(xcCmdBuf, 0, WFA_BUFF_1K);  /* reset the buffer */
 
-        retStatus = wfaInterFaceDataRecv(&dutHandle, xcCmdBuf, WFA_BUFF_1K, &nbytes);
+        retStatus = wfaInterFaceDataRecv(&dutHandle, (char *)xcCmdBuf, WFA_BUFF_1K, &nbytes);
 
         if(nbytes <=0)
         {
@@ -355,7 +352,7 @@ main(int argc, char **argv)
 
             /* gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf); */
 
-            retStatus = wfaInterFaceDataSend(&dutHandle,respBuf, respLen);
+            retStatus = wfaInterFaceDataSend(&dutHandle, (char *)respBuf, respLen);
             if(retStatus == -1) {
                 DPRINT_WARNING(WFA_WNG, "wfa-wfaCtrlSend Error\n");
             }

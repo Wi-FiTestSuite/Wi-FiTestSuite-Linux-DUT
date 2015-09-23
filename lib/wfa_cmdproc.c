@@ -1028,7 +1028,7 @@ int xcCmdProcStaVerifyIpConnection(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strcpy(verifyip->intf, str);
             verifyip->intf[15]='\0';
-            DPRINT_INFO(WFA_OUT, "interface %s %i\n", verifyip->intf, strlen(verifyip->intf));
+            DPRINT_INFO(WFA_OUT, "interface %s %zu\n", verifyip->intf, strlen(verifyip->intf));
         }
         else if(strcasecmp(str, "destination") == 0)
         {
@@ -2152,7 +2152,7 @@ int xcCmdProcStaDebugSet(char *pcmdStr, BYTE *aBuf, int *aLen)
         if(strcasecmp(str, "level") == 0)
         {
             str = strtok_r(NULL, ",", &pcmdStr);
-            if(atoi(str) == WFA_DEBUG_INFO || WFA_DEBUG_WARNING)
+            if(atoi(str) == WFA_DEBUG_INFO || atoi(str) == WFA_DEBUG_WARNING)
             {
                 debugSet->cmdsu.dbg.level = atoi(str);
                 DPRINT_INFO(WFA_OUT, "dbg level %i\n", debugSet->cmdsu.dbg.level);
@@ -5828,7 +5828,7 @@ int xcCmdProcStaCliCommand(char *pcmdStr, BYTE *aBuf, int *aLen)
 {
 
     printf("\n The CA CLI command to DUT is : %s",pcmdStr);
-    printf("\n The CA CLI command to DUT Length : %d",strlen(pcmdStr));
+    printf("\n The CA CLI command to DUT Length : %zu",strlen(pcmdStr));
     wfaEncodeTLV(WFA_STA_CLI_CMD_TLV, strlen(pcmdStr), (BYTE *)pcmdStr, aBuf);
 
     *aLen = 4+strlen(pcmdStr);
@@ -7028,7 +7028,7 @@ int xcCmdProcStaManageService(char *pcmdStr, BYTE *aBuf, int *aLen)
 						 if (subtoken == NULL)
 							 break;
 						 strncpy(staManageServCmd->MngCmds.MgtServ.fileList[index],str,16);
-						 staManageServCmd->MngCmds.MgtServ.fileList[index][16]='\0';
+						 staManageServCmd->MngCmds.MgtServ.fileList[index][15]='\0';
 						 index++;
 					}
 					staManageServCmd->MngCmds.MgtServ.numModFiles= index;					
@@ -7046,7 +7046,7 @@ int xcCmdProcStaManageService(char *pcmdStr, BYTE *aBuf, int *aLen)
 						 if (subtoken == NULL)
 							 break;
 						 strncpy(staManageServCmd->MngCmds.MgtServ.modFileList[index],str,16);
-						 staManageServCmd->MngCmds.MgtServ.modFileList[index][16]='\0';
+						 staManageServCmd->MngCmds.MgtServ.modFileList[index][15]='\0';
 						 index++;
 					}
 					staManageServCmd->MngCmds.MgtServ.numModFiles= index;					

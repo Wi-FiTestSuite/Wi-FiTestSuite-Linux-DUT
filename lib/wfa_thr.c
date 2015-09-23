@@ -48,7 +48,6 @@ extern int newCmdOn;
 
 extern tgStream_t *findStreamProfile(int id);
 extern int gxcSockfd;
-int vend;
 extern int wfaSetProcPriority(int);
 tgStream_t gStreams[WFA_MAX_TRAFFIC_STREAMS];
 int tgSockfds[WFA_MAX_TRAFFIC_STREAMS] = {-1, -1, -1, -1, -1, -1, -1, -1};
@@ -78,10 +77,7 @@ unsigned int psTxMsg[512];
 unsigned int psRxMsg[512];
 #endif /* WFA_WMM_PS_EXT */
 
-extern void tmout_stop_send(int);
 extern StationProcStatetbl_t stationProcStatetbl[LAST_TEST+1][11];
-
-int nsent;
 
 int runLoop = 0;
 int usedThread=0;
@@ -92,7 +88,8 @@ BOOL gtgRecv = 0;
 extern int slotCnt;
 extern int btSockfd;
 int totalTranPkts=0, sentTranPkts=0;
-BYTE *trafficBuf=NULL, *respBuf=NULL;
+extern BYTE *trafficBuf;
+extern BYTE *respBuf;
 
 #ifdef WFA_VOICE_EXT
 double gtgPktRTDelay = 0xFFFFFFFF;
@@ -102,7 +99,7 @@ static double rttime = 0;
 int sendThrId = 0;
 
 /* this is to stop sending packets by timer       */
-void tmout_stop_send(int num)
+static void tmout_stop_send(int num)
 {
     struct timeval af;
     int i =0;
@@ -254,7 +251,7 @@ int wfaTGSetPrio(int sockfd, int tgUserPriority)
  *    Set thread priorities
  *    It is an optional experiment if you decide not necessary.
  */
-void wfaSetThreadPrio(int tid, int userPriority)
+static void wfaSetThreadPrio(int tid, int userPriority)
 {
     struct sched_param tschedParam;
     pthread_attr_t tattr;
@@ -287,7 +284,7 @@ void wfaSetThreadPrio(int tid, int userPriority)
  * collects the traffic statistics from other threads and
  * sends the collected information to CA
  */
-void  wfaSentStatsResp(int sock, BYTE *buf)
+static void  wfaSentStatsResp(int sock, BYTE *buf)
 {
     int i, total=0, pkLen;
     tgStream_t *allStreams = gStreams;
@@ -350,7 +347,7 @@ void  wfaSentStatsResp(int sock, BYTE *buf)
  *               puts the station into the PS mode indicated by psave and
  *               sends the packet after sleeping for sllep_period
  */
-int sender(char psave,int sleep_period, int userPriority)
+static int sender(char psave,int sleep_period, int userPriority)
 {
     int r;
 
@@ -593,7 +590,7 @@ void * wfa_wmm_thread(void *thr_param)
     tgWMM_t *my_wmm = &wmm_thr[myId];
     tgStream_t *myStream = NULL;
     int myStreamId, i=0,rttime=0,difftime=0, rcvCount=0,sendCount=0;
-    int mySock = -1, status, respLen = 0, nbytes = 0, ret=0, j=0;
+    int mySock = -1, status, respLen = 0, nbytes = 0, j=0;
     tgProfile_t *myProfile;
     pthread_attr_t tattr;
 #ifdef WFA_WMM_PS_EXT
@@ -601,10 +598,10 @@ void * wfa_wmm_thread(void *thr_param)
     StationProcStatetbl_t  curr_state;
 #endif
 
-//#ifdef WFA_VOICE_EXT
     struct timeval lstime, lrtime;
+#ifdef WFA_VOICE_EXT
     int asn = 1;  /* everytime it starts from 1, and to ++ */
-//#endif
+#endif
 
     wPT_ATTR_INIT(&tattr);
     wPT_ATTR_SETSCH(&tattr, SCHED_RR);
@@ -738,7 +735,7 @@ void * wfa_wmm_thread(void *thr_param)
 
                 tmout.tv_sec = 0;
                 tmout.tv_usec = 15000;     // set for 15000 microsec timeout for rcv              
-                ret = setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout)); 
+                setsockopt(mySock, SOL_SOCKET, SO_RCVTIMEO, (char *)&tmout, (socklen_t) sizeof(tmout));
                 
                 rcvCount=0; sendFailCount=0;
                 j=0;  sendCount=0;
@@ -1104,7 +1101,7 @@ void * wfa_wmm_thread(void *thr_param)
 
                while(gtgTransac != 0)
                {
-                    memset(trafficBuf, 0, sizeof((char*)trafficBuf));
+                    trafficBuf[0] = 0;
 
                     if(mySock != -1)
                     {
@@ -1117,6 +1114,8 @@ void * wfa_wmm_thread(void *thr_param)
                       {
                           nbytes = wfaRecvFile(mySock, i, (char  *)trafficBuf);
                       }
+					  if (nbytes > 0)
+						trafficBuf[nbytes] = 0;
                       /* It is the end of a transaction, go out of the loop */
                       if (gtgTransac == 0) break;
                    }
