@@ -284,9 +284,11 @@ int wfaTGStopPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
         {
             stpResp->status = STATUS_INVALID;
         }
-
-        stpResp->cmdru.pingStp.sendCnt = myStream->stats.txFrames;
-        stpResp->cmdru.pingStp.repliedCnt = myStream->stats.rxFrames;
+        else
+        {
+            stpResp->cmdru.pingStp.sendCnt = myStream->stats.txFrames;
+            stpResp->cmdru.pingStp.repliedCnt = myStream->stats.rxFrames;
+        }
     }
     else
     {
@@ -1524,10 +1526,12 @@ errcleanup:
     if (packBuf) free(packBuf);
 
     sendResp.status = STATUS_INVALID;
-    wfaEncodeTLV(WFA_TRAFFIC_AGENT_SEND_RESP_TLV, 4, 
+    if (pRespBuf)
+        wfaEncodeTLV(WFA_TRAFFIC_AGENT_SEND_RESP_TLV, 4, 
                  (BYTE *)&sendResp, (BYTE *)pRespBuf);
     /* done here */
-    *pRespLen = WFA_TLV_HDR_LEN + 4; 
+    if (pRespLen)
+        *pRespLen = WFA_TLV_HDR_LEN + 4; 
 
     return ret;
 }/*  wfaSendBitrateData  */
