@@ -717,7 +717,7 @@ int wfaDeviceGetInfoResp(BYTE *cmdBuf)
         break;
 
     case STATUS_COMPLETE:
-        if(dinfo->firmware[0] != '\0' || dinfo->firmware[0] != '\n')
+        if(dinfo->firmware[0] != '\0' && dinfo->firmware[0] != '\n')
             sprintf(gRespStr, "status,COMPLETE,firmware,%s\r\n", dinfo->firmware);
         else
             sprintf(gRespStr, "status,COMPLETE,vendor,%s,model,%s,version,%s\r\n",
