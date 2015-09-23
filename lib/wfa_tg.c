@@ -888,12 +888,6 @@ void wfaTxSleepTime(int profile, int rate, int *sleepTime, int *throttledRate)
             *throttledRate = (rate?rate:10000)/50;
             printf("Hi Sleep time %i, throttledRate %i\n", *sleepTime, *throttledRate);
         }
-        else if(rate == 0)
-        {
-            *sleepTime = 20000; /* fixed 20 miniseconds */
-            *throttledRate = (rate?rate:10000)/50;
-            printf("Hi Sleep time %i, throttledRate %i\n", *sleepTime, *throttledRate);
-        }
         else if (rate > 0 && rate <= 50) /* typically for voice */
         {
             *throttledRate = 1;
