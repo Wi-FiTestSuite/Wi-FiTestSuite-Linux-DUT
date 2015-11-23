@@ -649,7 +649,7 @@ void * wfa_wmm_thread(void *thr_param)
         {
         case DIRECT_SEND:
             mySock = wfaCreateUDPSock(myProfile->sipaddr, myProfile->sport);
-            if (mySock <=0)
+            if (mySock < 0)
             {
                DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND ERROR failed create UDP socket! \n");
                break;
