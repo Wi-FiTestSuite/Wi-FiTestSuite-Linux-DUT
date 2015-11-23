@@ -1353,7 +1353,7 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
 
     DPRINT_INFO(WFA_OUT, "wfaSendBitrateData entering\n");
     /* error check section  */
-    if ( (mySockfd <= 0) || (streamId < 0) || ( pRespBuf == NULL) 
+    if ( (mySockfd < 0) || (streamId < 0) || ( pRespBuf == NULL) 
             || ( pRespLen == NULL) )
     {
         DPRINT_INFO(WFA_OUT, "wfaSendBitrateData pass-in parameter err mySockfd=%i streamId=%i pRespBuf=0x%x pRespLen=0x%x\n",
