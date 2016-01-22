@@ -166,7 +166,7 @@ typedef struct ca_sta_set_eapaka
 {
     char intf[WFA_IF_NAME_LEN];
     char ssid[WFA_SSID_NAME_LEN];
-    char username[32];
+    char username[64];
     char passwd[96];
     char keyMgmtType[8];
     char encrptype[9];
