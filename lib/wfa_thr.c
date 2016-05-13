@@ -1104,7 +1104,7 @@ void * wfa_wmm_thread(void *thr_param)
 
                while(gtgTransac != 0)
                {
-                    memset(trafficBuf, 0, sizeof((char*)trafficBuf));
+                    memset(trafficBuf, 0, MAX_UDP_LEN + 1);
 
                     if(mySock != -1)
                     {

@@ -284,9 +284,11 @@ int wfaTGStopPing(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
         {
             stpResp->status = STATUS_INVALID;
         }
-
-        stpResp->cmdru.pingStp.sendCnt = myStream->stats.txFrames;
-        stpResp->cmdru.pingStp.repliedCnt = myStream->stats.rxFrames;
+        else
+        {
+            stpResp->cmdru.pingStp.sendCnt = myStream->stats.txFrames;
+            stpResp->cmdru.pingStp.repliedCnt = myStream->stats.rxFrames;
+        }
     }
     else
     {
@@ -886,12 +888,6 @@ void wfaTxSleepTime(int profile, int rate, int *sleepTime, int *throttledRate)
             *throttledRate = (rate?rate:10000)/50;
             printf("Hi Sleep time %i, throttledRate %i\n", *sleepTime, *throttledRate);
         }
-        else if(rate == 0)
-        {
-            *sleepTime = 20000; /* fixed 20 miniseconds */
-            *throttledRate = (rate?rate:10000)/50;
-            printf("Hi Sleep time %i, throttledRate %i\n", *sleepTime, *throttledRate);
-        }
         else if (rate > 0 && rate <= 50) /* typically for voice */
         {
             *throttledRate = 1;
@@ -1125,6 +1121,7 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
         /* done here */
         *aRespLen = WFA_TLV_HDR_LEN + 4;
 
+        wFREE(packBuf);
         return DONE;
     }
 
@@ -1357,7 +1354,7 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
     if ( (mySockfd <= 0) || (streamId < 0) || ( pRespBuf == NULL) 
             || ( pRespLen == NULL) )
     {
-        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData pass-in parameter err mySockfd=%i streamId=%i pRespBuf=0x%x pRespLen=0x%x\n",
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData pass-in parameter err mySockfd=%i streamId=%i pRespBuf=0x%p pRespLen=0x%p\n",
             mySockfd,streamId,pRespBuf,pRespLen );
         ret= WFA_FAILURE;
         goto errcleanup;
@@ -1365,7 +1362,7 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
 
     if ( theProf == NULL || myStream == NULL)
     {
-        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData parameter err in NULL pt theProf=%l myStream=%l \n",
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData parameter err in NULL pt theProf=%p myStream=%p \n",
             theProf, myStream);
         ret= WFA_FAILURE;
         goto errcleanup;
@@ -1386,7 +1383,7 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
     /* calculate bitrate asked */
     if ( (rate = theProf->pksize * theProf->rate * 8) > WFA_SEND_FIX_BITRATE_MAX)
     {
-        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData over birate can do in the routine, req bitrate=%l \n",rate);
+        DPRINT_INFO(WFA_OUT, "wfaSendBitrateData over birate can do in the routine, req bitrate=%d \n",rate);
         ret= WFA_FAILURE;
         goto errcleanup;
     }
@@ -1534,10 +1531,12 @@ errcleanup:
     if (packBuf) free(packBuf);
 
     sendResp.status = STATUS_INVALID;
-    wfaEncodeTLV(WFA_TRAFFIC_AGENT_SEND_RESP_TLV, 4, 
+    if (pRespBuf)
+        wfaEncodeTLV(WFA_TRAFFIC_AGENT_SEND_RESP_TLV, 4, 
                  (BYTE *)&sendResp, (BYTE *)pRespBuf);
     /* done here */
-    *pRespLen = WFA_TLV_HDR_LEN + 4; 
+    if (pRespLen)
+        *pRespLen = WFA_TLV_HDR_LEN + 4; 
 
     return ret;
 }/*  wfaSendBitrateData  */
