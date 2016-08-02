@@ -1299,7 +1299,7 @@ int wfaStaInvokeCommandResp(BYTE *cmdBuf)
 			
 			memset(advidList,'\0',256);
 			memset(serviceList,'\0',256);
-			memset(serviceList,'\0',256);
+			memset(serviceMac,'\0',256);
 			
 			for (i =0 ; i < invokeCmdResp->invokeCmdResp.advRsp.numServInfo; i++)
 			{
