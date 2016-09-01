@@ -82,6 +82,53 @@ typeNameStr_t direcStr[] =
 };
 
 /*
+ *  getParamValueInt(): fetch the parameter value based on the parameter name, 
+ *                      and stored in provided place holder after converting to
+ *                      integer from string.
+ *  input:        pcmdStr -- a string pointer to the command string
+ *  input:        pParam --  a string pointer to the parameter name
+ *  input:        paramValue --  a int pointer to hold the parameter value
+ *  return        on success 0 else -1
+ */
+int getParamValueInt(char *pcmdStr, char *pParam, int *paramValue)
+{
+    char *str;
+    if(strcasecmp(pcmdStr, pParam) == 0)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        paramValue = atoi(str);
+        return 0;
+    }
+    return -1;
+}
+
+/*
+ *  getParamValueStr(): fetch the parameter value based on the parameter name, 
+ *                      and stored in provided place holder as string.
+ *                      function explicitly put the null char at last to 
+ *                      avoid string with out null in case src string longer.
+ *  input:        pcmdStr -- a string pointer to the command string
+ *  input:        pParam --  a string pointer to the parameter name
+ *  input:        paramValue -- a string pointer to hold the parameter value
+ *  input:        paramValLen --  length for the paramValue. 
+ *  return        on success 0 else -1
+ */
+int getParamValueStr(char *pcmdStr, char *pParam, char *paramValue, int paramValLen)
+{
+    char *str;
+    if(strcasecmp(pcmdStr, pParam) == 0)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        strncpy(paramValue, str, (paramValLen - 1));
+        paramValue[paramValLen] = 0;
+     return 0;
+    }
+    return -1;
+}
+
+
+
+/*
  * cmdProcNotDefinedYet(): a dummy function
  */
 int cmdProcNotDefinedYet(char *pcmdStr, char *buf, int *len)
