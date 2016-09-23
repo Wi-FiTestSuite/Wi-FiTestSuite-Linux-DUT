@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -423,7 +423,7 @@ enum
 	PROG_TYPE_WFDS,
     PROG_TYPE_HS2,
     PROG_TYPE_HS2_R2,
-	PROG_TYPE_NAN
+	PROG_TYPE_NAN,
 };
 
 typedef struct ca_sta_dev_sendframe
@@ -1236,6 +1236,7 @@ typedef struct ca_sta_preset_parameters
     BYTE ftoa;
     BYTE ftds;
     BYTE activescan;
+    WORD oper_chn;
     BYTE tdls;
     BYTE tdlsMode;
 

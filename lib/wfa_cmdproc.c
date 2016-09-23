@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -5206,6 +5206,11 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
                 presetTestParams->wfdDeviceDiscoverability= eDisable;
             }
         }
+		else if(strcasecmp(str, "oper_chn") == 0)
+        {
+             str = strtok_r(NULL, ",", &pcmdStr);
+             presetTestParams->oper_chn= atoi(str); 
+        }
         else if (strcasecmp(str, "program") == 0)
         {
             presetTestParams->programFlag= 1;
@@ -5329,7 +5334,7 @@ int xcCmdProcStaResetDefault(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(reset->intf, str, 15);
         }
-        else if(strcasecmp(str, "prog") == 0) // VHT, 11n, VOE; HS2; HS2-R2, etc
+        else if(strcasecmp(str, "prog") == 0) // VHT, 11n, VOE; HS2; HS2-R2, NAN etc
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(reset->prog, str, sizeof(reset->prog));

@@ -1,7 +1,7 @@
 
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -1344,12 +1344,12 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
     int                   packLen, bytesSent, rate;
     int                   sleepTimePerSent = 0, nOverTimeCount = 0, nDuration=0, nOverSend=0;
     unsigned long long int sleepTotal=0, extraTimeSpendOnSending=0;   /* sleep mil-sec per sending  */
-    int                   counter = 0, i;     /*  frame data sending count */
+    int                   counter = 0, i, iSleep;     /*  frame data sending count */
     unsigned long         difftime;
     dutCmdResponse_t      sendResp;
 
     //int throttledRate = 0;
-    struct timeval        before, after; 
+    struct timeval        before, after, stime; 
 
     DPRINT_INFO(WFA_OUT, "wfaSendBitrateData entering\n");
     /* error check section  */
@@ -1400,6 +1400,9 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
         goto errcleanup;
     }
     memset(packBuf, 0, packLen + 4);
+	/* fill in the header */
+    wSTRNCPY(packBuf, "1345678", sizeof(tgHeader_t));
+	
     /*  initialize the destination address  */
     memset(&toAddr, 0, sizeof(toAddr));
     toAddr.sin_family = AF_INET;
@@ -1414,15 +1417,22 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
     runLoop=1; /* global defined share with thread routine, should remove it later  */
     while ( runLoop)
     {
-        int iSleep = 0;
+        iSleep = 1;
         gettimeofday(&before, NULL);
         /* send data per second loop */
         for ( i=0; i<= (theProf->rate); i++)
         {
            counter++;
-           iSleep++;
+           //iSleep++;
            /* fill in the counter */
            int2BuffBigEndian(counter, &((tgHeader_t *)packBuf)->hdr[8]);
+           /*
+            * Fill the timestamp to the header.
+           */
+           wGETTIMEOFDAY(&stime, NULL);
+           int2BuffBigEndian(stime.tv_sec, &((tgHeader_t *)packBuf)->hdr[12]);
+           int2BuffBigEndian(stime.tv_usec, &((tgHeader_t *)packBuf)->hdr[16]);		   
+		   
            bytesSent = wfaTrafficSendTo(mySockfd, packBuf, packLen, 
                  (struct sockaddr *)&toAddr);
            if(bytesSent != -1)
@@ -1440,16 +1450,16 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
                i--;
            }
            /*  sleep per batch sending */
-           if ( i == (theProf->rate/10) * iSleep)
+           if ( i == ((int)(theProf->rate/50)) * iSleep)
            {
-              wfaSleepMilsec(5);
-              sleepTotal = sleepTotal + (unsigned long long int) 5;
+              wfaSleepMilsec(10);
+              sleepTotal = sleepTotal + (unsigned long long int) 10;
               iSleep++;
            }
 
 
         }// for loop per second sending
-        iSleep = 0;
+        //iSleep = 0;
         nDuration++;
 
         /*calculate second rest part need to sleep  */
@@ -1513,8 +1523,8 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
     *pRespLen = WFA_TLV_HDR_LEN + sizeof(dutCmdResponse_t);
 
     extraTimeSpendOnSending = extraTimeSpendOnSending/1000;
-    DPRINT_INFO(WFA_OUT, "*** wfg_tg.cpp wfaSendBitrateData Count=%i txFrames=%i totalByteSent=%i sleepTotal=%llu milSec extraTimeSpendOnSending=%llu nOverTimeCount=%d nOverSend=%i rate=%d nDuration=%d ***\n", 
-        counter, (myStream->stats.txFrames),(unsigned int) (myStream->stats.txPayloadBytes), sleepTotal,extraTimeSpendOnSending, nOverTimeCount, nOverSend, theProf->rate , nDuration);
+    DPRINT_INFO(WFA_OUT, "*** wfg_tg.cpp wfaSendBitrateData Count=%i txFrames=%i totalByteSent=%i sleepTotal=%llu milSec extraTimeSpendOnSending=%llu nOverTimeCount=%d nOverSend=%i rate=%d nDuration=%d iSleep=%d ***\n", 
+        counter, (myStream->stats.txFrames),(unsigned int) (myStream->stats.txPayloadBytes), sleepTotal,extraTimeSpendOnSending, nOverTimeCount, nOverSend, theProf->rate , nDuration,iSleep);
     wfaSleepMilsec(1000);
     return ret;
 

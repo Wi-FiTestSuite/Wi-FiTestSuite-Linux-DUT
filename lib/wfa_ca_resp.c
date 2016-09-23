@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -139,8 +139,8 @@ dutCommandRespFuncPtr wfaCmdRespProcFuncTbl[WFA_STA_RESPONSE_END+1] =
 	wfaStaManageServiceResp, /* 82*/
 	wfaStaGetEventsResp, /* 83*/
 	wfaStaGetEventDataResp, /* 84*/
-        wfaStaGenericResp,      /* 85 */
-		wfaStaExecActionResp,      /* 86 */	
+    wfaStaGenericResp,      /* 85 */
+	wfaStaExecActionResp,      /* 86 */	
 	
 
 };
@@ -1304,7 +1304,11 @@ int wfaStaInvokeCommandResp(BYTE *cmdBuf)
 			
 			for (i =0 ; i < invokeCmdResp->invokeCmdResp.advRsp.numServInfo; i++)
 			{
-				sprintf(serviceList, "%s %s",serviceList,invokeCmdResp->invokeCmdResp.advRsp.servAdvInfo[i].servName );
+				if (serviceList[0] == '\0') { 
+					sprintf(serviceList, "%s", invokeCmdResp->invokeCmdResp.advRsp.servAdvInfo[i].servName); 
+				} else { 
+					sprintf(serviceList, "%s %s", serviceList, invokeCmdResp->invokeCmdResp.advRsp.servAdvInfo[i].servName); 
+				} 
 				sprintf(advidList, "%s %lx", advidList,invokeCmdResp->invokeCmdResp.advRsp.servAdvInfo[i].advtID );			
 				sprintf(serviceMac, "%s %s", serviceMac,invokeCmdResp->invokeCmdResp.advRsp.servAdvInfo[i].serviceMac );			
 			}
@@ -1392,11 +1396,11 @@ int wfaStaManageServiceResp(BYTE *cmdBuf)
 int wfaStaGetEventsResp(BYTE *cmdBuf)
 {
     int done=0;
-    dutCmdResponse_t *dutResp = (dutCmdResponse_t *) (cmdBuf + 4);
-	caStaGetEventListCmdResp_t *resonse= &dutResp->cmdru.staGetEvents;
+    dutCmdResponse_t *getEventsResp = (dutCmdResponse_t *) (cmdBuf + 4);
+    caStaGetEventsResp_t *getEvents= &getEventsResp->cmdru.getEvents;
 
     DPRINT_INFO(WFA_OUT, "Entering wfaStaGetEventsResp ...\n");
-    switch(dutResp->status)
+    switch(getEventsResp->status)
     {
         case STATUS_RUNNING:
         DPRINT_INFO(WFA_OUT, "wfaStaGetEventsResp running ...\n");
@@ -1404,8 +1408,8 @@ int wfaStaGetEventsResp(BYTE *cmdBuf)
         break;
 
         case STATUS_COMPLETE:
-        sprintf(gRespStr, "status,COMPLETE,EventList,%s\r\n", resonse->result);
-        printf("status,COMPLETE,EventList,%s\r\n",resonse->result );
+        sprintf(gRespStr, "status,COMPLETE,EventName,%s,RemoteInstanceID,%u,LocalInstanceID,%u,mac,%s\r\n", getEvents->eventName,getEvents->remoteInstanceID,getEvents->localInstanceID,getEvents->mac);
+        printf("status,COMPLETE,EventName,%s,RemoteInstanceID,%u,LocalInstanceID,%u,mac,%s\r\n", getEvents->eventName,getEvents->remoteInstanceID,getEvents->localInstanceID,getEvents->mac);
         break;
 
         default:
