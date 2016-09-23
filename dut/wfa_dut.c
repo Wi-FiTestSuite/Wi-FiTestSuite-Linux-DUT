@@ -29,8 +29,6 @@
 #include <pthread.h>
 #include <signal.h>
 #include <time.h>
-#include <getopt.h>
-
 
 #include "wfa_portall.h"
 #include "wfa_debug.h"
@@ -45,7 +43,6 @@
 #include "wfa_rsp.h"
 #include "wfa_wmmps.h"
 
-#include "wfa_nw_al.h"
 /* Global flags for synchronizing the TG functions */
 int        gtimeOut = 0;        /* timeout value for select call in usec */
 
@@ -54,6 +51,7 @@ extern BOOL gtgWmmPS;
 extern unsigned long psTxMsg[512];
 extern unsigned long psRxMsg[512];
 extern wfaWmmPS_t wmmps_info;
+extern tgWMM_t    wmmps_mutex_info;
 extern int  psSockfd;
 extern struct apts_msg *apts_msgs;
 
@@ -69,11 +67,10 @@ char       gnetIf[WFA_BUFF_32];        /* specify the interface to use */
 extern BYTE   *trafficBuf, *respBuf;
 
 /* stream table */
-extern tgStream_t gStreams[];         /* streams' buffers             */ 
-#if 0
+extern tgStream_t gStreams[];         /* streams' buffers             */
+
 /* the agent local Socket, Agent Control socket and baseline test socket*/
 int   gagtSockfd = -1;
-#endif
 extern int btSockfd;
 
 
@@ -108,114 +105,30 @@ int gxcSockfd = -1;
 extern int wfa_estimate_timer_latency();
 extern void wfa_dut_init(BYTE **tBuf, BYTE **rBuf, BYTE **paBuf, BYTE **cBuf, struct timeval **timerp);
 
-
-
-void help_usage(char *str)
-{
-    printf("Usage:  %s <command interface> <type> <Local Control Port><baud rate> \n", str);
-    printf( "  Options:                                                              \n"
-            "     -I   --iface      interface either Ethernet or serial device name \n"
-            "     -T   --type       type interface like serial(1) TCP(2) UDP(3)      \n"
-            "     -P   --port       port address in case of TCP                      \n"
-            "     -b   --baud       baud rate in case of serial                      \n"
-            "     -h   --help       display usage                                    \n");
-}
-
-
-static const struct option longIPOptions[] = {
-    { "iface", required_argument, NULL, 'I' },
-    { "type",  required_argument, NULL, 'T' },
-    { "port",  required_argument, NULL, 'P' },
-    { "baud",  required_argument, NULL, 'b' },
-    { "help",  no_argument, NULL, 'h' },
-    { NULL,    no_argument, NULL, 0 }
-};
-static const char *optionString = "I:T:P:b:h?";
-
-
 int
 main(int argc, char **argv)
 {
-    t_ifaceHandle  dutHandle;
-    int         typeOfConn=0;
-    int         baudrate = 0;
-    int         retStatus;
-    int         opt;
-    int         optionIndex = 0;
-    int         nfds;
-    int         maxfdn1 = -1;
-    int         nbytes = 0;
-    int         cmdLen = 0;
-    int         isExit = 1;
-    int         respLen;
-    WORD        locPortNo = 0;      /* local control port number                  */
-    fd_set      sockSet;            /* Set of socket descriptors for select()     */
-    BYTE        *xcCmdBuf = NULL;
-    BYTE        *parmsVal = NULL;
+    int	      nfds, maxfdn1 = -1, nbytes = 0, cmdLen = 0, isExit = 1;
+    int       respLen, ret;
+    WORD      locPortNo = 0;   /* local control port number                  */
+    fd_set    sockSet;         /* Set of socket descriptors for select()     */
+    BYTE      *xcCmdBuf=NULL, *parmsVal=NULL;
     struct timeval *toutvalp=NULL, *tovalp; /* Timeout for select()           */
     WORD      xcCmdTag;
-/*  struct sockfds fds;   */
-    int i = 0;
-
-#if 0
+    struct sockfds fds;
 
     tgThrData_t tdata[WFA_THREADS_NUM];
+    int i = 0;
     pthread_attr_t ptAttr;
     int ptPolicy;
-    struct sched_param ptSchedParam;
-#endif
-    while((opt = getopt_long(argc, argv, optionString, longIPOptions, &optionIndex)) != -1)
-    {
-        switch (opt) {
-        case 'I':
-            printf ("option -I with value %s \n", optarg);
-            strncpy(gnetIf, optarg, 31);
-            break;
-        case 'T':
-            /*none: 0,  serial: 1, tcp: 2, udp: 3*/
-            typeOfConn = atoi(optarg);
-            break;
-        case 'P':
-            /* local server port*/
-            locPortNo = atoi(optarg);
-            break;
-        case 'b':
-            baudrate = atoi(optarg);
-            break;
-        case 'h':
-            help_usage(argv[0]);
-            exit(1);
-            break;
-        case ':':
-            printf ("option  --%s must have value \n", longIPOptions[optionIndex].name);
-            exit(1);
-            break;
-        case '?':
-        /* getopt_long() set a variable, just keep going */
-        break;
-        }
-    }
 
-    if (CONN_TYPE_SERIAL == typeOfConn) {
-        if ( baudrate == 0) {
-            printf ("wrong baud rate \n");
-            exit(1);
-        }
-    }
-    else if ((CONN_TYPE_TCP == typeOfConn) || CONN_TYPE_UDP == typeOfConn) {
-        if ( locPortNo == 0) {
-            printf ("wrong local port for IP connection\n");
-            exit(1);
-        }
-    }
-    else{
-        printf ("type (-T) should be with correct value %d\n", typeOfConn);
-        help_usage(argv[0]);
+    struct sched_param ptSchedParam;
+
+    if (argc < 3)              /* Test for correct number of arguments */
+    {
+        DPRINT_ERR(WFA_ERR, "Usage:  %s <command interface> <Local Control Port> \n", argv[0]);
         exit(1);
     }
-
-
-#if 0
 #ifdef WFA_PC_CONSOLE
     else if(argc > 3)
     {
@@ -236,9 +149,23 @@ main(int argc, char **argv)
         printf("Output starts\n");
     }
 #endif
-#endif
 
-#if 0
+    if(isString(argv[1]) == WFA_FAILURE)
+    {
+        DPRINT_ERR(WFA_ERR, "incorrect network interface\n");
+        exit(1);
+    }
+
+    strncpy(gnetIf, argv[1], 31);
+
+    if(isNumber(argv[2]) == WFA_FAILURE)
+    {
+        DPRINT_ERR(WFA_ERR, "incorrect port number\n");
+        exit(1);
+    }
+
+    locPortNo = atoi(argv[2]);
+
     adj_latency = wfa_estimate_timer_latency() + 4000; /* four more mini */
 
     if(adj_latency > 500000)
@@ -250,35 +177,20 @@ main(int argc, char **argv)
         /* Just set it to  500 mini seconds */
         adj_latency = 500000;
     }
-#endif
+
     /* allocate the traffic stream table */
     wfa_dut_init(&trafficBuf, &respBuf, &parmsVal, &xcCmdBuf, &toutvalp);
 
-    if(CONN_TYPE_TCP ==typeOfConn )
-    {
-        dutHandle.if_attr.ipConn.port = locPortNo;
-        retStatus = wfaOpenInterFace(&dutHandle, gnetIf, CONN_TYPE_TCP, CONNECTION_SERVER);
-        if(retStatus == WFA_ERROR) {
-            exit(1);
-        }
-    }
-    else if(CONN_TYPE_SERIAL==typeOfConn )
-    {
-        dutHandle.if_attr.serial.baudrate = baudrate;
-        wfaOpenInterFace(&dutHandle, gnetIf, CONN_TYPE_SERIAL, CONNECTION_CLIENT);
-    }
-
-#if 0
     /* 4create listening TCP socket */
-    gagtSockfd = wfaCreateTCPServSock(gnetIf,locPortNo);
+    gagtSockfd = wfaCreateTCPServSock(locPortNo);
     if(gagtSockfd == -1)
     {
-       DPRINT_ERR(WFA_ERR, "Failed to open socket\n");
-       exit(1);
+        DPRINT_ERR(WFA_ERR, "Failed to open socket\n");
+        exit(1);
     }
-#endif
-#if 0
+
     pthread_attr_init(&ptAttr);
+
     ptSchedParam.sched_priority = 10;
     pthread_attr_setschedparam(&ptAttr, &ptSchedParam);
     pthread_attr_getschedpolicy(&ptAttr, &ptPolicy);
@@ -293,90 +205,153 @@ main(int argc, char **argv)
         tdata[i].tid = i;
         pthread_mutex_init(&wmm_thr[i].thr_flag_mutex, NULL);
         pthread_cond_init(&wmm_thr[i].thr_flag_cond, NULL);
-        wmm_thr[i].thr_id = pthread_create(&wmm_thr[i].thr, 
-                       &ptAttr, wfa_wmm_thread, &tdata[i]);
+        wmm_thr[i].thr_id = pthread_create(&wmm_thr[i].thr,
+                                           &ptAttr, wfa_wmm_thread, &tdata[i]);
     }
-#endif
+
     for(i = 0; i < WFA_MAX_TRAFFIC_STREAMS; i++)
-       tgSockfds[i] = -1;
-//  maxfdn1 = gagtSockfd + 1;
+        tgSockfds[i] = -1;
 
-
-    while (isExit) 
+#ifdef WFA_WMM_PS_EXT
+    /* WMMPS thread   */
+    ret = pthread_mutex_init(&wmmps_mutex_info.thr_flag_mutex,NULL);
+    if ( ret !=0)
     {
-        /* 
+        DPRINT_INFO(WFA_OUT, "WMMPS pthread_mutex_init faile\n");
+    }
+    ret = pthread_cond_init(&wmmps_mutex_info.thr_flag_cond,NULL);
+    if (ret != 0)
+    {
+        DPRINT_INFO(WFA_OUT, "WMMPS pthread_cond_init faile\n");
+    }
+    wmmps_mutex_info.thr_id=pthread_create(&wmmps_mutex_info.thr,NULL /*&ptAttr*/,wfa_wmmps_thread,(void*)&wmmps_mutex_info.thr_id);// calls up the wmmps-thread
+#endif
+
+    maxfdn1 = gagtSockfd + 1;
+    while (isExit)
+    {
+        fds.agtfd = &gagtSockfd;
+        fds.cafd = &gxcSockfd;
+        fds.tgfd = &btSockfd;
+        fds.wmmfds = tgSockfds;
+#ifdef WFA_WMM_PS_EXT
+        fds.psfd = &psSockfd;
+#endif
+
+        wfaSetSockFiDesc(&sockSet, &maxfdn1, &fds);
+
+        /*
          * The timer will be set for transaction traffic if no echo is back
          * The timeout from the select call force to send a new packet
          */
         tovalp = NULL;
         if(gtimeOut != 0)
         {
-          /* timeout is set to usec */
-          tovalp = wfaSetTimer(0, gtimeOut*1000, toutvalp);
+            /* timeout is set to usec */
+            tovalp = wfaSetTimer(0, gtimeOut*1000, toutvalp);
         }
 
-        /* need to check for tcp connection from client*/
-        wfaInterFacePeerConn(&dutHandle);
-
-        /* we just need to check client connecion*/
-        memset(xcCmdBuf, 0, WFA_BUFF_1K);  /* reset the buffer */
-
-        retStatus = wfaInterFaceDataRecv(&dutHandle, xcCmdBuf, WFA_BUFF_1K, &nbytes);
-
-        if(nbytes <=0)
+        nfds = 0;
+        if ( (nfds = select(maxfdn1, &sockSet, NULL, NULL, tovalp)) < 0)
         {
-            DPRINT_ERR(WFA_ERR,"data receive error\n");
-            /* may not be correct idea unless recev wait till it gets some data*/
-//			wfaInterFacePeerConnClose(&dutHandle);
-//          continue;
+            if (errno == EINTR)
+                continue;           /* back to for() */
+            else
+                DPRINT_WARNING(WFA_WNG, "Warning: select()-%i", errno);
         }
-        else
+
+        if(nfds == 0)
         {
-            /* command received */
-            DPRINT_INFO(WFA_OUT,"recv cmd nbyte %d\n",nbytes);
-            wfaDecodeTLV(xcCmdBuf, nbytes, &xcCmdTag, &cmdLen, parmsVal);
+#if 0 //def WFA_WMM_PS_EXT
+            /*
+             * For WMM-Power Save
+             * periodically send HELLO to Console for initial setup.
+             */
+            if(gtgWmmPS != 0 && psSockfd != -1)
+            {
+                wfaSetDUTPwrMgmt(0);
+                wfaTGSetPrio(psSockfd, 0);
+                BUILD_APTS_MSG(APTS_HELLO, psTxMsg);
+                wfaTrafficSendTo(psSockfd, (char *)psTxMsg, sizeof(psTxMsg), (struct sockaddr *) &wmmps_info.psToAddr);
 
-            memset(respBuf, 0, WFA_RESP_BUF_SZ); 
-            respLen = 0;
-
-            /* reset two commond storages used by control functions */
-            memset(gCmdStr, 0, WFA_CMD_STR_SZ);
-            memset(&gGenericResp, 0, sizeof(dutCmdResponse_t));
-
-            /* command process function defined in wfa_ca.c and wfa_tg.c */
-            if(xcCmdTag != 0 && gWfaCmdFuncTbl[xcCmdTag] != NULL) {
-                /* since the new commands are expanded to new block */
-                gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
+                wmmps_info.sta_state = 0;
+                wmmps_info.wait_state = WFA_WAIT_STAUT_00;
+                continue;
             }
-            else {
-                /* no command defined */
-                gWfaCmdFuncTbl[0](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
-            }
+#endif /* WFA_WMM_PS_EXT */
+        }
 
-            /* gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf); */
-
-            retStatus = wfaInterFaceDataSend(&dutHandle,respBuf, respLen);
-            if(retStatus == -1) {
-                DPRINT_WARNING(WFA_WNG, "wfa-wfaCtrlSend Error\n");
+        if (FD_ISSET(gagtSockfd, &sockSet))
+        {
+            /* Incoming connection request */
+            gxcSockfd = wfaAcceptTCPConn(gagtSockfd);
+            if(gxcSockfd == -1)
+            {
+                DPRINT_ERR(WFA_ERR, "Failed to open control link socket\n");
+                exit(1);
             }
         }
-        /* close the client connection after serving one command*/
-        wfaInterFacePeerConnClose(&dutHandle);
-#if 0
-#ifdef WFA_WMM_PS_EXT
+
+        /* Control Link port event*/
+        if(gxcSockfd >= 0 && FD_ISSET(gxcSockfd, &sockSet))
+        {
+            memset(xcCmdBuf, 0, WFA_BUFF_1K);  /* reset the buffer */
+            nbytes = wfaCtrlRecv(gxcSockfd, xcCmdBuf);
+
+            if(nbytes <=0)
+            {
+                /* errors at the port, close it */
+                shutdown(gxcSockfd, SHUT_WR);
+                close(gxcSockfd);
+                gxcSockfd = -1;
+            }
+            else
+            {
+                /* command received */
+                wfaDecodeTLV(xcCmdBuf, nbytes, &xcCmdTag, &cmdLen, parmsVal);
+                memset(respBuf, 0, WFA_RESP_BUF_SZ);
+                respLen = 0;
+
+                /* reset two commond storages used by control functions */
+                memset(gCmdStr, 0, WFA_CMD_STR_SZ);
+                memset(&gGenericResp, 0, sizeof(dutCmdResponse_t));
+
+                /* command process function defined in wfa_ca.c and wfa_tg.c */
+                if(xcCmdTag != 0 && gWfaCmdFuncTbl[xcCmdTag] != NULL)
+                {
+                    /* since the new commands are expanded to new block */
+                    gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
+                }
+                else
+                {
+                    // no command defined
+                    gWfaCmdFuncTbl[0](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
+                }
+
+               // gWfaCmdFuncTbl[xcCmdTag](cmdLen, parmsVal, &respLen, (BYTE *)respBuf);
+               if(gxcSockfd != -1)
+               {
+                 if((ret = wfaCtrlSend(gxcSockfd, (BYTE *)respBuf, respLen)) != respLen)
+                 {
+                      DPRINT_WARNING(WFA_WNG, "wfa-dut main:wfaCtrlSend returned value %d != respLen %d\n", ret, respLen);
+                 }
+               }
+            }
+
+        }
+
+#if 0 // def WFA_WMM_PS_EXT
         /*
          * Check if there is from Console
          */
         if(psSockfd != -1 && FD_ISSET(psSockfd, &sockSet))
         {
-            printf("power save \n");
             wfaWmmPowerSaveProcess(psSockfd);
             continue;
         }
 #endif /* WFA_WMM_PS_EXT */
-#endif
 
-    }/* end while isExit*/
+    }
 
     /*
      * necessarily free all mallocs for flat memory real-time systems
@@ -387,10 +362,8 @@ main(int argc, char **argv)
     wFREE(xcCmdBuf);
     wFREE(parmsVal);
 
-     /* Close sockets */
-#if 0
+    /* Close sockets */
     wCLOSE(gagtSockfd);
-#endif
     wCLOSE(gxcSockfd);
     wCLOSE(btSockfd);
 
@@ -398,10 +371,10 @@ main(int argc, char **argv)
     {
         if(tgSockfds[i] != -1)
         {
-            wCLOSE(tgSockfds[i]); 
+            wCLOSE(tgSockfds[i]);
             tgSockfds[i] = -1;
         }
     }
-    DPRINT_INFO(WFA_OUT,"exit from application\n");
+
     return 0;
 }

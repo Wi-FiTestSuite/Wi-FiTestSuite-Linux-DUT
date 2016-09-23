@@ -49,14 +49,10 @@ struct sockfds
     int *psfd;       /* wmm-ps socket id         */
 };
 
-extern int wfaCreateTCPServSock(char *devIface, unsigned short port);
-
+extern int wfaCreateTCPServSock(unsigned short sport);
 extern int wfaCreateUDPSock(char *sipaddr, unsigned short sport);
 extern int wfaAcceptTCPConn(int servSock);
-
 extern int wfaConnectUDPPeer(int sock, char *dipaddr, int dport);
-extern int wfaConnectTCPPeer(int mysock, char *daddr, int dport);
-
 extern void wfaSetSockFiDesc(fd_set *sockset, int *, struct sockfds *);
 #ifdef _WINDOWS
 extern int wfaCtrlSend(SOCKET sock, unsigned char *buf, int bufLen);
