@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -21,6 +21,6 @@
 #define WFA_VER_H
 
 #define WFA_VERNAM_LEN      32
-#define WFA_SYSTEM_VER      "PCEDUT-Wi-FiTestSuite- 9.0.0"
+#define WFA_SYSTEM_VER      "PCEDUT-Wi-FiTestSuite- 9.2.0"
 
 #endif
