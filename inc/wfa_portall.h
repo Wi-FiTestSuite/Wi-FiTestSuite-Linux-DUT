@@ -16,10 +16,6 @@
 *
 *****************************************************************************/
 
-
-#ifndef _WFA_PORTALL_H
-#define _WFA_PORTALL_H
-
 /* The fixed definition for the device interface name */
 /* For different OSes or your platforms, you may not  */
 /* need to use fixed definition                       */
@@ -181,4 +177,4 @@ typedef struct _memblock
     void *mem;
 } wfaMemBlk_t;
 
-#endif /*_WFA_PORTALL_H*/
+
