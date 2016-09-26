@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -15,10 +15,6 @@
 * USE OR PERFORMANCE OF THIS SOFTWARE.
 *
 *****************************************************************************/
-
-
-#ifndef _WFA_PORTALL_H
-#define _WFA_PORTALL_H
 
 /* The fixed definition for the device interface name */
 /* For different OSes or your platforms, you may not  */
@@ -181,4 +177,4 @@ typedef struct _memblock
     void *mem;
 } wfaMemBlk_t;
 
-#endif /*_WFA_PORTALL_H*/
+

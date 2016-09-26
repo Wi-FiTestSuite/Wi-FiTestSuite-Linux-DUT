@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -80,6 +80,53 @@ typeNameStr_t direcStr[] =
     { DIRECT_SEND,  "send",          NULL},
     { DIRECT_RECV,  "receive",       NULL}
 };
+
+/*
+ *  getParamValueInt(): fetch the parameter value based on the parameter name, 
+ *                      and stored in provided place holder after converting to
+ *                      integer from string.
+ *  input:        pcmdStr -- a string pointer to the command string
+ *  input:        pParam --  a string pointer to the parameter name
+ *  input:        paramValue --  a int pointer to hold the parameter value
+ *  return        on success 0 else -1
+ */
+int getParamValueInt(char *pcmdStr, char *pParam, int *paramValue)
+{
+    char *str;
+    if(strcasecmp(pcmdStr, pParam) == 0)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        paramValue = atoi(str);
+        return 0;
+    }
+    return -1;
+}
+
+/*
+ *  getParamValueStr(): fetch the parameter value based on the parameter name, 
+ *                      and stored in provided place holder as string.
+ *                      function explicitly put the null char at last to 
+ *                      avoid string with out null in case src string longer.
+ *  input:        pcmdStr -- a string pointer to the command string
+ *  input:        pParam --  a string pointer to the parameter name
+ *  input:        paramValue -- a string pointer to hold the parameter value
+ *  input:        paramValLen --  length for the paramValue. 
+ *  return        on success 0 else -1
+ */
+int getParamValueStr(char *pcmdStr, char *pParam, char *paramValue, int paramValLen)
+{
+    char *str;
+    if(strcasecmp(pcmdStr, pParam) == 0)
+    {
+        str = strtok_r(NULL, ",", &pcmdStr);
+        strncpy(paramValue, str, (paramValLen - 1));
+        paramValue[paramValLen] = 0;
+     return 0;
+    }
+    return -1;
+}
+
+
 
 /*
  * cmdProcNotDefinedYet(): a dummy function
@@ -5159,6 +5206,11 @@ int xcCmdProcStaPresetTestParameters(char *pcmdStr, BYTE *aBuf, int *aLen)
                 presetTestParams->wfdDeviceDiscoverability= eDisable;
             }
         }
+		else if(strcasecmp(str, "oper_chn") == 0)
+        {
+             str = strtok_r(NULL, ",", &pcmdStr);
+             presetTestParams->oper_chn= atoi(str); 
+        }
         else if (strcasecmp(str, "program") == 0)
         {
             presetTestParams->programFlag= 1;
@@ -5282,7 +5334,7 @@ int xcCmdProcStaResetDefault(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(reset->intf, str, 15);
         }
-        else if(strcasecmp(str, "prog") == 0) // VHT, 11n, VOE; HS2; HS2-R2, etc
+        else if(strcasecmp(str, "prog") == 0) // VHT, 11n, VOE; HS2; HS2-R2, NAN etc
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(reset->prog, str, sizeof(reset->prog));

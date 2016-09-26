@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -54,11 +54,6 @@ void init_thr_flag()
 void wfa_dut_init(BYTE **tBuf, BYTE **rBuf, BYTE **paBuf, BYTE **cBuf, struct timeval **timerp)
 {
     /* allocate the traffic stream table */
-    printf(" %s \n",__func__);
-
-    if(tBuf == NULL || rBuf == NULL || paBuf == NULL || cBuf == NULL || timerp == NULL )
-        printf("one of the buffer is null \n");
-
     gStreams = (tgStream_t *) malloc(WFA_MAX_TRAFFIC_STREAMS*sizeof(tgStream_t));
     if(gStreams == NULL)
     {

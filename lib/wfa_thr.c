@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -649,7 +649,7 @@ void * wfa_wmm_thread(void *thr_param)
         {
         case DIRECT_SEND:
             mySock = wfaCreateUDPSock(myProfile->sipaddr, myProfile->sport);
-            if (mySock <=0)
+            if (mySock < 0)
             {
                DPRINT_INFO(WFA_OUT, "wfa_wmm_thread SEND ERROR failed create UDP socket! \n");
                break;
@@ -697,7 +697,8 @@ void * wfa_wmm_thread(void *thr_param)
                 setsockopt(mySock, SOL_SOCKET, SO_SNDBUF, (char *)&iOptVal, (socklen_t )iOptLen);
 
               if ( (myProfile->rate != 0 ) /* WFA_SEND_FIX_BITRATE_MAX_FRAME_RATE)*/ && 
-                   (myProfile->pksize * myProfile->rate * 8 < WFA_SEND_FIX_BITRATE_MAX) )
+                   (myProfile->pksize * myProfile->rate * 8 < WFA_SEND_FIX_BITRATE_MAX) &&
+                   (myProfile->trafficClass != TG_WMM_AC_VO)  )
                  wfaSendBitrateData(mySock, myStreamId, respBuf, &respLen);
               else
               {

@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-* Copyright (c) 2015 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -54,7 +54,7 @@ extern char gnetIf[];
  * intput:   port -- TCP socket port to listen
  * return:   socket id;
  */
-int wfaCreateTCPServSock(char *devIface, unsigned short port)
+int wfaCreateTCPServSock(unsigned short port)
 {
     int sock;                        /* socket to create */
     struct sockaddr_in servAddr; /* Local address */
@@ -64,17 +64,12 @@ int wfaCreateTCPServSock(char *devIface, unsigned short port)
     if ((sock = wSOCKET(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
     {
         DPRINT_ERR(WFA_ERR, "createTCPServSock socket() failed");
-        return WFA_ERROR;
+        return WFA_FAILURE;
     }
 
     /* Construct local address structure */
     wMEMSET(&servAddr, 0, sizeof(servAddr));
-//    wfaGetifAddr(gnetIf, &servAddr);
-    if (wfaGetifAddr(devIface, &servAddr)== WFA_FAILURE) {
-        DPRINT_ERR(WFA_ERR, "Unable to find interface %s\n",devIface);
-        wCLOSE(sock);
-        return WFA_ERROR;
-    }
+    wfaGetifAddr(gnetIf, &servAddr);
     servAddr.sin_family = AF_INET;        /* Internet address family */
     servAddr.sin_port = htons(port);              /* Local port */
 
@@ -83,14 +78,14 @@ int wfaCreateTCPServSock(char *devIface, unsigned short port)
     if (wBIND(sock, (struct sockaddr *) &servAddr, sizeof(servAddr)) < 0)
     {
         DPRINT_ERR(WFA_ERR, "bind() failed");
-        return WFA_ERROR;
+        return WFA_FAILURE;
     }
 
     /* Mark the socket so it will listen for incoming connections */
     if (wLISTEN(sock, MAXPENDING) < 0)
     {
         DPRINT_ERR(WFA_ERR, "listen() failed");
-        return WFA_ERROR;
+        return WFA_FAILURE;
     }
 
     return sock;
@@ -157,18 +152,6 @@ int wfaConnectUDPPeer(int mysock, char *daddr, int dport)
     return mysock;
 }
 
-int wfaConnectTCPPeer(int mysock, char *daddr, int dport)
-{
-    struct sockaddr_in peerAddr;
-#if 0
-    wMEMSET(&peerAddr, 0, sizeof(peerAddr));
-    peerAddr.sin_family = AF_INET;                
-    inet_aton(daddr, &peerAddr.sin_addr);
-    peerAddr.sin_port   = htons(dport);    
-#endif
-    wCONNECT(mysock, (struct sockaddr *)&peerAddr, sizeof(peerAddr));
-    return mysock;
-}
 /*
  * acceptTCPConn(): handle and accept any incoming socket connection request.
  * input:        serSock -- the socket id to listen
@@ -360,7 +343,7 @@ int wfaGetifAddr(char *ifname, struct sockaddr_in *sa)
 
     wCLOSE(fd);
 
-    return WFA_SUCCESS;
+    return WFA_FAILURE;
 }
 
 /*

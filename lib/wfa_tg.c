@@ -1,7 +1,7 @@
 
 /****************************************************************************
 *
-* Copyright (c) 2014 Wi-Fi Alliance
+* Copyright (c) 2016 Wi-Fi Alliance
 *
 * Permission to use, copy, modify, and/or distribute this software for any
 * purpose with or without fee is hereby granted, provided that the above
@@ -1351,10 +1351,9 @@ int wfaSendBitrateData(int mySockfd, int streamId, BYTE *pRespBuf, int *pRespLen
     //int throttledRate = 0;
     struct timeval        before, after, stime; 
 
-
     DPRINT_INFO(WFA_OUT, "wfaSendBitrateData entering\n");
     /* error check section  */
-    if ( (mySockfd <= 0) || (streamId < 0) || ( pRespBuf == NULL) 
+    if ( (mySockfd < 0) || (streamId < 0) || ( pRespBuf == NULL) 
             || ( pRespLen == NULL) )
     {
         DPRINT_INFO(WFA_OUT, "wfaSendBitrateData pass-in parameter err mySockfd=%i streamId=%i pRespBuf=0x%x pRespLen=0x%x\n",

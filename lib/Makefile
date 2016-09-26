@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2015 Wi-Fi Alliance
+# Copyright (c) 2016 Wi-Fi Alliance
 # 
 # Permission to use, copy, modify, and/or distribute this software for any 
 # purpose with or without fee is hereby granted, provided that the above 
@@ -33,10 +33,6 @@ wfa_cmdproc.o: wfa_cmdproc.c ../inc/wfa_agtctrl.h ../inc/wfa_types.h ../inc/wfa_
 wfa_cmdtbl.o: wfa_cmdtbl.c ../inc/wfa_types.h ../inc/wfa_tlv.h
 
 wfa_sock.o: wfa_sock.c ../inc/wfa_sock.h ../inc/wfa_types.h
-
-wfa_serial.o: wfa_serial.c ../inc/wfa_serial.h ../inc/wfa_nw_al.h ../inc/wfa_types.h
-
-wfa_nw_al.o: wfa_nw_al.c ../inc/wfa_nw_al.h ../inc/wfa_types.h
 
 wfa_thr.o: wfa_thr.c ../inc/wfa_tg.h 
 
