@@ -4598,6 +4598,81 @@ int xcCmdProcStaDevSendFrame(char *pcmdStr, BYTE *aBuf, int *aLen)
                     }
                 } /* for loop: hs2_r2 each prometers */
             } /* HS2-R2 */
+			else if (strcasecmp(str, "LOC") == 0)
+            {
+                locFrame_t *loc = &sf->frameType.loc;
+
+                sf->program= PROG_TYPE_LOC;
+                for(;;)
+                {
+                    str = strtok_r(NULL, ",", &pcmdStr);
+                    if(str == NULL || str[0] == '\0')
+                        break;
+                    if (strcasecmp(str, "framename") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        if (strcasecmp(str, "ANQPQUERY") == 0)
+                        {
+                            loc->eframe= LOC_TYPE_ANQPQUERY;
+                        }
+                        if (strcasecmp(str, "NeighReportReq") == 0)
+                        {
+                            loc->eframe= LOC_TYPE_NeighReportReq;
+                        }
+                        if (strcasecmp(str, "RadioMsntReq") == 0)
+                        {
+                            loc->eframe= LOC_TYPE_RadioMsntReq;
+                        }
+                    }
+
+                    else if(strcasecmp(str, "destmac") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        strncpy(loc->sDestMac, str, WFA_MAC_ADDR_STR_LEN-1);
+                        loc->sDestMac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+                    }
+                    else if(strcasecmp(str, "askForLocCivic") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        loc->baskForLocCivic = atoi(str);
+                    }
+                    else if(strcasecmp(str, "askForLCI") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        loc->baskForLCI= atoi(str);
+                    }
+                    else if(strcasecmp(str, "address3") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        loc->baddress3= atoi(str);
+                    }
+                    else if(strcasecmp(str, "MsntType") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        loc->bmsntType = atoi( str);
+                    }
+                    else if(strcasecmp(str, "MaxAgeSubelem") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        loc->bmaxAgeSubelem = atoi(str);
+                    }
+                    else if(strcasecmp(str, "RandInterval") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        loc->brandInterval= atoi(str);
+                    }
+                    else if(strcasecmp(str, "MinAPcount") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        loc->bminApcount= atoi(str);
+                    }
+                    else if(strcasecmp(str, "AskForPublicIdentifierURI-FQDN") == 0)
+                    {
+                        str = strtok_r(NULL, ",", &pcmdStr);
+                        loc->baskForPublicIdentifierURI_FQDN = atoi( str);
+                    }
+                }
+            } /* LOC */
         }/* program  */
     } /* for loop : each programs*/
 
@@ -5334,7 +5409,7 @@ int xcCmdProcStaResetDefault(char *pcmdStr, BYTE *aBuf, int *aLen)
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(reset->intf, str, 15);
         }
-        else if(strcasecmp(str, "prog") == 0) // VHT, 11n, VOE; HS2; HS2-R2, NAN etc
+        else if(strcasecmp(str, "prog") == 0) // VHT, 11n, VOE; HS2; HS2-R2, NAN, LOC etc
         {
             str = strtok_r(NULL, ",", &pcmdStr);
             strncpy(reset->prog, str, sizeof(reset->prog));
@@ -6437,6 +6512,42 @@ int xcCmdProcStaExecAction(char *pcmdStr, BYTE *aBuf, int *aLen)
 	   {
 		 str = strtok_r(NULL, ",", &pcmdStr);
          staExecAction->localInstanceID= atoi(str);
+	   }
+	   else if(strcasecmp(str, "destMac") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->destMac, str, WFA_MAC_ADDR_STR_LEN-1);
+         staExecAction->destMac[WFA_MAC_ADDR_STR_LEN-1]='\0';
+	   }
+	   else if(strcasecmp(str, "trigger") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         strncpy(staExecAction->trigger, str, 16);
+	   }
+	   else if(strcasecmp(str, "askForLocCivic") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->askForLocCivic= atoi(str);
+	   }
+	   else if(strcasecmp(str, "askForLCI") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->askForLCI= atoi(str);
+	   }
+	   else if(strcasecmp(str, "burstsExponent") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->burstsExponent= atoi(str);
+	   }
+	   else if(strcasecmp(str, "asap") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->asap= atoi(str);
+	   }
+	   else if(strcasecmp(str, "formatBwFTM") == 0)
+	   {
+		 str = strtok_r(NULL, ",", &pcmdStr);
+         staExecAction->formatBwFTM= atoi(str);
 	   }
 	}
 	
