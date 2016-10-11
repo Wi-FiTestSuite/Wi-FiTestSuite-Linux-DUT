@@ -61,9 +61,9 @@ extern int wfaStaSetPEAP(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetUAPSD(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetIBSS(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaDebugSet(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
-extern int wfaStaSetMode(int, BYTE *, int *, BYTE *);
-extern int wfaStaUpload(int, BYTE *, int *, BYTE *);
-extern int wfaStaSetWMM(int, BYTE *, int *, BYTE *);
+extern int wfaStaSetMode(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaUpload(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaSetWMM(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 
 extern int wfaStaPresetParams(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetEapFAST(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
@@ -79,12 +79,11 @@ extern int wfaStaResetDefault(int len, BYTE *caCmdBuf, int *respLen, BYTE *respB
 extern int wfaStaDisconnect(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaReAssociate(int, BYTE*, int*, BYTE*);
 
-extern int wfaStaSetPwrSave(int, BYTE *, int *, BYTE *);
-extern int wfaStaResetDefault(int, BYTE *, int *, BYTE *);
-extern int wfaStaSendNeigReq(int, BYTE *, int *, BYTE *);
+extern int wfaStaSetPwrSave(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaSendNeigReq(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaTestBedCmd(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
-extern int  wfaStaGetP2pDevAddress(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaGetP2pDevAddress(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetP2p(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaP2pConnect(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaStartAutoGo(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
@@ -112,6 +111,7 @@ extern int wfaStaDevSendFrame(int len, BYTE *caCmdBuf, int *respLen, BYTE *respB
 extern int wfaStaSetRadio(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetRFeature(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaSetSecurity(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
+extern int wfaStaScan(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 
 extern int wfaStaStartWfdConnection(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
 extern int wfaStaCliCommand(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf);
