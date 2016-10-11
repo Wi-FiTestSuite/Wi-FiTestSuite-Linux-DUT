@@ -153,6 +153,7 @@ enum cmd_tags
    WFA_STA_COMMANDS_END,                  /* 82 */
   
    WFA_STA_EXEC_ACTION_TLV,			/* 86 */
+   WFA_STA_SCAN_TLV, /* 87 */
 };
 
 
@@ -260,6 +261,7 @@ enum resp_tags
     WFA_STA_SET_EAPPWD_RESP_TLV,                   /* 81 */
     WFA_STA_RESPONSE_END,                        /* 82 */
 	WFA_STA_EXEC_ACTION_RESP_TLV,					/* 86 */
+	WFA_STA_SCAN_RESP_TLV, 					/* 87 */
 };
 
 #define WFA_TLV_HEAD_LEN 1+2

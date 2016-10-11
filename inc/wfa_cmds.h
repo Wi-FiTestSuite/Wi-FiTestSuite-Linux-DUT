@@ -216,6 +216,14 @@ typedef struct ca_sta_set_systime
 
 
 /* DEV_SEND_FRAME  related definitions    */
+/*  DEV_SEND_FRAME    LOC   */
+enum
+{
+    LOC_TYPE_ANQPQUERY = 1,
+    LOC_TYPE_NeighReportReq,
+    LOC_TYPE_RadioMsntReq,
+};
+
 /*  DEV_SEND_FRAME    PMF   */
 enum
 {
@@ -412,6 +420,19 @@ typedef struct hs2_frame
     char sSenderIp[IPV6_ADDRESS_STRING_LEN];
 } hs2Frame_t;
 
+typedef struct loc_frame
+{
+    char sDestMac[WFA_MAC_ADDR_STR_LEN];
+    BYTE eframe;
+    char baskForLocCivic;
+    char baskForLCI;
+    char baddress3;
+    char bmsntType;
+    char bmaxAgeSubelem;
+    char brandInterval;
+    char bminApcount;
+    char baskForPublicIdentifierURI_FQDN;
+} locFrame_t;
 
 enum
 {
@@ -424,6 +445,7 @@ enum
     PROG_TYPE_HS2,
     PROG_TYPE_HS2_R2,
 	PROG_TYPE_NAN,
+	PROG_TYPE_LOC,
 };
 
 typedef struct ca_sta_dev_sendframe
@@ -436,6 +458,7 @@ typedef struct ca_sta_dev_sendframe
         ventFrame_t vent;
         wfdFrame_t  wfd;
         hs2Frame_t  hs2_r2;
+		locFrame_t loc;
     } frameType;
 } caStaDevSendFrame_t;
 
@@ -796,6 +819,19 @@ enum
     eProtected = 1,
     eUnprotected,
     eProtectedVideoOnly,
+};
+
+enum trigger {
+    eFTMsession = 1,
+    eANQPQUERY,
+};
+
+enum formatBwFTM {
+    eHT20 = 9,
+	eHT40_5G = 11,
+	eVHT20 = 10,
+	eVHT40 = 12,
+	eVHT80 = 13,
 };
 
 enum event {
@@ -1464,6 +1500,16 @@ typedef struct ca_sta_set_pwrsave
     char mode[8];
 } caStaSetPwrSave_t;
 
+typedef struct ca_sta_scan
+{
+    char intf[WFA_IF_NAME_LEN];
+} caStaScan_t;
+
+typedef struct ca_sta_disconnect
+{
+    char intf[WFA_IF_NAME_LEN];
+} caStaDisconnect_t;
+
 typedef struct ca_sta_reset_default
 {
     char intf[WFA_IF_NAME_LEN];
@@ -1507,6 +1553,8 @@ typedef struct ca_sta_rfeature
 
 typedef struct ca_sta_exec_action
 {
+   /*  sta_exec_action  NAN */
+   
    char intf[WFA_IF_NAME_LEN];
    BYTE prog;
    char nanOp[8];
@@ -1516,7 +1564,7 @@ typedef struct ca_sta_exec_action
    char highTsf[8];
    char methodType[16];
    char furtherAvailInd[8];
-   char mac[18];
+   char mac[WFA_MAC_ADDR_STR_LEN];
    char band[8];
    unsigned short fiveGHzOnly;
    char publishType[16];
@@ -1531,7 +1579,18 @@ typedef struct ca_sta_exec_action
    unsigned short includeBit;
    unsigned short srfType;
    unsigned int remoteInstanceID;
-   unsigned int localInstanceID;   
+   unsigned int localInstanceID;
+   
+   /*  sta_exec_action  LOC */
+   
+   char destMac[WFA_MAC_ADDR_STR_LEN];
+   char trigger[16];
+   unsigned short askForLocCivic;
+   unsigned short askForLCI;
+   unsigned short burstsExponent;
+   unsigned short asap;
+   unsigned short formatBwFTM;
+   
 } caStaExecAction_t;
 
 typedef struct ca_sta_get_events
@@ -1576,6 +1635,10 @@ typedef struct dut_commands
         caStaRFeat_t         rfeat;
 	   caStaExecAction_t	sact;
 	   caStaGetEvents_t		sevts;
+	   caStaScan_t		scan;
+	   caStaDisconnect_t discont;
+	   caStaResetDefault_t rdef;
+	   caStaPresetParameters_t presetparams;
     } cmdsu;
 } dutCommand_t;
 
