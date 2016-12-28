@@ -176,7 +176,7 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
     char *str;
     int i = 0, j=0, kwcnt = 0;
     wfaTLV *hdr = (wfaTLV *)aBuf;
-    tgProfile_t tgpf = {0, 0, "", -1, "", -1, 0, 0, 0, TG_WMM_AC_BE, 0, 0};
+    tgProfile_t tgpf = {0, 0, "", -1, "", -1, 0, 0, 0, TG_WMM_AC_BE, 0, 0, ""};
     tgProfile_t *pf = &tgpf;
     int userPrio = 0;
 
