@@ -96,7 +96,7 @@ int getParamValueInt(char *pcmdStr, char *pParam, int *paramValue)
     if(strcasecmp(pcmdStr, pParam) == 0)
     {
         str = strtok_r(NULL, ",", &pcmdStr);
-        paramValue = atoi(str);
+        *paramValue = atoi(str);
         return 0;
     }
     return -1;
