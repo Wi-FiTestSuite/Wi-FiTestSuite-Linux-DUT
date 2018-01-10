@@ -155,7 +155,7 @@ int wfa_itime_diff(struct timeval *t1, struct timeval *t2)
  * THe following two functions are converting Little Endian to Big Endian.
  * If your machine is already a Big Endian, you may flag it out.
  */
-inline void int2BuffBigEndian(int val, char *buf)
+void int2BuffBigEndian(int val, char *buf)
 {
     char *littleEn = (char *)&val;
 
