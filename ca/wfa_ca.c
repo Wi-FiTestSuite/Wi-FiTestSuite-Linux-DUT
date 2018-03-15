@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
     int maxfdn1;
     BYTE xcCmdBuf[WFA_BUFF_4K];
     BYTE caCmdBuf[WFA_BUFF_4K];
+	int caCmdBufPos = 0;
     BYTE pcmdBuf[WFA_BUFF_1K];
     char *pcmdStr = NULL;
     char respStr[WFA_BUFF_512];
@@ -337,28 +338,49 @@ int main(int argc, char *argv[])
                     sleep(1);
                     memset(respStr, 0, WFA_BUFF_128);
                     memset(caCmdBuf, 0, WFA_BUFF_4K);
-                    if ((bytesRcvd = recv(gSock, caCmdBuf, WFA_BUFF_4K, 0)) <= 0)
+                    if ((bytesRcvd = recv(gSock, caCmdBuf + caCmdBufPos, WFA_BUFF_4K, 0)) <= 0)
                         {
                             DPRINT_WARNING(WFA_WNG, "recv() failed or connection closed prematurely");
+							caCmdBufPos = 0;
                             continue;
                         }
+						caCmdBufPos += bytesRcvd;
 
 #if DEBUG
                     for(i = 0; i< bytesRcvd; i++)
                         printf("%x ", caCmdBuf[i]);
                     printf("\n");
 #endif
-                    tag = ((wfaTLV *)caCmdBuf)->tag;
 
-                    memcpy(&ret_status, caCmdBuf+4, 4);
-
-                    DPRINT_INFO(WFA_OUT, "tag %i \n", tag);
-                    if(tag != 0 && wfaCmdRespProcFuncTbl[tag] != NULL)
-                        {
-                            wfaCmdRespProcFuncTbl[tag](caCmdBuf);
-                        }
-                    else
-                        DPRINT_WARNING(WFA_WNG, "function not defined\n");
+					while (caCmdBufPos > 4)
+					{
+						WORD cmd_len;
+						wfaTLV *pTlv = (wfaTLV *)caCmdBuf;
+						
+						if ((pTlv->len +4) > caCmdBufPos)
+							break;
+						
+						cmd_len = pTlv->len + 4;
+						tag = pTlv->tag;
+						
+						memcpy(&ret_status, caCmdBuf+4, 4);
+						
+						DPRINT_INFO(WFA_OUT, "tag %i, len = %u \n", tag, pTlv->len);
+						if(tag != 0 && wfaCmdRespProcFuncTbl[tag] != NULL)
+						{
+							wfaCmdRespProcFuncTbl[tag](caCmdBuf);
+						}
+						else
+							DPRINT_WARNING(WFA_WNG, "function not defined\n");
+						
+						caCmdBufPos -= cmd_len;
+						if (caCmdBufPos > 0)
+						{
+							memmove(caCmdBuf,
+									caCmdBuf + cmd_len,
+									caCmdBufPos);
+						}
+					}
                 } /* if(gCaSock */
 
         } /* for */
