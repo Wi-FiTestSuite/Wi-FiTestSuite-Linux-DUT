@@ -17,9 +17,9 @@
 include ../Makefile.inc
 
 all:    ${LIB_OBJS}
-		ar crv ${LIBWFA_NAME} $?
-		ar crv ${LIBWFA_NAME_DUT} ${LIB_OBJS_DUT}
-		ar crv ${LIBWFA_NAME_CA} ${LIB_OBJS_CA} 
+		$(AR) crv ${LIBWFA_NAME} $?
+		$(AR) crv ${LIBWFA_NAME_DUT} ${LIB_OBJS_DUT}
+		$(AR) crv ${LIBWFA_NAME_CA} ${LIB_OBJS_CA}
 		${RANLIB} ${LIBWFA_NAME} ${LIBWFA_NAME_DUT} ${LIBWFA_NAME_CA}
 
 wfa_tg.o: wfa_tg.c ../inc/wfa_agt.h ../inc/wfa_types.h ../inc/wfa_rsp.h ../inc/wfa_tlv.h  ../inc/wfa_tg.h

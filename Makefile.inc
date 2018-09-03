@@ -13,14 +13,15 @@
 # NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
 # USE OR PERFORMANCE OF THIS SOFTWARE.
 #
-CC = gcc
+CC ?= gcc
+AR ?= ar
 LIB=lib
 DUT=dut
 CA=ca
 UCC=ucc
 CON=console_src
 WTG=WTGService
-MAKE=make
+MAKE?=make
 
 # This is for WMM-PS
 #for Ext TG
@@ -46,7 +47,7 @@ CFLAGS = -g -O2 -D_REENTRANT -Wall -I../inc
 
 DUTLIBS = ../lib/libwfa_dut.a -lpthread
 CALIBS = ../lib/libwfa_ca.a -lpthread
-RANLIB = ranlib
+RANLIB ?= ranlib
 
 LIBWFA_NAME_DUT = libwfa_dut.a
 LIBWFA_NAME_CA = libwfa_ca.a
