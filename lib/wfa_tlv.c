@@ -75,9 +75,15 @@ BOOL wfaDecodeTLV(BYTE *tlv_data, int tlv_len, WORD *ptag, int *pval_len, BYTE *
     if(tlv_len < *pval_len)
         return WFA_FAILURE;
 
-    if(*pval_len != 0 && *pval_len < MAX_PARMS_BUFF)
+    if(*pval_len != 0)
     {
-        wMEMCPY(pvalue, tlv_data+4, *pval_len);
+        if(*pval_len >= MAX_PARMS_BUFF)
+        {
+            DPRINT_ERR(WFA_ERR, "parameter buffer is too small\n");
+            return WFA_FAILURE;
+        }
+
+        wMEMCPY(pvalue, (tlv_data+4), *pval_len);
     }
 
     return WFA_SUCCESS;
