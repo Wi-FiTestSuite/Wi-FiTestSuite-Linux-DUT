@@ -59,7 +59,8 @@ typeNameStr_t keywordStr[] =
     { KW_USESYNCCLOCK, "useSyncClock",  NULL},
     { KW_USERPRIORITY, "userpriority",  NULL},
     { KW_MAXCNT,       "maxcnt",        NULL},
-    { KW_TAGNAME,      "tagName",	    NULL}
+    { KW_TAGNAME,      "tagName",	    NULL},
+	{ KW_HTI,          "hti",           NULL},
 };
 
 /* profile type string table */
@@ -461,7 +462,20 @@ int xcCmdProcAgentConfig(char *pcmdStr, BYTE *aBuf, int *aLen)
                     strncpy(pf->WmmpsTagName,str,strlen(str));
                     printf("Got name %s\n",pf->WmmpsTagName);
                     break;
-
+				
+				case KW_HTI:
+					 str = strtok_r(NULL, ",", (char *)&pcmdStr);
+					 if (strcasecmp(str, "on") == 0)
+						 {
+					pf->hti = 1;
+					 }
+					 else
+					 {
+					pf->hti = 0;
+					 }
+					 DPRINT_INFO(WFA_OUT, "hti %s\n", str);
+					 break;
+		 
                 default:
                     ;
                 } /* switch */
