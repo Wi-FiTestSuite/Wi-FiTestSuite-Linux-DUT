@@ -102,7 +102,7 @@ char *e2eResults = "/tmp/e2e1198798626.txt";
 
 
 extern dutCmdResponse_t gGenericResp;
-static int  tableDscpToTos[15] [2] = {{0,0},{8,32},{10,40},{14,56},{18,72},{22,88},{24,96},{28,112},{34,136},{36,144},{38,152},{40,160},{46,184},{48,192},{56,224}};
+static int  tableDscpToTos[15] [2] = {{0,0},{8,32},{10,40},{14,56},{18,72},{22,88},{24,96},{28,112},{30,120},{34,136},{36,144},{38,152},{40,160},{46,184},{48,192},{56,224}};
 
 
 /* Some devices may only support UDP ECHO and do not have ICMP level ping */
@@ -969,7 +969,12 @@ int wfaSendLongFile(int mySockfd, int streamid, BYTE *aRespBuf, int *aRespLen)
 
     /* If RATE is 0 which means to send as much as possible, the frame size set to max UDP length */
     if(theProf->rate == 0)
-        packLen = MAX_UDP_LEN;
+	{
+		if(theProf->hti == 0 && theProf->pksize)
+			packLen = theProf->pksize;
+		else
+			packLen = MAX_UDP_LEN;
+	}
     else
         packLen = theProf->pksize;
 
