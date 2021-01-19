@@ -24,6 +24,9 @@
 #ifndef _WFA_TG_H
 #define _WFA_TG_H
 
+#ifndef _WINDOWS
+#include <pthread.h>
+#endif
 #include <sys/time.h>
 
 /* maximum number of streams to support */

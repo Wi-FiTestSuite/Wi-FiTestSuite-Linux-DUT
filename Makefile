@@ -15,7 +15,7 @@
 #
 include Makefile.inc
 
-DIRS= ${LIB} ${DUT} ${CA} ${TC} ${WTG} ${CON}
+DIRS= ${LIB} ${DUT} ${CA} ${TC}
 
 all:
 	for i in ${DIRS}; do \

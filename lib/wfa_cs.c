@@ -319,7 +319,7 @@ int wfaStaGetIpConfig(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
     /*
      * check a script file (the current implementation specific)
      */
-    ret = access("/usr/local/sbin/getipconfig.sh", F_OK);
+    ret = access("/usr/sbin/getipconfig.sh", F_OK);
     if(ret == -1)
     {
         ipconfigResp->status = STATUS_ERROR;
@@ -2115,7 +2115,7 @@ int wfaStaPresetParams(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
 	    st = remove("/tmp/processid.txt");
 	}
 	
-	sprintf(cmdStr, "/usr/local/sbin/findprocess.sh %s /tmp/processid.txt\n", "wpa_supplicant");
+	sprintf(cmdStr, "/usr/sbin/findprocess.sh %s /tmp/processid.txt\n", "wpa_supplicant");
 	st = system(cmdStr);
 	
 	tmpfd = fopen("/tmp/processid.txt", "r+");
