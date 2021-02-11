@@ -150,6 +150,7 @@ extern int gSock, gCaSockfd;
 int caCmdNotDefinedYet(BYTE *cmdBuf)
 {
     int done;
+    (void)cmdBuf;
 
     sprintf(gRespStr, "status,ERROR,Command Not Defined\r\n");
     /* make sure if getting send error, will close the socket */
