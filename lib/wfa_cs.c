@@ -256,7 +256,7 @@ int wfaStaIsConnected(int len, BYTE *caCmdBuf, int *respLen, BYTE *respBuf)
      * use 'wpa_cli' command to check the interface status
      * none, scanning or complete (wpa_supplicant specific)
      */
-    sprintf(gCmdStr, "/sbin/wpa_cli -i%s status | grep ^wpa_state= | cut -f2- -d= > /tmp/.isConnected", ifname);
+    sprintf(gCmdStr, "wpa_cli -i%s status | grep ^wpa_state= | cut -f2- -d= > /tmp/.isConnected", ifname);
     sret = system(gCmdStr);
 
     /*

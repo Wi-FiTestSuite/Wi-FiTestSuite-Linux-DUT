@@ -15,7 +15,7 @@
 #
 
 CC	= gcc
-CFLAGS	= -g -DWFA_DEBUG -pthread
+CFLAGS	= -g -DWFA_DEBUG -pthread `pkg-config --cflags libtirpc 2>/dev/null`
 
 TARGETS = wfa_con
 

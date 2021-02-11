@@ -308,6 +308,7 @@ main(int argc, char **argv)
             else
             {
                 /* command received */
+                memset(parmsVal,0,MAX_PARMS_BUFF);
                 wfaDecodeTLV(xcCmdBuf, nbytes, &xcCmdTag, &cmdLen, parmsVal);
                 memset(respBuf, 0, WFA_RESP_BUF_SZ);
                 respLen = 0;
