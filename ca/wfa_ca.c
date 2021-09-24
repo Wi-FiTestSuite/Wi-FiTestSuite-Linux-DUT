@@ -65,18 +65,17 @@ int main(int argc, char *argv[])
 {
     int nfds;
     struct sockaddr_in servAddr;
-    struct timeval tv, curr_time, start_time;
     unsigned short servPort, myport;
     char *servIP=NULL, *tstr=NULL;
     int bytesRcvd;
     fd_set sockSet;
     char cmdName[WFA_BUFF_32];
-    int i, isFound = 0, nbytes, ret_status, slen, st_timer = 0, st_timer_count = 1, difftime;
+    int i, isFound = 0, nbytes, ret_status, slen;
     WORD tag;
     int tmsockfd, cmdLen = WFA_BUFF_1K;
     int maxfdn1;
     BYTE xcCmdBuf[WFA_BUFF_4K];
-    BYTE caCmdBuf[WFA_BUFF_4K];
+    BYTE caCmdBuf[WFA_BUFF_8K];
 	int caCmdBufPos = 0;
     BYTE pcmdBuf[WFA_BUFF_1K];
     char *pcmdStr = NULL;
@@ -173,8 +172,6 @@ int main(int argc, char *argv[])
 
     for(;;)
         {
-            tv.tv_sec = 170;
-            tv.tv_usec = 0;
             FD_ZERO(&sockSet);
             FD_SET(tmsockfd, &sockSet);
             maxfdn1 = tmsockfd + 1;
@@ -193,7 +190,7 @@ int main(int argc, char *argv[])
                         maxfdn1 = gSock +1;
                 }
 
-            if((nfds = select(maxfdn1, &sockSet, NULL, NULL, &tv)) < 0)
+            if((nfds = select(maxfdn1, &sockSet, NULL, NULL, NULL)) < 0)
                 {
                     if(errno == EINTR)
                         continue;
@@ -229,13 +226,6 @@ int main(int argc, char *argv[])
                     memset(respStr, 0, WFA_BUFF_128);
                     sprintf(respStr, "status,RUNNING\r\n");
                     wfaCtrlSend(gCaSockfd, (BYTE *)respStr, strlen(respStr));
-					
-    	            /*
-                     * start timer to send status,RUNNING again to UCC, if DUT did not respond within 170 secs
-    	             */
-                    st_timer = 1;
-                    gettimeofday(&start_time, NULL);
-                    DPRINT_INFO(WFA_OUT, "st_timer %d\n", st_timer);
 
                     DPRINT_INFO(WFA_OUT, "%s\n", respStr);
                     DPRINT_INFO(WFA_OUT, "message %s %i\n", xcCmdBuf, nbytes);
@@ -314,7 +304,6 @@ int main(int argc, char *argv[])
                     if(isFound == 0)
                         {
                             sleep(1);
-                            st_timer = 0;
                             sprintf(respStr, "status,INVALID\r\n");
                             wfaCtrlSend(gCaSockfd, (BYTE *)respStr, strlen(respStr));
                             DPRINT_WARNING(WFA_WNG, "Command not valid, check the name\n");
@@ -325,7 +314,6 @@ int main(int argc, char *argv[])
                     if(nameStr[i].cmdProcFunc(pcmdStr, pcmdBuf, &cmdLen)==WFA_FAILURE)
                         {
                             sleep(1);
-                            st_timer = 0;
                             sprintf(respStr, "status,INVALID\r\n");
                             wfaCtrlSend(gCaSockfd, (BYTE *)respStr, strlen(respStr));
                             DPRINT_WARNING(WFA_WNG, "Incorrect command syntax\n");
@@ -337,42 +325,20 @@ int main(int argc, char *argv[])
                      */
                     if(send(gSock, pcmdBuf, cmdLen, 0) != cmdLen)
                         {
-                            st_timer = 0;
                             DPRINT_WARNING(WFA_WNG, "Incorrect sending ...\n");
                             continue;
                         }
 
                     DPRINT_INFO(WFA_OUT, "sent to DUT\n");
                 } /* done with gCaSockfd */
-            /* If st_timer flag is set, check if time difference is more than 170 secs and send status,RUNNING to UCC
-            If st_timer_count has reached 5, stop sending status,RUNNING to UCC. There could be some issue with wfa_dut*/
-			if(st_timer == 1)
-			    {
-					gettimeofday(&curr_time, NULL);
-					difftime = wfa_itime_diff(&start_time, &curr_time);
-                    printf("diff time %d\n", difftime);
-                    if(difftime > 170000000 && st_timer_count <= 5)
-					{
-                        memset(respStr, 0, WFA_BUFF_128);
-						sprintf(respStr, "status,RUNNING\r\n");
-						wfaCtrlSend(gCaSockfd, (BYTE *)respStr, strlen(respStr));
-                        gettimeofday(&start_time, NULL);					
-                        st_timer_count = st_timer_count + 1;
-                    }
-				}
-            else
-                {
-                    st_timer_count=0; /* Reset st_timer_count */
-                }
+
             if(gSock > 0 && FD_ISSET(gSock, &sockSet))
                 {
-                    st_timer = 0;
-                    DPRINT_INFO(WFA_OUT, "st_timer %d\n", st_timer);
                     DPRINT_INFO(WFA_OUT, "received from DUT\n");
                     sleep(1);
                     memset(respStr, 0, WFA_BUFF_128);
-                    memset(caCmdBuf, 0, WFA_BUFF_4K);
-                    if ((bytesRcvd = recv(gSock, caCmdBuf + caCmdBufPos, WFA_BUFF_4K, 0)) <= 0)
+                    memset(caCmdBuf, 0, WFA_BUFF_8K);
+                    if ((bytesRcvd = recv(gSock, caCmdBuf + caCmdBufPos, WFA_BUFF_8K, 0)) <= 0)
                         {
                             DPRINT_WARNING(WFA_WNG, "recv() failed or connection closed prematurely");
 							caCmdBufPos = 0;
@@ -405,8 +371,9 @@ int main(int argc, char *argv[])
 							wfaCmdRespProcFuncTbl[tag](caCmdBuf);
 						}
 						else
+						{
 							DPRINT_WARNING(WFA_WNG, "function not defined\n");
-						
+						}	
 						caCmdBufPos -= cmd_len;
 						if (caCmdBufPos > 0)
 						{

@@ -21,6 +21,6 @@
 #define WFA_VER_H
 
 #define WFA_VERNAM_LEN      32
-#define WFA_SYSTEM_VER      "PCEDUT-Wi-FiTestSuite- 10.15.0"
+#define WFA_SYSTEM_VER      "PCEDUT-Wi-FiTestSuite - 10.20.0"
 
 #endif

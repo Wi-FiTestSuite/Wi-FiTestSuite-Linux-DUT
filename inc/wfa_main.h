@@ -43,9 +43,10 @@
 #define WFA_BUFF_512        512
 #define WFA_BUFF_1K         1024
 #define WFA_BUFF_4K         4096
+#define WFA_BUFF_8K	    8192
 
 #ifdef WFA_PC_CONSOLE
-#define WFA_RESP_BUF_SZ    WFA_BUFF_4K
+#define WFA_RESP_BUF_SZ    WFA_BUFF_8K
 #else
 #define WFA_RESP_BUF_SZ    WFA_BUFF_4K
 #endif
