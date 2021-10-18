@@ -14,8 +14,7 @@
 # USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-CC	= gcc
-CFLAGS	= -g -DWFA_DEBUG -pthread
+CFLAGS	+= -g -DWFA_DEBUG -pthread
 
 TARGETS = wfa_con
 
