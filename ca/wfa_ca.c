@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
         {
             if ((gSock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
                 {
-                    DPRINT_ERR(WFA_ERR, "socket() failed: %i", errno);
+                    DPRINT_ERR(WFA_ERR, "socket() failed: %i\n", errno);
                     exit(1);
                 }
 
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
 
             if (connect(gSock, (struct sockaddr *) &servAddr, sizeof(servAddr)) < 0)
                 {
-                    DPRINT_ERR(WFA_ERR, "connect() failed: %i", errno);
+                    DPRINT_ERR(WFA_ERR, "connect(%s:%d) failed: %s\n", servIP, servPort, strerror(errno));
                     exit(1);
                 }
 
@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
                     if(errno == EINTR)
                         continue;
                     else
-                        DPRINT_WARNING(WFA_WNG, "select error %i", errno);
+                        DPRINT_WARNING(WFA_WNG, "select error %i\n", errno);
                 }
 
             DPRINT_INFO(WFA_OUT, "new event \n");
@@ -249,7 +249,7 @@ int main(int argc, char *argv[])
                         {
                             if ((gSock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0)
                                 {
-                                    DPRINT_ERR(WFA_ERR, "socket() failed: %i", errno);
+                                    DPRINT_ERR(WFA_ERR, "socket() failed: %i\n", errno);
                                     exit(1);
                                 }
 
@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
 
                             if (connect(gSock, (struct sockaddr *) &servAddr, sizeof(servAddr)) < 0)
                                 {
-                                    DPRINT_ERR(WFA_ERR, "connect() failed: %i", errno);
+                                    DPRINT_ERR(WFA_ERR, "connect() failed: %i\n", errno);
                                     exit(1);
                                 }
                         }
@@ -374,7 +374,7 @@ int main(int argc, char *argv[])
                     memset(caCmdBuf, 0, WFA_BUFF_4K);
                     if ((bytesRcvd = recv(gSock, caCmdBuf + caCmdBufPos, WFA_BUFF_4K, 0)) <= 0)
                         {
-                            DPRINT_WARNING(WFA_WNG, "recv() failed or connection closed prematurely");
+                            DPRINT_WARNING(WFA_WNG, "recv() failed or connection closed prematurely\n");
 							caCmdBufPos = 0;
                             continue;
                         }
