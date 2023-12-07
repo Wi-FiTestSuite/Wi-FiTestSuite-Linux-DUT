@@ -60,6 +60,7 @@
 #define KW_USERPRIORITY            17
 #define KW_MAXCNT                  18
 #define KW_TAGNAME                 19
+#define KW_HTI			           20
 
 /* Profile Types */
 #define PROF_FILE_TX               1
@@ -161,6 +162,7 @@ typedef struct _tg_profile
     int  startdelay;
     int  maxcnt;
     char WmmpsTagName[10];//Aaron's//Store the test case name
+	int hti;
 } tgProfile_t;
 
 typedef struct _tg_stream
