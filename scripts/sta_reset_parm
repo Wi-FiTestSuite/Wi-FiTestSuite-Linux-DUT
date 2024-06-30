@@ -1,0 +1,91 @@
+#!/bin/bash
+
+#
+# Copyright (c) 2016 Wi-Fi Alliance
+# 
+# Permission to use, copy, modify, and/or distribute this software for any 
+# purpose with or without fee is hereby granted, provided that the above 
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
+# SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+# RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+# NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
+# USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+#rm nul
+
+declare -a array_list
+index=0
+i=0
+st=0
+tmp=""
+interfacename=" "
+ipaddress=" "
+
+if [ $# -lt 2 ]
+then 
+  echo "usage: sta_reset_parm /interface <ifName> /arp <all | ipAddr>"
+  echo "2 -Command format error"
+  exit
+fi
+
+# i is as parameters here
+for i in $*
+do
+  array_list[$index]=$i
+  #echo ${array_list[$index]}
+  ((index++))
+done
+
+# i is as index here
+for (( i = 0 ; i < $# ;  ))  ##### for params in $* do loop
+do
+    tmp=${array_list[$i]}
+    if [ ${tmp,,} = "/interface" ] ; then
+      ((i++))
+      tmp=${array_list[$i]}  # find next arg
+      interfacename=${tmp,,}
+      #echo "find interface $interfacename"
+    fi
+
+    if [ ${tmp,,} = "/arp" ] ; then
+      ((i++))
+      if [ $i = $# ] ; then
+         ipaddress="x"
+         st=2
+         ##echo " find empty arp param $ipaddress D"
+      else
+        tmp=${array_list[$i]}  ## find next arg
+        ipaddress=${tmp,,}
+      fi
+      ##echo "find ipaddress $ipaddress"
+    fi
+
+    ((i++))
+done
+
+if [ $interfacename = " " -o $ipaddress = "x" ] ; then
+   st=2
+else
+
+  if [ $ipaddress = "all" ] ; then
+    for (( i = 0 ; i < 2 ;  ))
+    do
+      ip neigh flush dev $interfacename
+      #echo " for all $i"
+      sleep 2 ;
+      ((i++))
+    done 
+  else
+    arp -i $interfacename -d $ipaddress
+  fi
+fi
+##arp -a
+if [ $st = 0 ] ; then
+  echo "$st -Reset parm OK"
+else
+  echo "$st -Error command"
+fi

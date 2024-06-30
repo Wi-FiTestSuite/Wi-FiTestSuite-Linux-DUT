@@ -1,0 +1,11 @@
+#wfa_test_cli-TRUE, ## must follow this format to use capital TRUE and end with ','
+sta_reset_parm-TRUE,
+dev_send_frame-TRUE,
+
+
+
+
+
+
+
+

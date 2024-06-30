@@ -1,0 +1,49 @@
+#!/bin/sh
+
+#
+# Copyright (c) 2016 Wi-Fi Alliance
+# 
+# Permission to use, copy, modify, and/or distribute this software for any 
+# purpose with or without fee is hereby granted, provided that the above 
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
+# SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+# RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+# NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
+# USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+
+flag=0
+i=0
+var=()
+#declare -a var
+v6add=0
+interface=$(ifconfig $1)
+interface=${interface// /$'\n'}
+for word in $interface
+do
+  if [ $word = "HWaddr" -o $word = "inet" -o $word = "addr:" ];then
+     flag=1
+  else
+     if [ $flag -eq 1 ];then
+	 var[$i]=$word	
+	 flag=0
+	 ((i=i+1))
+     fi
+  fi
+done
+echo "${var[0]}  ${var[1]##*:} ${var[2]} "
+v6add=$(echo ${var[2]} | cut -f1 -d/)
+set -x
+while true; do 
+send_arp ${var[1]##*:} ${var[0]} ${var[1]##*:} 00:00:00:00:00:00 $1 ${var[0]} ff:ff:ff:ff:ff:ff request
+sleep 5
+send_arp ${var[1]##*:} ${var[0]} ${var[1]##*:} ${var[0]} $1 ${var[0]} ff:ff:ff:ff:ff:ff reply
+sleep 5 ;
+ndsend  $v6add $1
+sleep 5;
+done
+

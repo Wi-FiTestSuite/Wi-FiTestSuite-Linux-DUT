@@ -1,0 +1,161 @@
+#!/bin/bash 
+
+#
+# Copyright (c) 2016 Wi-Fi Alliance
+# 
+# Permission to use, copy, modify, and/or distribute this software for any 
+# purpose with or without fee is hereby granted, provided that the above 
+# copyright notice and this permission notice appear in all copies.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES 
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF 
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY 
+# SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER 
+# RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
+# NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE
+# USE OR PERFORMANCE OF THIS SOFTWARE.
+#
+
+# implemented dev_send_frame from PCEnd to STA for HS2-R2
+# need to find interface name first; enhance this script depend on new paramters used in 
+# scripts
+# current supported format: ignored program name in script, assume it is for HS2-R2
+#  dev_send_frame /interface eth0 /nframes 4 /FrameName <GARPRes | GARPReq | NeighAdv>
+
+flag=0
+i=0
+#var=()
+declare -a var
+v6add=0
+tmp=""
+framename="fn"
+interfacename="in"
+interface=""
+nframes=1
+st=0
+
+declare -a array_list
+index=0
+
+# routines to do three tasks
+# frameName GARPReq
+GARPReq ()
+{
+  for (( i = 1 ; i <= $nframes ; i++ ))
+  do
+  send_arp ${var[1]##*:} ${var[0]} ${var[1]##*:} 00:00:00:00:00:00 $interfacename ${var[0]} ff:ff:ff:ff:ff:ff     request
+  done
+  #echo "done for GARPReq, frameCount+1 $i"
+}
+# following three routine do task for each frame type, if you have more frame types, add routines
+# frameName GARPRes
+GARPRes ()
+{
+  for (( i = 1 ; i <= $nframes ; i++ ))
+  do
+  send_arp ${var[1]##*:} ${var[0]} ${var[1]##*:} ${var[0]} $interfacename ${var[0]} ff:ff:ff:ff:ff:ff reply
+  done
+  #echo "done for GARPRes, frmaeCount+1 $i"
+}
+
+ERRcase()
+{
+   st=2 
+   #echo "Not recognized task"
+}
+ 
+# frameName  NeighAdv
+NeighAdv ()
+{
+  for (( i = 1 ; i <= $nframes ; i++ ))
+  do
+  ndsend  $v6add $interfacename
+  done
+  #echo "done for NeighAdv"
+}
+# find interface name, nFrames and frame name
+
+# i is as parameters here
+for i in $*
+do
+  array_list[$index]=$i
+  #echo ${array_list[$index]}
+  ((index++))
+done
+
+# i is as index here
+for (( i = 0 ; i < $# ;  ))  ##### for params in $* do loop
+do
+    tmp=${array_list[$i]}
+    if [ ${tmp,,} = "/interface" ] ; then
+      
+      ((i++))
+      tmp=${array_list[$i]}  # find next arg
+      interfacename=${tmp,,}
+      #echo "find interface $tmp"
+    fi
+
+    if [ ${tmp,,} = "/framename" ] ; then
+      ((i++))
+      
+      tmp=${array_list[$i]}  # find next arg
+      framename=${tmp,,}
+      #echo "find frame name $tmp"
+    fi
+
+    if [ ${tmp,,} = "/nframes" ] ; then
+      ((i++))
+      
+      nframes=${array_list[$i]}  # find next arg
+ 
+      #echo "find nframes $nframes"
+    fi
+    ((i++))
+done
+
+
+#echo 'changed to lower case: interfaceName' $interfacename  'frameName'  $framename
+
+interface=$(ifconfig $interfacename)
+#echo "This is string for command ifconfig $interfacename OUTPUT:: "
+#echo "$interface"
+
+# Need system to setup ipV6 for following test
+interface=${interface// /$'\n'}
+i=0  ### reinit i here
+for word in $interface
+do
+  if [ $word = "HWaddr" -o $word = "inet" -o $word = "addr:" ];then
+     flag=1
+  else
+     if [ $flag -eq 1 ];then
+	 var[$i]=$word
+         #echo "This is $word, $var[$i]"
+	 flag=0
+	 ((i=i+1))
+     fi
+  fi
+done
+#echo "DONE on loop to find info"
+
+#echo "${var[0]}  ${var[1]##*:} ${var[2]} "
+v6add=$(echo ${var[2]} | cut -f1 -d/)
+#set -x
+
+
+# do task for each frame type, add more cases for different frame type
+# you may enhance this case staements to be nested to support different program name
+case $framename in
+  "garpreq")  GARPReq;;
+  "garpres")  GARPRes;;
+  "neighadv") NeighAdv;;
+  *)  ERRcase;;  
+esac
+
+# return code with string
+if [ $st -eq 0 ] ; then 
+   echo "$st -Send $framename OK"
+else
+   echo "$st -Send $framename error"
+fi
+

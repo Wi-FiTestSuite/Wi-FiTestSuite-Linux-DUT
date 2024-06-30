@@ -1,0 +1,144 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.6	//
+APTS_BCST	wfa_con.h	27;"	d
+APTS_CK_BE	wfa_con.h	30;"	d
+APTS_CK_BK	wfa_con.h	31;"	d
+APTS_CK_VI	wfa_con.h	32;"	d
+APTS_CK_VO	wfa_con.h	33;"	d
+APTS_CONFIRM	wfa_con.h	28;"	d
+APTS_DEFAULT	wfa_con.h	25;"	d
+APTS_HELLO	wfa_con.h	26;"	d
+APTS_LAST	wfa_con.h	37;"	d
+APTS_RESET	wfa_con.h	34;"	d
+APTS_RESET_RESP	wfa_con.h	35;"	d
+APTS_RESET_STOP	wfa_con.h	36;"	d
+APTS_STOP	wfa_con.h	29;"	d
+A_J	wfa_con.h	15;"	d
+A_U	wfa_con.h	18;"	d
+A_Y	wfa_con.h	13;"	d
+B_B	wfa_con.h	7;"	d
+B_D	wfa_con.h	5;"	d
+B_H	wfa_con.h	6;"	d
+B_K	wfa_con.h	20;"	d
+B_M	wfa_con.h	8;"	d
+B_W	wfa_con.h	14;"	d
+B_Z	wfa_con.h	10;"	d
+ConsoleStateFunctionPtr	wfa_con.h	/^typedef int (*ConsoleStateFunctionPtr)(struct station*, unsigned int *, int ); \/\/Recieved message buffer, length$/;"	t
+IAmDead	wfa_con.c	/^void IAmDead()$/;"	f
+LAST_TEST	wfa_con.h	24;"	d
+L_1	wfa_con.h	12;"	d
+MAXRETRY	wfa_con.c	54;"	d	file:
+M_B	wfa_con.h	21;"	d
+M_D	wfa_con.h	9;"	d
+M_K	wfa_con.h	22;"	d
+M_L	wfa_con.h	19;"	d
+M_U	wfa_con.h	17;"	d
+M_V	wfa_con.h	16;"	d
+M_W	wfa_con.h	23;"	d
+M_Y	wfa_con.h	11;"	d
+NSTA	wfa_con.h	38;"	d
+PORT	wfa_con.c	53;"	d	file:
+TOS_BE	wfa_con.h	61;"	d
+TOS_BK	wfa_con.h	64;"	d
+TOS_EE	wfa_con.h	62;"	d
+TOS_VI	wfa_con.h	58;"	d
+TOS_VI4	wfa_con.h	59;"	d
+TOS_VO	wfa_con.h	56;"	d
+TOS_VO7	wfa_con.h	55;"	d
+WfaConRcvBE	wfa_sndrcv.c	/^int WfaConRcvBE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvBESnd	wfa_sndrcv.c	/^int WfaConRcvBESnd(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvBESndBcast	wfa_sndrcv.c	/^int WfaConRcvBESndBcast(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvBESndBcastE	wfa_sndrcv.c	/^int WfaConRcvBESndBcastE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvBESndE	wfa_sndrcv.c	/^int WfaConRcvBESndE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvBKE	wfa_sndrcv.c	/^int WfaConRcvBKE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvConf	wfa_sndrcv.c	/^int WfaConRcvConf(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvConfSndVI	wfa_sndrcv.c	/^int WfaConRcvConfSndVI(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvHello	wfa_sndrcv.c	/^int WfaConRcvHello(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVI	wfa_sndrcv.c	/^int WfaConRcvVI(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVIE	wfa_sndrcv.c	/^int WfaConRcvVIE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVISnd	wfa_sndrcv.c	/^int WfaConRcvVISnd(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVISndBE	wfa_sndrcv.c	/^int WfaConRcvVISndBE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVISndBK	wfa_sndrcv.c	/^int WfaConRcvVISndBK(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVISndBcast	wfa_sndrcv.c	/^int WfaConRcvVISndBcast(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVISndBcastE	wfa_sndrcv.c	/^int WfaConRcvVISndBcastE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVISndE	wfa_sndrcv.c	/^int WfaConRcvVISndE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVISndVOE	wfa_sndrcv.c	/^int WfaConRcvVISndVOE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVO	wfa_sndrcv.c	/^int WfaConRcvVO(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVOE	wfa_sndrcv.c	/^int WfaConRcvVOE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVOSnd	wfa_sndrcv.c	/^int WfaConRcvVOSnd(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVOSnd2VO	wfa_sndrcv.c	/^int WfaConRcvVOSnd2VO(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVOSndAllE	wfa_sndrcv.c	/^int WfaConRcvVOSndAllE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVOSndBcastE	wfa_sndrcv.c	/^int WfaConRcvVOSndBcastE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVOSndCyclic	wfa_sndrcv.c	/^int WfaConRcvVOSndCyclic(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConRcvVOSndE	wfa_sndrcv.c	/^int WfaConRcvVOSndE(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConResetAll	wfa_con.c	/^void WfaConResetAll()$/;"	f
+WfaConSndVI	wfa_sndrcv.c	/^int WfaConSndVI(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+WfaConWaitStop	wfa_sndrcv.c	/^int WfaConWaitStop(struct station *sta,unsigned int *rmsg,int length)$/;"	f
+alreadyCleared	wfa_con.h	/^        int alreadyCleared; \/\/ ignore this station if this value is 1$/;"	m	struct:station
+apts_lookup	wfa_util.c	/^struct apts_msg * apts_lookup(char *s)$/;"	f
+apts_msg	wfa_con.h	/^struct apts_msg {			\/\/ $/;"	s
+apts_msgs	wfa_con.c	/^struct apts_msg apts_msgs[] ={$/;"	v	typeref:struct:apts_msg
+assign_sta_id	wfa_util.c	/^int assign_sta_id(unsigned int addr)$/;"	f
+cmd	wfa_con.h	/^	int cmd;			\/\/ msg num$/;"	m	struct:apts_msg
+cmd	wfa_con.h	/^    int cmd;$/;"	m	struct:station
+consoleProcStatetbl	wfa_con.c	/^consoleProcStatetbl_t consoleProcStatetbl[LAST_TEST+1][10] = {$/;"	v
+consoleProcStatetbl_t	wfa_con.h	/^} consoleProcStatetbl_t;$/;"	t	typeref:struct:console_state_table
+console_state_table	wfa_con.h	/^typedef struct console_state_table$/;"	s
+cookie	wfa_con.h	/^	int cookie;			    \/\/ cookie value exchanged with each staut$/;"	m	struct:station
+create_apts_msg	wfa_util.c	/^void create_apts_msg(int msg, unsigned int txbuf[],int id)$/;"	f
+dscp	wfa_con.c	/^unsigned char dscp, ldscp;		\/\/ new\/last dscp output values$/;"	v
+dst	wfa_con.c	/^struct sockaddr dst;           \/\/ sock declarations$/;"	v	typeref:struct:sockaddr
+expectedmsgrcd	wfa_util.c	/^int expectedmsgrcd(unsigned int *rmsg,unsigned long type,int tos)$/;"	f
+expectedmsgrcdl1	wfa_util.c	/^int expectedmsgrcdl1(unsigned int *rmsg,unsigned long type,int tos)$/;"	f
+from	wfa_con.c	/^struct sockaddr_in from;$/;"	v	typeref:struct:sockaddr_in
+fromlen	wfa_con.c	/^unsigned int fromlen;		    \/\/ sizeof socket struct$/;"	v
+get_sta_id	wfa_util.c	/^int get_sta_id(unsigned int addr)$/;"	f
+getipclass	wfa_util.c	/^char getipclass(unsigned long ip)$/;"	f
+ipaddress	wfa_con.h	/^  char ipaddress[20];$/;"	m	struct:station
+is_ipdotformat	wfa_util.c	/^is_ipdotformat(char *s)$/;"	f
+ldscp	wfa_con.c	/^unsigned char dscp, ldscp;		\/\/ new\/last dscp output values$/;"	v
+local	wfa_con.c	/^struct sockaddr_in local;$/;"	v	typeref:struct:sockaddr_in
+main	wfa_con.c	/^main(int argc, char **argv)$/;"	f
+mpx	mpx.c	/^mpx(char *m, void *buf_v, int len)$/;"	f
+msgno	wfa_con.h	/^	int nsent, nrecv, nend, nerr,msgno;   \/\/ counters$/;"	m	struct:station
+myid	wfa_con.h	/^    int myid;$/;"	m	struct:station
+name	wfa_con.h	/^	char *name;			\/\/ name of test$/;"	m	struct:apts_msg
+nend	wfa_con.h	/^	int nsent, nrecv, nend, nerr,msgno;   \/\/ counters$/;"	m	struct:station
+nerr	wfa_con.h	/^	int nsent, nrecv, nend, nerr,msgno;   \/\/ counters$/;"	m	struct:station
+nrecv	wfa_con.h	/^	int nsent, nrecv, nend, nerr,msgno;   \/\/ counters$/;"	m	struct:station
+nsent	wfa_con.h	/^	int nsent, nrecv, nend, nerr,msgno;   \/\/ counters$/;"	m	struct:station
+nsta	wfa_con.c	/^int nsta=0;                          \/\/ Number of stations$/;"	v
+num_retry	wfa_con.c	/^int num_retry    = 0;$/;"	v
+param0	wfa_con.h	/^	int param0;			\/\/ number of packet exchanges$/;"	m	struct:apts_msg
+param1	wfa_con.h	/^	int param1;			\/\/ number of uplink frames $/;"	m	struct:apts_msg
+param2	wfa_con.h	/^	int param2;			\/\/ number of downlink frames$/;"	m	struct:apts_msg
+param3	wfa_con.h	/^	int param3;$/;"	m	struct:apts_msg
+pbaddr	wfa_util.c	/^pbaddr(s, in)$/;"	f
+port	wfa_con.c	/^int port        = PORT;$/;"	v
+print_hex_string	mpx.c	/^print_hex_string(char* buf, int len)$/;"	f
+procname	wfa_con.c	/^char *procname;                   \/\/ dst system name or ip address$/;"	v
+rd	wfa_con.c	/^int sd,rd;				    \/\/ socket descriptor$/;"	v
+reset	wfa_con.c	/^int reset        = 0;$/;"	v
+reset_recd	wfa_con.c	/^int reset_recd   = 0;$/;"	v
+rmsg	wfa_con.c	/^unsigned int rmsg[512];           \/\/ rx msg buffer$/;"	v
+s_addr	wfa_con.h	/^	unsigned long s_addr;	    \/\/ station address$/;"	m	struct:station
+sd	wfa_con.c	/^int sd,rd;				    \/\/ socket descriptor$/;"	v
+set_dscp	wfa_util.c	/^int set_dscp(int new_dscp) $/;"	f
+setup_addr	wfa_util.c	/^setup_addr(char *name, struct sockaddr *dst)$/;"	f
+setup_socket	wfa_util.c	/^void setup_socket()$/;"	f
+sockflags	wfa_con.c	/^int sockflags;			    \/\/ socket call flags$/;"	v
+state	wfa_con.h	/^    int state;$/;"	m	struct:station
+statefunc	wfa_con.h	/^    consoleProcStatetbl_t  *statefunc;$/;"	m	struct:station
+statefunc	wfa_con.h	/^ConsoleStateFunctionPtr statefunc;$/;"	m	struct:console_state_table
+station	wfa_con.h	/^struct station $/;"	s
+stations	wfa_con.c	/^struct station stations[NSTA];$/;"	v	typeref:struct:station
+strvec_sep	wfa_util.c	/^strvec_sep(s, array, n, sep)$/;"	f
+target	wfa_con.c	/^struct sockaddr_in target;$/;"	v	typeref:struct:sockaddr_in
+tout	wfa_con.c	/^int tout        = 0;$/;"	v
+traceflag	wfa_con.c	/^char traceflag=1;				\/\/ enable debug packet tracing$/;"	v
+txmsg	wfa_con.c	/^unsigned int txmsg[512];	    \/\/ tx msg buffer$/;"	v
+waitval_state	wfa_con.c	/^struct itimerval waitval_state = { 40,0};$/;"	v	typeref:struct:itimerval
